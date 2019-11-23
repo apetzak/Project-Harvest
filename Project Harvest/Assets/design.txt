@@ -1,0 +1,13 @@
+﻿fruit trees: apple pear
+
+apple
+pear
+banana - ak47
+strawberry - 
+
+patches: carrot
+corn - 
+carrot - speedy / katana
+broccoli - 
+potato - slow / beefy / shield / hammer 
+
