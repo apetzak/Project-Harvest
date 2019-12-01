@@ -71,7 +71,7 @@ public class Game : MonoBehaviour
         Vector3 pos = new Vector3(x + 20, 10f, z + 10);
         Troop u = Instantiate(unitPrefabs[index], pos, Quaternion.identity);
         u.ToggleSelected(false);
-        u.attacking = true;
+        //u.attacking = true;
         Instance.troops.Add(u);
     }
 

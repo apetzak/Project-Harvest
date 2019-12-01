@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Burst : MonoBehaviour
 {
-    MeshRenderer mesh;
+    private MeshRenderer mesh;
     public float speed = .0015f;
     public int burstTime = 10;
     public int burstTimer = 10;
     public bool popping = false;
     private bool isTemp = false;
-    Vector3 initSize;
+    private Vector3 initSize;
 
     void Start()
     {

@@ -12,14 +12,13 @@ public class Asparagus : Troop
         base.Start();
     }
 
-    void Update()
+    public void Update()
     {
         base.Update();
     }
 
     public override void TriggerAttack()
     {
-        //SoundFX.Instance.Play();
         burst.Pop();
         base.TriggerAttack();
     }

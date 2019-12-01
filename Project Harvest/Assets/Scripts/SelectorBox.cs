@@ -79,7 +79,7 @@ public class SelectorBox : MonoBehaviour
         }
 
         if (Game.Instance.selectedUnit != null)
-            Game.Instance.selectedUnit.ToggleSelected(false);
+            selectedCount++;
 
         Game.Instance.ChangeSelection(selectedCount);
         rt.transform.localScale = new Vector3(0, 0, 0);

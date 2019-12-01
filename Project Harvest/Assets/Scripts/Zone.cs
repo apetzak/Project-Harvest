@@ -41,29 +41,16 @@ public class Zone : MonoBehaviour
     {
         //Debug.Log("right click");
         SetDestinations();
-        ClearTargets();       
+        Units.ClearTargets();       
     }
 
     void SetDestinations()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
-
         if (!Physics.Raycast(ray, out hit))    
             return;
         Units.SetGroupLocation(hit);
-    }
-
-    void ClearTargets()
-    {
-        foreach (Troop t in Game.Instance.troops)
-        {
-            if (t.target != null && t.selected)
-            {
-                t.target = null;
-                t.attacking = false;
-            }
-        }
     }
 
     void OnMouseDown()

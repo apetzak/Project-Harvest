@@ -14,8 +14,7 @@ public class Map : MonoBehaviour
 
     void Update()
     {
-
-        
+       
     }
 
     void OnGUI()

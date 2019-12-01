@@ -7,7 +7,6 @@ public class UnitBox : MonoBehaviour
 {
     public RawImage image;
     public Image green;
-    //public 
 
     void Start()
     {
@@ -27,7 +26,6 @@ public class UnitBox : MonoBehaviour
     void OnMouseOver()
     {
         Debug.Log("over");
-
     }
 
     void OnPointerDown()

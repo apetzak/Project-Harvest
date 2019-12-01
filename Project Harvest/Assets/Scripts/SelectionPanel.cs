@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class SelectionPanel : MonoBehaviour
 {
-    //public Material matRed;
-    //public Material matGreen;
     public List<UnitBox> unitBoxes;
     public UnitBox prefab;
     public int index = 0;
@@ -25,7 +23,6 @@ public class SelectionPanel : MonoBehaviour
     private bool visible = true;
     private bool unitBoxesActive = false;
     private int selectedCount = 0;
-
 
     void Start()
     {
@@ -56,7 +53,6 @@ public class SelectionPanel : MonoBehaviour
 
             //else if (unit != null)
             //    UpdateHealthBar();
-
         }
     }
 
@@ -81,16 +77,17 @@ public class SelectionPanel : MonoBehaviour
     {
         //Debug.Log("show unit boxes");
         var units = new List<Unit>();
-        var indexs = new List<int>();
+        //var indexs = new List<int>();
         foreach (Troop t in Game.Instance.troops)
         {
             if (!t.selected || t.dying)
                 continue;
             units.Add(t);
-            indexs.Add(Game.Instance.troops.IndexOf(t));
+            //indexs.Add(Game.Instance.troops.IndexOf(t));
         }
 
         HideUnitBoxes();
+        Debug.Log(unitBoxes.Count + " " + units.Count + " " + Game.Instance.selectionCount);
 
         for (int i = 0; i < Game.Instance.selectionCount; i++)
         {
@@ -102,6 +99,11 @@ public class SelectionPanel : MonoBehaviour
             //v.transform.localPosition = initPosition;
             //v.transform.localPosition += new Vector3(barLength / 2 - 57.5f, 0, 0);
         }
+    }
+
+    public void UpdateUnitBoxHealthBar()
+    {
+
     }
 
     private void HideUnitBoxes()
@@ -131,8 +133,6 @@ public class SelectionPanel : MonoBehaviour
         images[unit.index].enabled = true;
         txt.enabled = green.enabled = red.enabled = true;
         txt.text = GetText();
-        //foreach (UnitBox u in unitBoxes)
-        //    u.transform.gameObject.SetActive(false);
     }
 
     private void UpdateHealthBar()
@@ -147,11 +147,7 @@ public class SelectionPanel : MonoBehaviour
     private string GetText()
     {
         Troop t = unit as Troop;
-        string s = string.Format(
-            "Health        {0}\nSpeed        {1}\n" +
-            "Damage     {2}\nA. Speed    {3}\n" +
-            "A. Range    {4}",
-            t.maxHealth, t.speed, t.attackDamage, t.attackSpeed, t.attackRange);
-        return s;
+        return $"Health        {t.maxHealth}\nSpeed        {t.speed}" +
+        $"\nDamage     {t.attackDamage}\nA. Speed    {t.attackSpeed}\nA. Range    {t.attackRange}";
     }
 }

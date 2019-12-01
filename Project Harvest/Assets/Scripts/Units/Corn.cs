@@ -20,7 +20,6 @@ public class Corn : Troop
             cannonBall.hit = false;
             base.TriggerAttack();
         }
-
         base.Update();
     }
 
