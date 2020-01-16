@@ -32,17 +32,15 @@ public class Units
 
     public static void SetGroupLocation(RaycastHit hit)
     {
-        int count = Game.Instance.troops.FindAll(s => s.selected).Count;
+        var selected = Game.Instance.troops.FindAll(s => s.selected);
+        int count = selected.Count;
         double rows = Math.Round(Math.Sqrt(count), 0);
         float xSpace = 0;
         float zSpace = 0;
         float lowestSpeed = 20;
 
-        foreach (Troop u in Game.Instance.troops)
+        foreach (Troop u in selected)
         {
-            if (!u.selected)
-                continue;
-
             if (u.speed < lowestSpeed)
                 lowestSpeed = u.speed;
 
@@ -57,27 +55,21 @@ public class Units
             u.SetDestination(new Vector3(hit.point.x + xSpace, hit.point.y, hit.point.z + zSpace));
         }
 
-        foreach (Troop u in Game.Instance.troops)
-        {
-            if (u.selected)
-                u.currentSpeed = lowestSpeed;
-        }
+        foreach (Troop u in selected)
+            u.currentSpeed = lowestSpeed;
 
-        count = Game.Instance.workers.FindAll(s => s.selected).Count;
-        rows = Math.Round(Math.Sqrt(count), 0);
+        var selected2 = Game.Instance.workers.FindAll(s => s.selected);
+        rows = Math.Round(Math.Sqrt(selected2.Count), 0);
         xSpace = zSpace = 0;
 
-        foreach (Unit u in Game.Instance.workers)
+        foreach (Unit u in selected2)
         {
-            if (!u.selected)
-                continue;
-
             rows--;
             if (rows <= 1)
             {
                 xSpace = 0;
                 zSpace += 5;
-                rows = Math.Round(Math.Sqrt(count), 0);
+                rows = Math.Round(Math.Sqrt(selected2.Count), 0);
             }
             xSpace += 5;
             u.SetDestination(new Vector3(hit.point.x + xSpace, hit.point.y, hit.point.z + zSpace));

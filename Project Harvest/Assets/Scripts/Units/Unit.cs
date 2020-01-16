@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour
     public float maxHealth;
     public float lineOfSight;
     public bool dying = false;
-    public int deathTimer = 150;
+    public int deathTimer = 300;
     private int clickTimer;
     private bool clickedOnce = false;
     public Troop target;
@@ -41,6 +41,21 @@ public class Unit : MonoBehaviour
     {
 
     }
+
+    ////Detect when there is a collision starting
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    //Ouput the Collision to the console
+    //    Debug.Log("Collision : " + collision.gameObject.name);
+    //}
+
+    ////Detect when there is are ongoing Collisions
+    //void OnCollisionStay(Collision collision)
+    //{
+    //    //Output the Collision to the console
+    //    Debug.Log("Stay : " + collision.gameObject.name);
+    //}
+
 
     public void SelectType()
     {
@@ -124,7 +139,13 @@ public class Unit : MonoBehaviour
         if (Mathf.Abs(v.x) < 2 && Mathf.Abs(v.z) < 2)
             StopMoving();
         else
+        {
             transform.Translate(velocity * currentSpeed / 10, Space.World);
+            //if (GetComponent<Rigidbody>() != null)
+            //{
+            //    GetComponent<Rigidbody>().position = transform.position;
+            //}
+        }
 
         coll.enabled = false;
         coll.enabled = true;

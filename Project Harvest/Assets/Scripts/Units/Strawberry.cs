@@ -18,14 +18,14 @@ public class Strawberry : Troop
         if (arrow.hit)
         {
             arrow.hit = false;
-            base.TriggerAttack();
+            arrow.target.health -= attackDamage;
         }
         base.Update();
     }
 
     public override void TriggerAttack()
     {
-        arrow.Spawn(destination);
+        arrow.Spawn(destination, target);
     }
 
     public override void RotateTowards(float x, float z)

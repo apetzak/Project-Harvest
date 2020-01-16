@@ -33,10 +33,6 @@ public class Audio : MonoBehaviour
 
     public void PlaySound(AudioClip clip)
     {
-        Debug.Log(clip);
-        Debug.Log(Instance.objects);
-        Debug.Log(Instance.objects[currentIndex].GetComponent<AudioSource>());
-
         Instance.objects[currentIndex].GetComponent<AudioSource>().clip = clip;
         Instance.objects[currentIndex++].GetComponent<AudioSource>().Play();
 
@@ -51,11 +47,8 @@ public class Audio : MonoBehaviour
 
     public void PlayAttack(int index)
     {
-        //Instance.objects[currentIndex].GetComponent<AudioSource>().clip = TroopClass.Instance.list[index - 2].sounds[0];
-        //Instance.objects[currentIndex++].GetComponent<AudioSource>().Play();
-
-        //if (currentIndex == 30)
-        //    currentIndex = 0;
+        if (currentIndex == 30)
+            currentIndex = 0;
         PlaySound(TroopClass.Instance.list[index - 2].sounds[0]);
     }
 }

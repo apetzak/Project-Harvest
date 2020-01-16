@@ -17,6 +17,7 @@ public class Troop : Unit
         //Cursor.lockState = CursorLockMode.Confined;
         timeUntilNextAttack = attackSpeed * 60;
         health = maxHealth;
+        deathTimer = 300;
         //Debug.Log(burstMesh);
         //var v = new CapsuleCollider();
         base.Start();
@@ -46,7 +47,7 @@ public class Troop : Unit
         if (timeUntilNextAttack > 0)
             timeUntilNextAttack--;
 
-        if (target != null && !target.dying)
+        if (target != null && !target.dying && !dying)
             Pursue();
 
         else if (attacking)
@@ -92,7 +93,7 @@ public class Troop : Unit
     {
         destination = target.transform.position;
         Vector3 diff = transform.position - destination;
-        moving = diff.magnitude > attackRange;
+        moving = diff.magnitude >= attackRange;
 
         if (timeUntilNextAttack == 0 && !moving)
         {
@@ -140,7 +141,7 @@ public class Troop : Unit
     public void Die()
     {
         //Debug.Log(deathTimer);
-        if (deathTimer == 150)
+        if (deathTimer == 300)
         {
             //Debug.Log("dead");
             Audio.Instance.PlayDeath(index);
@@ -149,7 +150,7 @@ public class Troop : Unit
         }
 
         deathTimer--;
-        if (deathTimer > 60) // fall over
+        if (deathTimer > 210) // fall over
         {
             if (selected)
             {

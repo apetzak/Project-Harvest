@@ -18,14 +18,14 @@ public class Corn : Troop
         if (cannonBall.hit)
         {
             cannonBall.hit = false;
-            base.TriggerAttack();
+            cannonBall.target.health -= attackDamage;
         }
         base.Update();
     }
 
     public override void TriggerAttack()
     {
-        cannonBall.Spawn(destination);
+        cannonBall.Spawn(destination, target);
     }
 
     public override void RotateTowards(float x, float z)

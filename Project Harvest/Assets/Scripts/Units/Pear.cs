@@ -14,20 +14,20 @@ public class Pear : Troop
 
     void Update()
     {
-        if (rocket.hit)
+        if (rocket.hit) // explosion!
         {
             Burst b = Instantiate(burst, rocket.hitLocation, Quaternion.identity);
             b.Spawn();
             rocket.mesh.enabled = true;
             rocket.hit = false;
-            base.TriggerAttack();
+            rocket.target.health -= attackDamage;
         }
         base.Update();
     }
 
     public override void TriggerAttack()
     {
-        rocket.Spawn(destination);
+        rocket.Spawn(destination, target);
         rocket.mesh.enabled = false;
     }
 }
