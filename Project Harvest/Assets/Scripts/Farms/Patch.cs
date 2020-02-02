@@ -2,25 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Farm : MonoBehaviour
+public class Patch : MonoBehaviour
 {
-
-
-    bool empty;
-    //bool
-
     void Start()
     {
-
+        
     }
 
     void Update()
     {
-
-    }
-
-    void OnMouseDown()
-    {
-
+        
     }
 }
