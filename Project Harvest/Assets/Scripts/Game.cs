@@ -30,9 +30,8 @@ public class Game : MonoBehaviour
         Instance.farms = new List<Farm>();
         Instance.workers = new List<Worker>();
 
-        AddSquad(20, 3);
-        AddWorkers();
-
+        //AddSquad(10, 2);
+        //AddWorkers();
         var rt = selectorBox.GetComponent<RectTransform>();
         rt.transform.localScale = new Vector3(0, 0, 0);
     }

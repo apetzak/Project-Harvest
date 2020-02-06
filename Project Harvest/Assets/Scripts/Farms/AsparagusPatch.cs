@@ -6,8 +6,8 @@ public class AsparagusPatch : Farm
 {
     public override void Start()
     {
-        growthEnd = 14;
-        prop.transform.Translate(new Vector3(0, -14, 0), Space.World);
+        growthEnd = 15;
+        prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         base.Start();
     }
 
@@ -39,7 +39,7 @@ public class AsparagusPatch : Farm
         else if (state == FarmState.Pickable)
         {
             Pick(1);
-            prop.transform.Translate(new Vector3(0, -14, 0), Space.World);
+            prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         }
     }
 }

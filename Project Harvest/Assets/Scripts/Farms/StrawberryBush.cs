@@ -25,6 +25,7 @@ public class StrawberryBush : Farm
             {
                 spawnTime = spawnStart;
                 state = FarmState.Dead;
+                // todo: tip over
             }
             else if (spawnTime > 25)
             {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Burst : MonoBehaviour
 {
     private MeshRenderer mesh;
-    public float speed = .0015f;
+    public float expansionRate = .0015f;
     public int burstTime = 10;
     public int burstTimer = 10;
     public bool popping = false;
@@ -22,7 +22,7 @@ public class Burst : MonoBehaviour
     {
         isTemp = true;
         mesh = GetComponent<MeshRenderer>();
-        speed = .4f;
+        expansionRate = .4f;
         burstTime = 35;
         Pop();
     }
@@ -39,7 +39,7 @@ public class Burst : MonoBehaviour
         if (!popping)
             return;
         burstTimer--;
-        transform.localScale += new Vector3(speed, speed, speed);
+        transform.localScale += new Vector3(expansionRate, expansionRate, expansionRate);
         if (burstTimer <= 0)
         {
             mesh.enabled = false;

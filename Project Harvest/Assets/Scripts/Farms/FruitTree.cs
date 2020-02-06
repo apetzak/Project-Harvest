@@ -5,6 +5,7 @@ using UnityEngine;
 public class FruitTree : Farm
 {
     public int plantGrowthTime = 200;
+    public int plantGrowthStart;
     private int pickCount = 3;
     public List<GameObject> props;
     public int harvestCount;
@@ -18,6 +19,7 @@ public class FruitTree : Farm
         propMesh.enabled = true;
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 11;
+        plantGrowthStart = plantGrowthTime;
     }
 
     public override void Update()
@@ -31,7 +33,7 @@ public class FruitTree : Farm
             {
                 dirtMesh.enabled = false;
                 state = FarmState.Growing;
-                plantGrowthTime = 200;
+                plantGrowthTime = plantGrowthStart;
             }
         }
         else if (state == FarmState.Growing) // tree is grown, grow fruits

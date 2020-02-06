@@ -9,7 +9,7 @@ public class BananaTree : FruitTree
         spawnTime = 52;
         harvestCount = 3;
         growthEnd = 120;
-        plantGrowthTime = 100;
+        plantGrowthTime = plantGrowthStart = 100;
         plantGrowthIncrement = 1f;
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = false;

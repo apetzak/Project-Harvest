@@ -9,7 +9,7 @@ public class Corn : Troop
     void Start()
     {
         transform.Rotate(90, 0, 180, Space.Self);
-        transform.Translate(0, 4, 0, Space.World);
+        transform.Translate(0, 5, 0, Space.World);
         base.Start();
     }
 
