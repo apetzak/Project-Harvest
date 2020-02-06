@@ -59,17 +59,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bce4582f8d8044d8ef47ea48916322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
+  maxHealth: 0
+  minX: 0
+  maxX: 0
+  maxY: 0
+  minY: 0
   state: 0
   prop: {fileID: 6461357407408142646}
   dirtMound: {fileID: 1406436183202130426}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
   prefab: {fileID: 3926050989987883873, guid: 1dc3edb58b74fa045bfc1147508597c3, type: 3}
+  troops: []
   size: 0
   growthTime: 0
   growthEnd: 0
+  spawnTime: 0
+  spawnStart: 0
   sproutTime: 30
-  health: 100
 --- !u!1001 &2778487142227175611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -169,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4138167088530162, guid: 7539f332605bc1c459589267c9e9ccea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 4138167088530162, guid: 7539f332605bc1c459589267c9e9ccea, type: 3}
       propertyPath: m_LocalPosition.z
