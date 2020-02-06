@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pea : Worker
+public class Water : Resource
 {
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
-        base.Update();
+        
     }
 }

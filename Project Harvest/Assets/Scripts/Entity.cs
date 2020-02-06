@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pea : Worker
+public class Entity : MonoBehaviour
 {
+
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
-        base.Update();
+        
     }
 }

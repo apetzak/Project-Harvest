@@ -15,7 +15,7 @@ public class Wall : Structure
         
     }
 
-    public override void LeftClick()
+    protected override void LeftClick()
     {
         Drop();
 

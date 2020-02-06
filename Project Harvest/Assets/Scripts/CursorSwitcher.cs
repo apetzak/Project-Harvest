@@ -22,4 +22,9 @@ public class CursorSwitcher : MonoBehaviour
 
         Cursor.SetCursor(Instance.textures[i], hotSpot, cursorMode);
     }
+
+    public void Set(string s)
+    {
+
+    }
 }

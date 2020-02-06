@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pea : Worker
+public class Market : Structure
 {
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
-        base.Update();
+        
     }
 }

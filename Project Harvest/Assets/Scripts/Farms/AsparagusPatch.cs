@@ -21,7 +21,7 @@ public class AsparagusPatch : Farm
         base.Update();
     }
 
-    public override void LeftClick()
+    protected override void LeftClick()
     {
         if (state == FarmState.Spawning)
             return;

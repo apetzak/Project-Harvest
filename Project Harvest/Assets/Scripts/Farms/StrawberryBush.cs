@@ -39,7 +39,7 @@ public class StrawberryBush : Farm
         }
     }
 
-    public override void LeftClick()
+    protected override void LeftClick()
     {
         if (state == FarmState.Spawning)
             return;

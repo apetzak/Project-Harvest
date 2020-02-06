@@ -31,7 +31,7 @@ public class Unit : MonoBehaviour
         coll = GetComponent<Collider>();
     }
 
-    public virtual void Update()
+    protected virtual void Update()
     {
         if (moving)
             Move();
@@ -183,5 +183,10 @@ public class Unit : MonoBehaviour
     public float GetAngle(float x, float z)
     {
         return Mathf.Atan2(x, z) * rad - facingAngle;
+    }
+
+    void OnMouseEnter()
+    {
+        CursorSwitcher.Instance.Set(1);
     }
 }

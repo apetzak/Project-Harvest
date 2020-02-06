@@ -42,7 +42,7 @@ public class Troop : Unit
         //Debug.Log("collision");
     }
 
-    public override void Update()
+    protected override void Update()
     {
         if (timeUntilNextAttack > 0)
             timeUntilNextAttack--;
@@ -103,7 +103,7 @@ public class Troop : Unit
             TriggerAttack();
         }
 
-        if (target.moving)
+        if (target is Troop && (target as Troop).moving)
             velocity = GetVelocity(diff.x, diff.z);
 
         RotateTowards(diff.x, diff.z);

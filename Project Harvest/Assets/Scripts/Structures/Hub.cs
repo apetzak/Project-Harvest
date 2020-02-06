@@ -47,7 +47,7 @@ public class Hub : Structure
         }
     }
 
-    public override void LeftClick()
+    protected override void LeftClick()
     {
         Pick();
         ReleaseUnits();

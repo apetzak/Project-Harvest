@@ -12,17 +12,40 @@ public class Worker : Unit
         Mining,
         Chopping,
         Building,
-        Planting
+        Planting,
+        Spawning
     }
 
-    void Start()
+    public State state = State.Spawning;
+
+    protected override void Update()
     {
-        transform.Rotate(0, 90, 0, Space.Self);
-        base.Start();
+        if (state == State.Spawning)
+        {
+            DropThenMoveToSpawnPoint();
+        }
+        else
+        {
+            base.Update();
+        }
     }
 
-    void Update()
+    private void DropThenMoveToSpawnPoint()
     {
-        base.Update();
+        if (transform.position.y > 10) // drop
+        {
+            transform.Translate(0, -.5f, 0);
+
+            if (transform.position.y <= 10) // set on ground
+                transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+        }
+        else if (moving) // move towards destination
+        {
+            Move();
+        }
+        else // stop
+        {
+            state = State.Idle;
+        }
     }
 }

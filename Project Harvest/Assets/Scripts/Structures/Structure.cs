@@ -17,34 +17,26 @@ public class Structure : MonoBehaviour
 
     }
 
-    //void Update()
-    //{
-
-    //}
-
-    public virtual void LeftClick()
+    protected virtual void LeftClick()
     {
 
     }
 
-    public void RightClick()
+    protected virtual void RightClick()
     {
 
     }
-
-    int i = 0;
 
     protected virtual void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(i++);
+        CursorSwitcher.Instance.Set(1);
     }
 
-    public void OnMouseOver()
+    protected void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
             LeftClick();
         else if (Input.GetMouseButtonDown(1))
             RightClick();
     }
-
 }

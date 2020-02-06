@@ -57,4 +57,9 @@ public class Zone : MonoBehaviour
     {
 
     }
+
+    void OnMouseEnter()
+    {
+        CursorSwitcher.Instance.Set(0);
+    }
 }
