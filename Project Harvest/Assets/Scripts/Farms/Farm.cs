@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Farm : MonoBehaviour
+public class Farm : Structure
 {
     public enum FarmState
     {
         Empty,
         Planting,
-        Sprouting, // TO DO
+        Sprouting, // todo
         PlantGrowing,
         Growing,
         Pickable,
@@ -30,7 +30,6 @@ public class Farm : MonoBehaviour
     public int spawnTime;
     public int spawnStart;
     public int sproutTime = 30;
-    public int health = 100;
 
     public virtual void Start()
     {
@@ -60,24 +59,6 @@ public class Farm : MonoBehaviour
         }
     }
 
-    public virtual void LeftClick()
-    {
-
-    }
-
-    public void RightClick()
-    {
-
-    }
-
-    public void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-            LeftClick();
-        else if (Input.GetMouseButtonDown(1))
-            RightClick();
-    }
-
     public List<Troop> Pick(int count)
     {
         if (propMesh != null)
@@ -104,5 +85,10 @@ public class Farm : MonoBehaviour
 
         state = FarmState.Empty;
         return list;
+    }
+
+    void OnMouseEnter()
+    {
+        CursorSwitcher.Instance.Set(8);
     }
 }

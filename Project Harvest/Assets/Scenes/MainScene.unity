@@ -2433,7 +2433,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 428226, guid: e350938a92294fa4c89f92666eeb9647, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 428226, guid: e350938a92294fa4c89f92666eeb9647, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3033,14 +3033,12 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 61dc8b4c6376cca4785a9cdc4457e962, type: 3}
   - {fileID: 2800000, guid: 8965215566c0f1848bddaa192873bcc6, type: 3}
   - {fileID: 2800000, guid: 37cea6ed3409f254b979469d8e43d8ff, type: 3}
-  - {fileID: 2800000, guid: 205784629633f4d41a97fd09ba9173a2, type: 3}
+  - {fileID: 2800000, guid: ee5d3c06f2ec5974784f49b27d955261, type: 3}
   - {fileID: 2800000, guid: d720e42d9c9e89d40a5ffc8b11bd11bf, type: 3}
   - {fileID: 2800000, guid: 4b7d16c38d9aa234aa444610aa221db5, type: 3}
   - {fileID: 2800000, guid: acaee1377ef864342a70165c6f12037f, type: 3}
-  - {fileID: 2800000, guid: ee5d3c06f2ec5974784f49b27d955261, type: 3}
   cursorMode: 0
   hotSpot: {x: 0, y: 0}
-  current: 
 --- !u!1001 &964147556
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4613,7 +4611,7 @@ PrefabInstance:
     - target: {fileID: 1325930980711345070, guid: 502143445c5d174459e36b0506aa2da1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1325930980711345070, guid: 502143445c5d174459e36b0506aa2da1,
         type: 3}
@@ -4829,7 +4827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 430702, guid: 7274a97973fa71248b71b67dc56c2203, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 430702, guid: 7274a97973fa71248b71b67dc56c2203, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
