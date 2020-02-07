@@ -3,26 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Unit : MonoBehaviour
+/// <summary>
+/// Base class for troops and workers.
+/// Can be selected, moved, and killed.
+/// </summary>
+public class Unit : Entity
 {
     public GameObject selector;
     public int index;
-    public bool fruit = true;
-    public bool selected;
     public Vector3 destination;
     public Vector3 velocity;
     public bool moving;
     public float speed;
     public float currentSpeed;
     public float facingAngle;
-    public float health;
-    public float maxHealth;
     public float lineOfSight;
-    public bool dying = false;
     public int deathTimer = 300;
     private int clickTimer;
     private bool clickedOnce = false;
-    public Troop target;
+    public Entity target;
     private static float rad = 180.0f / Mathf.PI;
     private Collider coll;
 
@@ -33,120 +32,84 @@ public class Unit : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (moving)
+        if (isDying)
+            Die();
+
+        else if (health <= 0)
+            isDying = true;
+
+        else if (moving)
             Move();
     }
 
     public virtual void RightClick()
     {
+        if (isDying)
+            return;
 
+        foreach (Troop t in GetEnemyTroops())
+        {
+            if (!t.selected)
+                continue;
+            t.Attack(this);
+        }
     }
 
-    ////Detect when there is a collision starting
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    //Ouput the Collision to the console
-    //    Debug.Log("Collision : " + collision.gameObject.name);
-    //}
-
-    ////Detect when there is are ongoing Collisions
-    //void OnCollisionStay(Collision collision)
-    //{
-    //    //Output the Collision to the console
-    //    Debug.Log("Stay : " + collision.gameObject.name);
-    //}
-
-
-    public void SelectType()
+    public virtual void SelectType()
     {
-        int selectedCount = 0;
-        foreach (Unit u in Game.Instance.troops)
-        {
-            if (selectedCount > 84)
-                break;
 
-            // to do: only select units in screen
-            if (index == u.index)
-            {
-                selectedCount++;
-                u.ToggleSelected(true);
-            }
-        }
-        foreach (Unit u in Game.Instance.workers)
-        {
-            if (selectedCount > 84)
-                break;
-
-            // to do: only select units in screen
-            if (index == u.index)
-            {
-                selectedCount++;
-                u.ToggleSelected(true);
-            }
-        }
-        //Debug.Log("select type " + selectedCount);
-        Game.Instance.ChangeSelection(selectedCount);
     }
 
-    int ss = 0;
     public virtual void OnMouseOver()
     {
-        //Debug.Log("unit");
+        if (isDying)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
-            if (clickedOnce == true)
+            UnitUtils.ClearUnitSelection();
+
+            if (clickedOnce == true) // double click
+            {
                 SelectType();
-            clickedOnce = true;
+            }
+            else
+            {
+                ToggleSelected(true);
+                clickedOnce = true;
+            }
+            Game.Instance.ChangeSelection();
         }
         else if (Input.GetMouseButtonDown(1))
+        {
             RightClick();
+        }
 
         if (clickedOnce)
             clickTimer++;
 
-        if (clickTimer == 20)
+        if (clickTimer == 20) // cancel double click after 20
         {
             clickTimer = 0;
             clickedOnce = false;
         }
     }
 
-    public void ToggleSelected(bool b)
-    {
-        var mr = selector.GetComponentInChildren<MeshRenderer>();
-        mr.enabled = selected = b;
-    }
-
     void OnMouseDown()
     {
-        //Debug.Log("mouse down");
-        foreach (Unit u in Game.Instance.troops)
-            u.ToggleSelected(false);
-
-        foreach (Unit u in Game.Instance.workers)
-            u.ToggleSelected(false);
-
-        ToggleSelected(true);
-        Game.Instance.selectedUnit = this;
-        Game.Instance.selectionCount = 1;
-        Game.Instance.selectionChanged = true;
         Game.Instance.holdingDown = false;
     }
 
     public void Move()
     {
         Vector3 v = transform.position - destination;
+
         if (Mathf.Abs(v.x) < 2 && Mathf.Abs(v.z) < 2)
             StopMoving();
         else
-        {
             transform.Translate(velocity * currentSpeed / 10, Space.World);
-            //if (GetComponent<Rigidbody>() != null)
-            //{
-            //    GetComponent<Rigidbody>().position = transform.position;
-            //}
-        }
 
+        // bandaid for weird bug (colliders don't move with object)
         coll.enabled = false;
         coll.enabled = true;
     }
@@ -184,9 +147,71 @@ public class Unit : MonoBehaviour
     {
         return Mathf.Atan2(x, z) * rad - facingAngle;
     }
-
+ 
     void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(1);
+        if (Game.Instance.troopIsSelected && !isDying)
+            CursorSwitcher.Instance.Set(1);
+    }
+
+    public void Die()
+    {
+        if (deathTimer == 300)
+        {
+            if (selected)
+            {
+                ToggleSelected(false);
+
+                if (Game.Instance.selectedUnits.Contains(this))
+                    Game.Instance.selectedUnits.Remove(this);
+
+                Game.Instance.ChangeSelection();
+            }
+
+            Audio.Instance.PlayDeath(index);
+            StopMoving();
+            target = null;
+        }
+
+        deathTimer--;
+        if (deathTimer > 210) // fall over
+        {
+            ToggleSelected(false);
+            transform.Rotate(0, 0, 1, Space.World);
+        }
+        else if (deathTimer > 0) // sink
+        {
+            transform.Translate(0, -.1f, 0, Space.World);
+        }
+        else // delete
+        {
+            foreach (Troop t in GetEnemyTroops())
+            {
+                if (t.target != null && t.target == this)
+                    t.target = null;
+            }
+            Destroy();
+        }
+    }
+
+    public virtual List<Troop> GetEnemyTroops()
+    {
+        return null;
+    }
+
+    public virtual List<Unit> GetSameType()
+    {
+        return null;
+    }
+
+    public override void ToggleSelected(bool b)
+    {
+        //Debug.Log("toggle selected");
+
+        var mr = selector.GetComponentInChildren<MeshRenderer>();
+        mr.enabled = selected = b;
+
+        if (b)
+            Game.Instance.selectedUnits.Add(this);
     }
 }

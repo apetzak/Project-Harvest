@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : MonoBehaviour
+public class Resource : Entity
 {
-    public float amount;
-    public float startingAmount;
-    public bool occupied = false;
+    public bool occupied;
+
     public GameObject prop;
 
     protected virtual void Start()

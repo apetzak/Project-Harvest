@@ -9,6 +9,7 @@ public class CarrotPatch : RootPatch
     {
         spawnTime = 60;
         growthEnd = 15;
+        index = 1;
         base.Start();
     }
 }

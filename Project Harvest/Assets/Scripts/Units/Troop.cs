@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// Attacks enemy units or structures.
+/// Each type has unique attributes, animations, and sounds.
+/// Each type has corresponding farm, which they are grown from.
+/// </summary>
 public class Troop : Unit
 {
     public bool attacking;
@@ -10,7 +15,6 @@ public class Troop : Unit
     public float attackRange;
     public float attackDamage;
     public float timeUntilNextAttack;
-    public int targetIndex;
 
     public void Start()
     {
@@ -18,77 +22,50 @@ public class Troop : Unit
         timeUntilNextAttack = attackSpeed * 60;
         health = maxHealth;
         deathTimer = 300;
-        //Debug.Log(burstMesh);
-        //var v = new CapsuleCollider();
         base.Start();
-    }
-
-    //public Texture2D cursorTexture;
-    //private CursorMode cursorMode = CursorMode.Auto;
-    //private Vector2 hotSpot = Vector2.zero;
-
-    //void OnMouseEnter()
-    //{
-    //    Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
-    //}
-
-    //void OnMouseExit()
-    //{
-    //    Cursor.SetCursor(null, Vector2.zero, cursorMode);
-    //}
-
-    void OnCollisionEnter(Collision collision)
-    {
-        //Debug.Log("collision");
     }
 
     protected override void Update()
     {
-        if (timeUntilNextAttack > 0)
-            timeUntilNextAttack--;
+        if (!isDying)
+        {
+            if (timeUntilNextAttack > 0)
+                timeUntilNextAttack--;
 
-        if (target != null && !target.dying && !dying)
-            Pursue();
+            if (target != null && !target.isDying)
+            {
+                if (target is Unit)
+                    Pursue();
+                else
+                    AttackStructure();
+            }
 
-        else if (attacking)
-            FindClosestTarget();
+            else if (attacking)
+                FindClosestTarget();
+        }
 
-        if (dying)
-            Die();
-
-        else if (health <= 0)
-            dying = true;
-
-        else if (moving)
-            Move();
+        base.Update();
     }
 
     public override void OnMouseOver()
     {
-        //Debug.Log("troop");
         base.OnMouseOver();
-        //var v = GetComponent<CapsuleCollider>();
-        //Debug.Log(v.transform.position + " " + transform.position);
     }
 
-    public override void RightClick()
+    /// <summary>
+    /// Set target, switch to attack mode, set destination
+    /// </summary>
+    /// <param name="e"></param>
+    public virtual void Attack(Entity e)
     {
-        foreach (Troop t in Game.Instance.troops)
-        {
-            if (!t.selected || fruit == t.fruit)
-                continue;
-            t.Attack(this);
-        }
-    }
-
-    public virtual void Attack(Troop t)
-    {
-        target = t;
+        target = e;
         attacking = true;
         SetDestination(target.transform.position);
-        //u.Attack(this);
     }
 
+     /// <summary>
+     /// Chase targeted enemy unit
+     /// </summary>
     private void Pursue()
     {
         destination = target.transform.position;
@@ -98,15 +75,22 @@ public class Troop : Unit
         if (timeUntilNextAttack == 0 && !moving)
         {
             timeUntilNextAttack = attackSpeed * 60;
-            targetIndex = Game.Instance.troops.IndexOf(target);
+            //targetIndex = GetEnemyTroops().IndexOf(target);
             Audio.Instance.PlayAttack(index);
             TriggerAttack();
         }
 
-        if (target is Troop && (target as Troop).moving)
+        if ((target as Unit).moving)
+        {
             velocity = GetVelocity(diff.x, diff.z);
+            RotateTowards(diff.x, diff.z);
+        }
+    }
 
-        RotateTowards(diff.x, diff.z);
+
+    private void AttackStructure()
+    {
+
     }
 
     private void FindClosestTarget()
@@ -114,66 +98,68 @@ public class Troop : Unit
         float closest = 10000;
         int index = 0;
 
-        foreach (Troop t in Game.Instance.troops)
+        foreach (Troop t in GetEnemyTroops())
         {
-            if (fruit == t.fruit || t.dying)
+            if (t.isDying)
                 continue;
             Vector3 diff = transform.position - t.transform.position;
 
             if (diff.magnitude < closest)
             {
                 closest = diff.magnitude;
-                index = Game.Instance.troops.IndexOf(t);
+                index = GetEnemyTroops().IndexOf(t);
             }
         }
 
         if (closest != 10000)
         {
-            Attack(Game.Instance.troops[index]);
+            Attack(GetEnemyTroops()[index]);
         }
         else
         {
+            foreach (Worker w in GetEnemyWorkers())
+            {
+                if (w.isDying)
+                    continue;
+                Vector3 diff = transform.position - w.transform.position;
+
+                if (diff.magnitude < closest)
+                {
+                    closest = diff.magnitude;
+                    index = GetEnemyWorkers().IndexOf(w);
+                }
+            }
+
+            if (closest != 10000)
+            {
+                Attack(GetEnemyWorkers()[index]);
+            }
+            else
+            {
+                foreach (Structure s in GetEnemyStructures())
+                {
+                    if (s.isDying)
+                        continue;
+                    Vector3 diff = transform.position - s.transform.position;
+
+                    if (diff.magnitude < closest)
+                    {
+                        closest = diff.magnitude;
+                        index = GetEnemyStructures().IndexOf(s);
+                    }
+                }
+
+                if (closest != 10000)
+                {
+                    Attack(GetEnemyStructures()[index]);
+                }
+            }
+        }
+
+        if (closest == 10000)
+        {
             attacking = false;
             StopMoving();
-        }
-    }
-
-    public void Die()
-    {
-        //Debug.Log(deathTimer);
-        if (deathTimer == 300)
-        {
-            //Debug.Log("dead");
-            Audio.Instance.PlayDeath(index);
-            StopMoving();
-            target = null;
-        }
-
-        deathTimer--;
-        if (deathTimer > 210) // fall over
-        {
-            if (selected)
-            {
-                Game.Instance.selectionChanged = true;
-                Game.Instance.selectionCount--;
-            }
-            ToggleSelected(false);
-            transform.Rotate(0, 0, 1, Space.World);
-        }
-        else if (deathTimer > 0) // sink
-        {
-            transform.Translate(0, -.1f, 0, Space.World);
-        }
-        else // delete
-        {
-            foreach (Troop t in Game.Instance.troops)
-            {
-                if (t.target != null && t.target == this)
-                    t.target = null;
-            }
-
-            Destroy(gameObject);
-            Game.Instance.troops.Remove(this);
         }
     }
 
@@ -181,5 +167,21 @@ public class Troop : Unit
     {
         if (target != null)
             target.health -= attackDamage;
+    }
+
+
+    public virtual List<Troop> GetAllyTroops()
+    {
+        return null;
+    }
+
+    public virtual List<Worker> GetEnemyWorkers()
+    {
+        return null;
+    }
+
+    public virtual List<Structure> GetEnemyStructures()
+    {
+        return null;
     }
 }

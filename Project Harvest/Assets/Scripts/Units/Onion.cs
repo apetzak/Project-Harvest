@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Onion : Troop
+public class Onion : Veggie
 {
     public Burst burst;
 

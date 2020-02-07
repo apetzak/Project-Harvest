@@ -64,5 +64,7 @@ public class RootPatch : Farm
             troop.transform.Translate(new Vector3(0, -5, 0), Space.World);
             state = FarmState.Spawning;
         }
+
+        base.LeftClick();
     }
 }

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Stages: Grow tree, grow troops numerous times, die, chop down
+/// </summary>
 public class FruitTree : Farm
 {
     public int plantGrowthTime = 200;
@@ -57,9 +60,6 @@ public class FruitTree : Farm
 
                 if (troops[i].transform.position.y > stopHeight)
                     troops[i].transform.position -= new Vector3(0, .5f, 0);
-
-                //Debug.Log(spawnTime + " " + (troops[i].transform.position.y > stopHeight)
-                //    + " " + stopHeight + " " + transform.position.y);
             }
 
             if (spawnTime <= 0)
@@ -87,6 +87,8 @@ public class FruitTree : Farm
         }
         else if (state == FarmState.Planting)
         {
+            if (propMesh != null)
+                propMesh.enabled = true;
             state = FarmState.PlantGrowing;
         }
         else if (state == FarmState.Pickable)
@@ -111,6 +113,8 @@ public class FruitTree : Farm
             dirtMesh.enabled = false;
             state = FarmState.Empty;
         }
+
+        base.LeftClick();
     }
 
     public void ShowFruit(bool b = true)

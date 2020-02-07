@@ -28,13 +28,37 @@ public class Map : MonoBehaviour
 
     void DrawUnits()
     {
-        foreach (Unit u in Game.Instance.troops)
+        foreach (Entity e in Game.Instance.fruits)
         {
             //Debug.Log(transform.position.x + " " + transform.position.y);
-            int x = Convert.ToInt32(u.transform.position.x) / 5;
-            int z = Convert.ToInt32(u.transform.position.z) / 5;
+            int x = Convert.ToInt32(e.transform.position.x) / 5;
+            int z = Convert.ToInt32(e.transform.position.z) / 5;
             Rect r = new Rect(1624 + x, 911 - z, 2, 2);
-            GUI.DrawTexture(r, !u.selected ? Texture2D.whiteTexture : Texture2D.normalTexture);
+            GUI.DrawTexture(r, !e.selected ? Texture2D.whiteTexture : Texture2D.normalTexture);
+        }
+
+        foreach (Entity e in Game.Instance.veggies)
+        {
+            int x = Convert.ToInt32(e.transform.position.x) / 5;
+            int z = Convert.ToInt32(e.transform.position.z) / 5;
+            Rect r = new Rect(1624 + x, 911 - z, 2, 2);
+            GUI.DrawTexture(r, !e.selected ? Texture2D.whiteTexture : Texture2D.normalTexture);
+        }
+
+        foreach (Entity e in Game.Instance.blueberries)
+        {
+            int x = Convert.ToInt32(e.transform.position.x) / 5;
+            int z = Convert.ToInt32(e.transform.position.z) / 5;
+            Rect r = new Rect(1624 + x, 911 - z, 2, 2);
+            GUI.DrawTexture(r, !e.selected ? Texture2D.whiteTexture : Texture2D.normalTexture);
+        }
+
+        foreach (Entity e in Game.Instance.peas)
+        {
+            int x = Convert.ToInt32(e.transform.position.x) / 5;
+            int z = Convert.ToInt32(e.transform.position.z) / 5;
+            Rect r = new Rect(1624 + x, 911 - z, 2, 2);
+            GUI.DrawTexture(r, !e.selected ? Texture2D.whiteTexture : Texture2D.normalTexture);
         }
     }
 

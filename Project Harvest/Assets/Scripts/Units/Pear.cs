@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pear : Troop
+public class Pear : Fruit
 {
     public Burst burst;
     public Projectile rocket;

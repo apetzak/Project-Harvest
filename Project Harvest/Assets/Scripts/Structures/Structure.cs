@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-public class Structure : MonoBehaviour
+/// <summary>
+/// Produces units or provides upgrades/utility/defense.
+/// Can be built or repaired by workers.
+/// Can be destroyed by troops.
+/// </summary>
+public class Structure : Entity
 {
-    public float health;
-    public float maxHealth;
     public float minX;
     public float maxX;
     public float maxY;
@@ -19,7 +22,7 @@ public class Structure : MonoBehaviour
 
     protected virtual void LeftClick()
     {
-
+        
     }
 
     protected virtual void RightClick()
@@ -29,7 +32,10 @@ public class Structure : MonoBehaviour
 
     protected virtual void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(1);
+        if (Game.Instance.troopIsSelected)
+            CursorSwitcher.Instance.Set(1);
+        else if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(7);
     }
 
     protected void OnMouseOver()

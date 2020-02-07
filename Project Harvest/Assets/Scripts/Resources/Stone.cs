@@ -23,6 +23,7 @@ public class Stone : Resource
 
     void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(6);
+        if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(6);
     }
 }

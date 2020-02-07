@@ -8,6 +8,7 @@ public class OnionPatch : RootPatch
     {
         spawnTime = 55;
         growthEnd = 25;
+        index = 9;
         base.Start();
     }
 }

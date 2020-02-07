@@ -30,6 +30,7 @@ public class Gold : Resource
 
     void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(6);
+        if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(6);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Apple : Troop
+public class Apple : Fruit
 {
     public GameObject sword;
     public Vector3 initPosition;

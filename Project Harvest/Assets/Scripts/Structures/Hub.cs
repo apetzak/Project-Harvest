@@ -68,7 +68,7 @@ public class Hub : Structure
         Worker w = Instantiate(workerPrefab, b.transform.position, b.transform.rotation);
         var t = gameObject.transform.position;
         w.SetDestination(new Vector3(t.x + i * 5, t.y, t.z - 35));
-        Game.Instance.workers.Add(w);
+        w.Spawn();
     }
 
     protected void ShowProps(bool b = true)

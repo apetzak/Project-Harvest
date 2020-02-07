@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Watermelon : Troop
+public class Watermelon : Fruit
 {
     public GameObject chainSaw;
     public Vector3 initPosition;

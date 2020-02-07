@@ -31,17 +31,14 @@ public class Zone : MonoBehaviour
 
     void LeftClick()
     {
-        Game.Instance.selectionCount = 0;
-        Game.Instance.selectionChanged = true;
-        Game.Instance.selectedUnit = null;
-        Units.DisableAllSelectors();
+        UnitUtils.ClearUnitSelection();
+        Game.Instance.ChangeSelection();
     }
 
     void RightClick()
     {
-        //Debug.Log("right click");
         SetDestinations();
-        Units.ClearTargets();       
+        UnitUtils.ClearTargets();       
     }
 
     void SetDestinations()
@@ -50,7 +47,7 @@ public class Zone : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (!Physics.Raycast(ray, out hit))    
             return;
-        Units.SetGroupLocation(hit);
+        UnitUtils.SetGroupLocation(hit);
     }
 
     void OnMouseDown()

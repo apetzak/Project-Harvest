@@ -21,6 +21,7 @@ public class Tree : Resource
 
     void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(8);
+        if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(8);
     }
 }

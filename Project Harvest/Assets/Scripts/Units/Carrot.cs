@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Carrot : Troop
+public class Carrot : Veggie
 {
     private int spinTimer = 30;
     private bool spinning = false;
@@ -17,7 +17,7 @@ public class Carrot : Troop
 
     void Update()
     {
-        if (spinning && !dying)
+        if (spinning && !isDying)
             Spin();
         base.Update();
     }

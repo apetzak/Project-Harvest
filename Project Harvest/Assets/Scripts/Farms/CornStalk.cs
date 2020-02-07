@@ -9,6 +9,7 @@ public class CornStalk : Farm
     {
         growthEnd = 90;
         spawnTime = 90;
+        index = 5;
         base.Start();
     }
 
@@ -77,5 +78,7 @@ public class CornStalk : Farm
             prop.transform.Rotate(-90, 0, 0, Space.Self);
             state = FarmState.Empty;
         }
+
+        base.LeftClick();
     }
 }

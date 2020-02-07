@@ -10,6 +10,7 @@ public class AppleTree : FruitTree
         harvestCount = 6;
         growthEnd = 60;
         plantGrowthIncrement = .025f;
+        index = 0;
         base.Start();
     }
 }

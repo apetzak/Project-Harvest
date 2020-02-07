@@ -38,6 +38,8 @@ public class SelectorBox : MonoBehaviour
 
     void SelectUnits()
     {
+        //UnitUtils.ClearUnitSelection();
+
         holdingDown = false;
         var rt = selectorBox.GetComponent<RectTransform>();
         var end = Input.mousePosition;
@@ -50,38 +52,63 @@ public class SelectorBox : MonoBehaviour
         if (maxX - minX < 5)
             return;
 
-        foreach (Troop t in Game.Instance.troops)
+        foreach (Troop t in Game.Instance.fruits)
         {
             var v = Camera.main.WorldToScreenPoint(t.transform.position);
 
             if (selectedCount > 84)
                 break;
 
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying && !t.selected)
             {
                 t.ToggleSelected(true);
                 selectedCount++;
             }
         }
 
-        foreach (Worker w in Game.Instance.workers)
+        foreach (Troop t in Game.Instance.veggies)
+        {
+            var v = Camera.main.WorldToScreenPoint(t.transform.position);
+
+            if (selectedCount > 84)
+                break;
+
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying && !t.selected)
+            {
+                t.ToggleSelected(true);
+                selectedCount++;
+            }
+        }
+
+        foreach (Worker w in Game.Instance.blueberries)
         {
             var v = Camera.main.WorldToScreenPoint(w.transform.position);
 
             if (selectedCount > 84)
                 break;
 
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying && !w.selected)
             {
                 w.ToggleSelected(true);
                 selectedCount++;
             }
         }
 
-        if (Game.Instance.selectedUnit != null)
-            selectedCount++;
+        foreach (Worker w in Game.Instance.peas)
+        {
+            var v = Camera.main.WorldToScreenPoint(w.transform.position);
 
-        Game.Instance.ChangeSelection(selectedCount);
+            if (selectedCount > 84)
+                break;
+
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying && !w.selected)
+            {
+                w.ToggleSelected(true);
+                selectedCount++;
+            }
+        }
+
+        Game.Instance.ChangeSelection();
         rt.transform.localScale = new Vector3(0, 0, 0);
     }
 }

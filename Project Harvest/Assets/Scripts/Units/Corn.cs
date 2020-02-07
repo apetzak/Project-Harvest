@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Corn : Troop
+public class Corn : Veggie
 {
     public Projectile cannonBall;
 

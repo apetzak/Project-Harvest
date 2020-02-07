@@ -10,7 +10,7 @@ public class Projectile : MonoBehaviour
     private float launchDistance = 0;
     public bool hit = false;
     public Vector3 hitLocation;
-    public Troop target;
+    public Entity target;
 
     void Start()
     {
@@ -36,9 +36,9 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Spawn(Vector3 destination, Troop u)
+    public void Spawn(Vector3 destination, Entity e)
     {
-        target = u;
+        target = e;
         Vector3 diff = transform.position - destination;
         launchDistance = Mathf.RoundToInt(diff.magnitude);
         velocity = new Vector3(-diff.x, 0, -diff.z).normalized;

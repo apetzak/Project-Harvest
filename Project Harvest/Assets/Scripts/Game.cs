@@ -10,30 +10,40 @@ public class Game : MonoBehaviour
 
     public static int screenHeight;
     public static int screenWidth;
-    public List<Troop> unitPrefabs;
-    public List<Troop> troops { get; set; }
     public Pea peaPrefab;
     public Blueberry bbPrefab;
-    public List<Worker> workers { get; set; }
-    public Unit selectedUnit;
-    public List<Farm> farms { get; set; }
+    public List<Troop> unitPrefabs;
+    public List<Troop> fruits { get; set; }
+    public List<Troop> veggies { get; set; }
+    public List<Worker> blueberries { get; set; }
+    public List<Worker> peas { get; set; }
+    public List<Structure> fruitStructures { get; set; }
+    public List<Structure> veggieStructures { get; set; }
+    public List<Unit> selectedUnits { get; set; }
+    public Entity selectedUnit;
     public GameObject selectorBox;
     public bool holdingDown = false;
     public Vector3 boxPoint;
     public bool selectionChanged = false;
-    public int selectionCount = 0;
+    public bool workerIsSelected = false;
+    public bool troopIsSelected = false;
 
     void Start()
     {
-        //Application.targetFrameRate = 30;
-        Instance.troops = new List<Troop>();
-        Instance.farms = new List<Farm>();
-        Instance.workers = new List<Worker>();
+        Instance.peaPrefab = peaPrefab;
+        Instance.bbPrefab = bbPrefab;
+        Instance.unitPrefabs = unitPrefabs;
+        Instance.fruits = new List<Troop>();
+        Instance.veggies = new List<Troop>();
+        Instance.blueberries = new List<Worker>();
+        Instance.peas = new List<Worker>();
+        Instance.fruitStructures = new List<Structure>();
+        Instance.veggieStructures = new List<Structure>();
+        Instance.selectedUnits = new List<Unit>();
 
         //AddSquad(10, 2);
         //AddWorkers();
-        var rt = selectorBox.GetComponent<RectTransform>();
-        rt.transform.localScale = new Vector3(0, 0, 0);
+        selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
     }
 
     void AddWorkers()
@@ -56,11 +66,7 @@ public class Game : MonoBehaviour
             for (int i = 0; i < rows; i++)
             {
                 for (int q = 0; q < columns; q++)
-                {
-                    int j = i * 10;
-
                     AddUnit(z, i * 10, q * 10 + (12 * z * columns));
-                }
             }
         }
     }
@@ -71,7 +77,6 @@ public class Game : MonoBehaviour
         Troop u = Instantiate(unitPrefabs[index], pos, Quaternion.identity);
         u.ToggleSelected(false);
         //u.attacking = true;
-        Instance.troops.Add(u);
     }
 
     public void AddWorker(int index, int x, int z)
@@ -79,21 +84,44 @@ public class Game : MonoBehaviour
         Vector3 pos = new Vector3(x + 20, 10f, z + 10);
         Worker w = Instantiate(peaPrefab, pos, Quaternion.identity);
         w.ToggleSelected(false);
-        Instance.workers.Add(w);
+        Instance.blueberries.Add(w);
 
         pos = new Vector3(x + 30, 10f, z + 10);
         w = Instantiate(bbPrefab, pos, Quaternion.identity);
         w.ToggleSelected(false);
-        Instance.workers.Add(w);
+        Instance.peas.Add(w);
     }
 
-    public void ChangeSelection(int selectedCount)
+    /// <summary>
+    /// Set/clear selectedUnit, toggle selectionChanged flag, set workerIsSelected and troopIsSelected
+    /// </summary>
+    public void ChangeSelection()
     {
-        if (selectedCount != 1)
-            Instance.selectedUnit = null;
-        Instance.selectionCount = selectedCount;
-        //Debug.Log("changeSelection");
-        Instance.selectionChanged = true;
+        if (selectedUnits.Count == 1)
+            selectedUnit = Instance.selectedUnits[0];
+        else
+            selectedUnit = null;
+
+        selectionChanged = true;
+        workerIsSelected = troopIsSelected = false;
+
+        foreach (Unit u in selectedUnits)
+        {
+            if (u is Worker)
+            {
+                workerIsSelected = true;
+                break;
+            }
+        }
+
+        foreach (Unit u in selectedUnits)
+        {
+            if (u is Troop)
+            {
+                troopIsSelected = true;
+                break;
+            }
+        }
     }
 
     void Update()

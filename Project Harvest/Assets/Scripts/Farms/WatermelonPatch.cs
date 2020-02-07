@@ -10,6 +10,7 @@ public class WatermelonPatch : Farm
     {
         growthEnd = 160;
         prop.transform.localScale = new Vector3(0, 0, 0);
+        index = 8;
         base.Start();
     }
 
@@ -22,7 +23,7 @@ public class WatermelonPatch : Farm
     {
         if (state == FarmState.Spawning)
         {
-
+            // todo
         }
         else
         {
@@ -49,12 +50,11 @@ public class WatermelonPatch : Farm
         else if (state == FarmState.Pickable)
         {
             Troop t = Pick(1)[0];
+
             //t.transform.position = new Vector3(-.25f, 5.68f, -7.08f) + transform.position;
             //t.transform.Rotate(0, 0, -90, Space.Self);
             //t.transform.position = dummy.transform.position;
-            //t.transform.rotation = dummy.transform.rotation;
-
-
+            //t.transform.rotation = dummy.transform.rotation
 
             //if (propMesh != null)
             //    propMesh.enabled = false;
@@ -67,5 +67,7 @@ public class WatermelonPatch : Farm
             //t.ToggleSelected(true);
             //state = FarmState.Empty;
         }
+
+        base.LeftClick();
     }
 }

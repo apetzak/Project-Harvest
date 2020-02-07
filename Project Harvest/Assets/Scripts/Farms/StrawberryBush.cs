@@ -8,6 +8,7 @@ public class StrawberryBush : Farm
     {
         growthEnd = 20;
         spawnTime = 90;
+        index = 6;
         base.Start();
     }
 
@@ -70,5 +71,7 @@ public class StrawberryBush : Farm
             propMesh.enabled = false;
             state = FarmState.Empty;
         }
+
+        base.LeftClick();
     }
 }

@@ -6,6 +6,7 @@ public class BananaTree : FruitTree
 {
     public override void Start()
     {
+        // dont use propMesh
         spawnTime = 52;
         harvestCount = 3;
         growthEnd = 120;
@@ -17,5 +18,6 @@ public class BananaTree : FruitTree
         ShowFruit(false);
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 15;
+        index = 2;
     }
 }

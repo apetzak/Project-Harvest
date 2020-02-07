@@ -30,7 +30,11 @@ public class Farm : Structure
     public int spawnTime;
     public int spawnStart;
     public int sproutTime = 30;
+    public int index;
 
+    /// <summary>
+    /// Set/disable prop and dirt mesh, set spawnStart
+    /// </summary>
     public virtual void Start()
     {
         propMesh = prop.GetComponent<MeshRenderer>();
@@ -44,6 +48,9 @@ public class Farm : Structure
 
     }
 
+    /// <summary>
+    /// Grow crow if in growing state
+    /// </summary>
     public virtual void Update()
     {
         if (state == FarmState.Growing)
@@ -59,6 +66,11 @@ public class Farm : Structure
         }
     }
 
+    /// <summary>
+    /// Retrieve troops from pickable farm and select them
+    /// </summary>
+    /// <param name="count"></param>
+    /// <returns></returns>
     public List<Troop> Pick(int count)
     {
         if (propMesh != null)
@@ -73,22 +85,51 @@ public class Farm : Structure
         {
             Troop t = Instantiate(prefab, pos, Quaternion.identity);
 
+            // spread out
             if (count > 1)
                 pos.x += 3;
 
-            Game.Instance.troops.Add(t);
+            t.Spawn();
             t.ToggleSelected(true);
             list.Add(t);
         }
 
-        //Game.Instance.ChangeSelection(list.Count);
-
+        Game.Instance.ChangeSelection();
         state = FarmState.Empty;
         return list;
     }
 
-    void OnMouseEnter()
+    protected override void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(8);
+        if (Game.Instance.troopIsSelected)
+            CursorSwitcher.Instance.Set(1);
+
+        else if (Game.Instance.workerIsSelected)
+            SwitchCursors();
+    }
+
+    /// <summary>
+    /// Switch cursor, only if worker(s) are selected
+    /// </summary>
+    protected override void LeftClick()
+    {
+        if (!Game.Instance.troopIsSelected && Game.Instance.workerIsSelected)
+            SwitchCursors();
+    }
+
+    /// <summary>
+    /// Set cursor icon to corresponding farm state
+    /// </summary>
+    protected void SwitchCursors()
+    {
+        if (state == FarmState.Empty)
+            CursorSwitcher.Instance.Set(2);
+
+        else if (state == FarmState.Planting || state == FarmState.Growing 
+              || state == FarmState.PlantGrowing || state == FarmState.Sprouting)
+            CursorSwitcher.Instance.Set(4);
+
+        else if (state == FarmState.Dead || state == FarmState.Pickable)
+            CursorSwitcher.Instance.Set(5);
     }
 }

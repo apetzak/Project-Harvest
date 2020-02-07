@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Brocolli : Troop
+public class Brocolli : Veggie
 {
     public Burst burst1;
     public Burst burst2;
 
     void Start()
     {
-        transform.Rotate(65, 0, 0, Space.World);
+        //transform.Rotate(65, 0, 0, Space.World);
         transform.Translate(0, 4, 0, Space.World);
         base.Start();
     }

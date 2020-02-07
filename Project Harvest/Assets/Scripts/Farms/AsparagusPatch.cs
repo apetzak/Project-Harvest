@@ -8,6 +8,7 @@ public class AsparagusPatch : Farm
     {
         growthEnd = 15;
         prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
+        index = 7;
         base.Start();
     }
 
@@ -41,5 +42,7 @@ public class AsparagusPatch : Farm
             Pick(1);
             prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         }
+
+        base.LeftClick();
     }
 }
