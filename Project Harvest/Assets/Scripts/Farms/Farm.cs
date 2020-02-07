@@ -49,7 +49,7 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Grow crow if in growing state
+    /// Grow crop if in growing state
     /// </summary>
     public virtual void Update()
     {
@@ -69,8 +69,8 @@ public class Farm : Structure
     /// <summary>
     /// Retrieve troops from pickable farm and select them
     /// </summary>
-    /// <param name="count"></param>
-    /// <returns></returns>
+    /// <param name="count">Quantity to pick</param>
+    /// <returns>Harvested troops</returns>
     public List<Troop> Pick(int count)
     {
         if (propMesh != null)
@@ -109,7 +109,7 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Switch cursor, only if worker(s) are selected
+    /// Switch cursor, if only worker(s) are selected
     /// </summary>
     protected override void LeftClick()
     {

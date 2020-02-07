@@ -55,7 +55,7 @@ public class Troop : Unit
     /// <summary>
     /// Set target, switch to attack mode, set destination
     /// </summary>
-    /// <param name="e"></param>
+    /// <param name="e">Target to attack</param>
     public virtual void Attack(Entity e)
     {
         target = e;
@@ -87,12 +87,14 @@ public class Troop : Unit
         }
     }
 
-
     private void AttackStructure()
     {
 
     }
 
+    /// <summary>
+    /// Find and target closest enemy entity
+    /// </summary>
     private void FindClosestTarget()
     {
         float closest = 10000;

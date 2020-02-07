@@ -26,7 +26,7 @@ public class TroopClass : MonoBehaviour
     void Start()
     {
         Instance.list = GetProperties();
-        Debug.Log(Instance.list);
+        //Debug.Log(Instance.list);
     }
 
     private List<AudioClip> GetClips(params string[] arr)

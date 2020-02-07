@@ -18,11 +18,11 @@ public class SelectionPanel : MonoBehaviour
     private Text txt;
     public GameObject pic;
     public List<RawImage> images;
-    private Unit unit;
-    private bool change = true;
+    private Entity entity;
+    //private bool change = true;
     private bool visible = true;
-    private bool unitBoxesActive = false;
-    private int selectedCount = 0;
+    //private bool unitBoxesActive = false;
+    //private int selectedCount = 0;
 
     void Start()
     {
@@ -36,23 +36,30 @@ public class SelectionPanel : MonoBehaviour
 
     void LateUpdate()
     {
-        if (Game.Instance.selectionChanged)
+        try
         {
-            //Debug.Log("selectionChanged");
-            Game.Instance.selectionChanged = false;
+            if (Game.Instance.selectionChanged)
+            {
+                //Debug.Log("selectionChanged");
+                Game.Instance.selectionChanged = false;
 
-            if (Game.Instance.selectedUnit == null && Game.Instance.selectionCount != 1)
-                HideSingle();
-            else if (Game.Instance.selectedUnit != unit)
-                ShowSingle();
+                if (Game.Instance.selectedUnit == null && Game.Instance.selectedUnits.Count != 1)
+                    HideSingle();
+                else if (Game.Instance.selectedUnit != entity)
+                    ShowSingle();
 
-            HideUnitBoxes();
+                HideUnitBoxes();
 
-            if (Game.Instance.selectionCount > 1)
-                ShowUnitBoxes();
+                if (Game.Instance.selectedUnits.Count > 1)
+                    ShowUnitBoxes();
 
-            //else if (unit != null)
-            //    UpdateHealthBar();
+                //else if (unit != null)
+                //    UpdateHealthBar();
+            }
+        }
+        catch
+        {
+            Debug.Log("catch");
         }
     }
 
@@ -78,18 +85,18 @@ public class SelectionPanel : MonoBehaviour
         //Debug.Log("show unit boxes");
         var units = new List<Unit>();
         //var indexs = new List<int>();
-        foreach (Troop t in Game.Instance.troops)
+        foreach (Unit u in Game.Instance.selectedUnits)
         {
-            if (!t.selected || t.dying)
+            if (!u.selected || u.isDying)
                 continue;
-            units.Add(t);
+            units.Add(u);
             //indexs.Add(Game.Instance.troops.IndexOf(t));
         }
 
         HideUnitBoxes();
-        Debug.Log(unitBoxes.Count + " " + units.Count + " " + Game.Instance.selectionCount);
+        //Debug.Log(unitBoxes.Count + " " + units.Count + " " + Game.Instance.selectionCount);
 
-        for (int i = 0; i < Game.Instance.selectionCount; i++)
+        for (int i = 0; i < Game.Instance.selectedUnits.Count; i++)
         {
             unitBoxes[i].transform.gameObject.SetActive(true);
             unitBoxes[i].image.texture = images[units[i].index].texture;
@@ -120,24 +127,24 @@ public class SelectionPanel : MonoBehaviour
         foreach (RawImage i in images)
             i.enabled = false;
         txt.enabled = green.enabled = red.enabled = false;
-        unit = null;
+        entity = null;
         visible = false;
     }
 
     private void ShowSingle()
     {
         //Debug.Log("show single " + Game.Instance.selectedUnit + " " + Game.Instance.selectionCount);
-        unit = Game.Instance.selectedUnit;
+        entity = Game.Instance.selectedUnit;
         foreach (RawImage i in images)
             i.enabled = false;
-        images[unit.index].enabled = true;
+        //images[entity.index].enabled = true;
         txt.enabled = green.enabled = red.enabled = true;
         txt.text = GetText();
     }
 
     private void UpdateHealthBar()
     {
-        var barLength = 175 / unit.maxHealth * unit.health * 1.15f * .75f;
+        var barLength = 175 / entity.maxHealth * entity.health * 1.15f * .75f;
         var v = lifeBar.GetComponent<RectTransform>();
         v.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, barLength);
         v.transform.localPosition = initPosition;
@@ -146,7 +153,7 @@ public class SelectionPanel : MonoBehaviour
 
     private string GetText()
     {
-        Troop t = unit as Troop;
+        Troop t = entity as Troop;
         return $"Health        {t.maxHealth}\nSpeed        {t.speed}" +
         $"\nDamage     {t.attackDamage}\nA. Speed    {t.attackSpeed}\nA. Range    {t.attackRange}";
     }

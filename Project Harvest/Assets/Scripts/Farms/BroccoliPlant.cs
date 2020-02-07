@@ -61,7 +61,7 @@ public class BroccoliPlant : Farm
             state = FarmState.PlantGrowing;
         }
         else if (state == FarmState.Pickable)
-        {           
+        {
             Pick(1);
             propMesh.enabled = true;
             state = FarmState.Growing;

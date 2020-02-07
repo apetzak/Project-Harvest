@@ -19,14 +19,14 @@ public class CameraMovement : MonoBehaviour
         float mouseY = Input.mousePosition.y;
         float camY = Camera.main.transform.position.y;       
 
-        if (mouseX < 0)
+        if (mouseX < 0 || Input.GetKey("a"))
             Camera.main.transform.Translate(-speed, 0, 0);
-        else if (mouseX >= Screen.width - 5)
+        else if (mouseX >= Screen.width - 5 || Input.GetKey("d"))
             Camera.main.transform.Translate(speed, 0, 0);
 
-        if (mouseY < 0)
+        if (mouseY < 0 || Input.GetKey("s"))
             Camera.main.transform.Translate(0, 0, -speed);
-        else if (mouseY >= Screen.height)
+        else if (mouseY >= Screen.height || Input.GetKey("w"))
             Camera.main.transform.Translate(0, 0, speed);
 
         RevertChangeInY(camY);

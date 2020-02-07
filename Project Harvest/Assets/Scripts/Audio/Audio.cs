@@ -28,7 +28,7 @@ public class Audio : MonoBehaviour
             AudioSource s = o.AddComponent<AudioSource>();
             Instance.objects.Add(o);
         }
-        Debug.Log(Instance.objects);
+        //Debug.Log(Instance.objects);
     }
 
     public void PlaySound(AudioClip clip)
