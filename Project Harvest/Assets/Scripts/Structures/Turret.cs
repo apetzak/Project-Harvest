@@ -7,22 +7,89 @@ public class Turret : Structure
     public GameObject gun;
     public Burst burst;
     private int attackTime = 60;
-
-    void Start()
-    {
-
-    }
+    public bool attacking = false;
+    public Entity target;
+    private float facingAngle = 90;
 
     void Update()
     {
-        attackTime--;
-
-        if (attackTime <= 0)
+        if (target == null)
         {
-            burst.Pop();
-            attackTime = 60;
+            FindTarget();
         }
+        else if (attacking)
+        {
+            attackTime--;
 
-        gun.transform.Rotate(0, 1f, 0, Space.World);
+            if (target is Unit && (target as Unit).moving)
+            {
+                Vector3 diff = transform.position - target.transform.position;
+
+                if (diff.magnitude > 60) // unit left range
+                {
+                    target = null;
+                    attacking = false;
+                    return;
+                }
+                else
+                {
+                    RotateTowardsTarget();
+                }
+            }
+
+            if (attackTime <= 0)
+                ShootTarget();
+        }
+    }
+
+    private void ShootTarget()
+    {
+        // sniper shot
+        Audio.Instance.PlaySound(TroopClass.Instance.list[5].sounds[0]);
+
+        burst.Pop();
+        attackTime = 60;
+        target.health -= 20;
+
+        if (target.health <= 0)
+        {
+            target.isDying = true;
+            target = null;
+            attacking = false;
+        }
+    }
+
+    private void FindTarget()
+    {
+        foreach (Fruit f in Game.Instance.fruits)
+        {
+            if (f.isDying)
+                continue;
+
+            Vector3 diff = transform.position - f.transform.position;
+            //Debug.Log(diff.magnitude + " searching for target");
+
+            if (diff.magnitude < 60)
+            {
+                //Debug.Log("target found");
+                target = f;
+                attacking = true;
+                RotateTowardsTarget();
+                break;
+            }
+        }
+    }
+
+    private void RotateTowardsTarget()
+    {
+        Vector3 diff = transform.position - target.transform.position;
+        float angleDiff = GetAngle(diff.x, diff.z);
+        gun.transform.Rotate(0, angleDiff, 0, Space.Self);
+        facingAngle += angleDiff;
+    }
+
+    private float GetAngle(float x, float z)
+    {
+        return Mathf.Atan2(x, z) * (180.0f / Mathf.PI) - facingAngle;
     }
 }

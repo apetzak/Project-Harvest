@@ -457,19 +457,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dc8c4e7738d294a98bde0a25f97b1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 100
+  maxHealth: 0
+  isDying: 0
+  fruit: 0
+  selected: 0
+  minX: 0
+  maxX: 0
+  maxY: 0
+  minY: 0
   state: 0
   prop: {fileID: 6500218705289101392}
   dirtMound: {fileID: 6903815174386097256}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
   prefab: {fileID: -5232442228165917311, guid: 185dbccf2feb0fe41b140907aca541a1, type: 3}
+  troops: []
   size: 0
   growthTime: 0
   growthEnd: 0
+  spawnTime: 0
+  spawnStart: 0
   sproutTime: 30
-  health: 100
+  index: 0
   plantGrowthTime: 200
-  fallTime: 50
+  plantGrowthStart: 0
   props:
   - {fileID: 5492639259040000645}
   - {fileID: 3678858916961553947}
@@ -477,6 +489,9 @@ MonoBehaviour:
   - {fileID: 7738747479348017264}
   - {fileID: 3256363935932595461}
   - {fileID: 9097714663417562548}
+  harvestCount: 0
+  plantGrowthIncrement: 0
+  stopHeight: 0
 --- !u!1 &7738747479348017264
 GameObject:
   m_ObjectHideFlags: 0
