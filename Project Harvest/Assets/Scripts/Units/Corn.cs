@@ -23,7 +23,7 @@ public class Corn : Veggie
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         cannonBall.Spawn(destination, target);
     }

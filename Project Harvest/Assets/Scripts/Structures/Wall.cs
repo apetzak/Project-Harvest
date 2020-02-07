@@ -10,10 +10,10 @@ public class Wall : Structure
     public bool dropping;
     public float dropDistance;
 
-    void Start()
-    {
+    //void Start()
+    //{
         
-    }
+    //}
 
     protected override void LeftClick()
     {

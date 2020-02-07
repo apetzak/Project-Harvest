@@ -95,20 +95,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d836c3ce8a62070409dfb611b87f68a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selector: {fileID: 7615457315078711391}
-  index: 10
+  health: 0
+  maxHealth: 175
+  isDying: 0
   fruit: 1
   selected: 0
+  selector: {fileID: 7615457315078711391}
+  index: 10
   destination: {x: 0, y: 0, z: 0}
   velocity: {x: 0, y: 0, z: 0}
   moving: 0
   speed: 3
   currentSpeed: 0
   facingAngle: 0
-  health: 0
-  maxHealth: 175
   lineOfSight: 0
-  dying: 0
   deathTimer: 150
   target: {fileID: 0}
   attacking: 0
@@ -116,7 +116,6 @@ MonoBehaviour:
   attackRange: 20
   attackDamage: 25
   timeUntilNextAttack: 0
-  targetIndex: 0
   chainSaw: {fileID: 4891163602511563586}
   initPosition: {x: 0, y: 0, z: 0}
 --- !u!136 &2474602906577241059

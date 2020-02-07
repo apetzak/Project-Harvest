@@ -23,7 +23,7 @@ public class Strawberry : Fruit
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         arrow.Spawn(destination, target);
     }

@@ -457,8 +457,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dc8c4e7738d294a98bde0a25f97b1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 0
+  health: 300
+  maxHealth: 300
   isDying: 0
   fruit: 0
   selected: 0

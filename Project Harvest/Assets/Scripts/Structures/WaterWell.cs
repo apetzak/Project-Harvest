@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class WaterWell : Structure
 {
-    void Start()
-    {
+    //void Start()
+    //{
         
-    }
+    //}
 
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AsparagusPatch : Farm
 {
-    public override void Start()
+    protected override void Start()
     {
         growthEnd = 15;
         prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
@@ -12,32 +12,32 @@ public class AsparagusPatch : Farm
         base.Start();
     }
 
-    public override void GrowProp()
+    protected override void GrowProp()
     {
         prop.transform.Translate(new Vector3(0, 1, 0), Space.World);
     }
 
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
     }
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             propMesh.enabled = true;
-            state = FarmState.Growing;
+            state = State.Growing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             Pick(1);
             prop.transform.Translate(new Vector3(0, -15, 0), Space.World);

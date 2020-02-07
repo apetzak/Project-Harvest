@@ -6,7 +6,7 @@ public class WatermelonPatch : Farm
 {
     public Troop dummy;
 
-    public override void Start()
+    protected override void Start()
     {
         growthEnd = 160;
         prop.transform.localScale = new Vector3(0, 0, 0);
@@ -14,14 +14,14 @@ public class WatermelonPatch : Farm
         base.Start();
     }
 
-    public override void GrowProp()
+    protected override void GrowProp()
     {
         prop.transform.localScale += new Vector3(.01f, .01f, .01f);
     }
 
-    public override void Update()
+    protected override void Update()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
         {
             // todo
         }
@@ -33,21 +33,21 @@ public class WatermelonPatch : Farm
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             propMesh.enabled = true;
             prop.transform.localScale = new Vector3(0, 0, 0);
-            state = FarmState.Growing;
+            state = State.Growing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             Troop t = Pick(1)[0];
 

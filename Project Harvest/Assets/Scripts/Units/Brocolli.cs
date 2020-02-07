@@ -19,11 +19,11 @@ public class Brocolli : Veggie
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         burst1.Pop();
         burst2.Pop();
-        base.TriggerAttack();
+        base.InflictDamage();
     }
 
     public override void RotateTowards(float x, float z)

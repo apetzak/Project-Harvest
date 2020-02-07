@@ -11,7 +11,7 @@ public class Turret : Structure
     public Entity target;
     private float facingAngle = 90;
 
-    void Update()
+    protected override void Update()
     {
         if (target == null)
         {
@@ -40,6 +40,7 @@ public class Turret : Structure
             if (attackTime <= 0)
                 ShootTarget();
         }
+        base.Update();
     }
 
     private void ShootTarget()

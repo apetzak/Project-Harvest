@@ -5,7 +5,7 @@ using System;
 
 public class Farm : Structure
 {
-    public enum FarmState
+    public enum State
     {
         Empty,
         Planting,
@@ -17,7 +17,7 @@ public class Farm : Structure
         Dead
     }
 
-    public FarmState state = FarmState.Empty;
+    public State state = State.Empty;
     public GameObject prop;
     public GameObject dirtMound;
     public MeshRenderer propMesh;
@@ -35,15 +35,17 @@ public class Farm : Structure
     /// <summary>
     /// Set/disable prop and dirt mesh, set spawnStart
     /// </summary>
-    public virtual void Start()
+    protected override void Start()
     {
         propMesh = prop.GetComponent<MeshRenderer>();
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = propMesh.enabled = false;
         spawnStart = spawnTime;
+        health = 200;
+        base.Start();
     }
 
-    public virtual void GrowProp()
+    protected virtual void GrowProp()
     {
 
     }
@@ -51,19 +53,20 @@ public class Farm : Structure
     /// <summary>
     /// Grow crop if in growing state
     /// </summary>
-    public virtual void Update()
+    protected override void Update()
     {
-        if (state == FarmState.Growing)
+        if (state == State.Growing)
         {
             growthTime++;
             GrowProp();
 
             if (growthTime >= growthEnd)
             {
-                state = FarmState.Pickable;
+                state = State.Pickable;
                 growthTime = 0;
             }
         }
+        base.Update();
     }
 
     /// <summary>
@@ -95,7 +98,7 @@ public class Farm : Structure
         }
 
         Game.Instance.ChangeSelection();
-        state = FarmState.Empty;
+        state = State.Empty;
         return list;
     }
 
@@ -122,14 +125,14 @@ public class Farm : Structure
     /// </summary>
     protected void SwitchCursors()
     {
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
             CursorSwitcher.Instance.Set(2);
 
-        else if (state == FarmState.Planting || state == FarmState.Growing 
-              || state == FarmState.PlantGrowing || state == FarmState.Sprouting)
+        else if (state == State.Planting || state == State.Growing 
+              || state == State.PlantGrowing || state == State.Sprouting)
             CursorSwitcher.Instance.Set(4);
 
-        else if (state == FarmState.Dead || state == FarmState.Pickable)
+        else if (state == State.Dead || state == State.Pickable)
             CursorSwitcher.Instance.Set(5);
     }
 }

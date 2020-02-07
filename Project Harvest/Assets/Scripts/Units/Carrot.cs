@@ -33,13 +33,13 @@ public class Carrot : Veggie
             spinning = false;
             spinTimer = 30;
             katana.gameObject.transform.Rotate(0, -90, 0, Space.Self);
-            base.TriggerAttack();
+            base.InflictDamage();
         }
 
         spinTimer--;
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         spinning = true;
         katana.gameObject.transform.Rotate(0, 90, 0, Space.Self);

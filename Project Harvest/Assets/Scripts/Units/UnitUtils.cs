@@ -18,17 +18,10 @@ public class UnitUtils
         }
     }
 
-    public static void ClearUnitSelection()
+    public static void ClearSelection()
     {
         foreach (Unit u in Game.Instance.selectedUnits)
-        {
-            if (u != null && u.gameObject != null)
-                u.ToggleSelected(false);
-            else
-            {
-                Debug.Log("not null");
-            }
-        }
+            u.ToggleSelected(false);
         Game.Instance.selectedUnits = new List<Unit>();
     }
 

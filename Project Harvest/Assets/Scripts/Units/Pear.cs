@@ -25,7 +25,7 @@ public class Pear : Fruit
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         rocket.Spawn(destination, target);
         rocket.mesh.enabled = false;

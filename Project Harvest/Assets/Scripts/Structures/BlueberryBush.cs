@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class BlueberryBush : Hub
 {
-    void Start()
+    protected override void Start()
     {
         growthTimer = growthEnd = 120;
         maxUnits = 8;
         ShowProps(false);
+        base.Start();
     }
 
     protected override void GrowUnits()

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Market : Structure
 {
-    void Start()
-    {
-        
-    }
+    //void Start()
+    //{
 
-    void Update()
-    {
-        
-    }
+    //}
+
+    //void Update()
+    //{
+
+    //}
 }

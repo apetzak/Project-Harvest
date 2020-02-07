@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OnionPatch : RootPatch
 {
-    public override void Start()
+    protected override void Start()
     {
         spawnTime = 55;
         growthEnd = 25;

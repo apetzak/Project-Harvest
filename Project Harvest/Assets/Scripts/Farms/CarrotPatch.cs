@@ -5,7 +5,7 @@ using System;
 
 public class CarrotPatch : RootPatch
 {
-    public override void Start()
+    protected override void Start()
     {
         spawnTime = 60;
         growthEnd = 15;

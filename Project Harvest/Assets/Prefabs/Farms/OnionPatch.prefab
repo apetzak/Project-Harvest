@@ -46,19 +46,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f8f8f08e112ac742afc128e22d0c20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 200
+  maxHealth: 200
+  isDying: 0
+  fruit: 0
+  selected: 0
+  minX: 0
+  maxX: 0
+  maxY: 0
+  minY: 0
   state: 0
   prop: {fileID: 5295728642447858447}
   dirtMound: {fileID: 2527040050117395429}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
   prefab: {fileID: 6405555840964027602, guid: e3e129dd3eb34ba419aac5a4c7ab61a1, type: 3}
+  troops: []
   size: 0
   growthTime: 0
   growthEnd: 0
   spawnTime: 0
-  initialSpawnTime: 0
+  spawnStart: 0
   sproutTime: 30
-  health: 100
+  index: 0
 --- !u!65 &2146547886759396158
 BoxCollider:
   m_ObjectHideFlags: 0

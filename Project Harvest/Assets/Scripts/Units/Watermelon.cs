@@ -38,13 +38,13 @@ public class Watermelon : Fruit
             swinging = false;
             swingTimer = 40;
             chainSaw.gameObject.transform.Rotate(-65, 0, 0, Space.Self);
-            base.TriggerAttack();
+            base.InflictDamage();
         }
 
         swingTimer--;
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         chainSaw.gameObject.transform.Rotate(65, 0, 0, Space.Self);
         swinging = true;

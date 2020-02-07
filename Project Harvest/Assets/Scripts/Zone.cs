@@ -31,7 +31,7 @@ public class Zone : MonoBehaviour
 
     void LeftClick()
     {
-        UnitUtils.ClearUnitSelection();
+        UnitUtils.ClearSelection();
         Game.Instance.ChangeSelection();
     }
 

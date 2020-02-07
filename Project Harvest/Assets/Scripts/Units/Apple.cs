@@ -23,7 +23,7 @@ public class Apple : Fruit
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         swinging = true;
     }
@@ -44,7 +44,7 @@ public class Apple : Fruit
         {
             swinging = false;
             swingTimer = 20;
-            base.TriggerAttack();
+            base.InflictDamage();
             //sword.gameObject.transform.Rotate(0, -120, 0, Space.Self);
         }
 

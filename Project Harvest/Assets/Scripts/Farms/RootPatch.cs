@@ -6,14 +6,14 @@ public class RootPatch : Farm
 {
     private Troop troop;
 
-    public override void GrowProp()
+    protected override void GrowProp()
     {
         prop.transform.localScale += new Vector3(1, 1, 1);
     }
 
-    public override void Update()
+    protected override void Update()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
         {
             spawnTime--;
 
@@ -32,7 +32,7 @@ public class RootPatch : Farm
             else
             {
                 spawnTime = spawnStart;
-                state = FarmState.Empty;
+                state = State.Empty;
             }
         }
         else
@@ -43,26 +43,26 @@ public class RootPatch : Farm
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             propMesh.enabled = true;
             prop.transform.localScale = new Vector3(1, 1, 1);
-            state = FarmState.Growing;
+            state = State.Growing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             troop = Pick(1)[0];
             troop.transform.position = prop.transform.position;
             troop.transform.Translate(new Vector3(0, -5, 0), Space.World);
-            state = FarmState.Spawning;
+            state = State.Spawning;
         }
 
         base.LeftClick();

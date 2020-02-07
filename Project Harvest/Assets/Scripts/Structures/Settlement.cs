@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Settlement : Structure
 {
-    void Start()
-    {
-        
-    }
+    //void Start()
+    //{
 
-    void Update()
-    {
-        
-    }
+    //}
+
+    //void Update()
+    //{
+
+    //}
 }

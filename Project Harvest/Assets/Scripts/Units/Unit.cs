@@ -51,7 +51,7 @@ public class Unit : Entity
         {
             if (!t.selected)
                 continue;
-            t.Attack(this);
+            t.TargetUnit(this);
         }
     }
 
@@ -67,7 +67,7 @@ public class Unit : Entity
 
         if (Input.GetMouseButtonDown(0))
         {
-            UnitUtils.ClearUnitSelection();
+            UnitUtils.ClearSelection();
 
             if (clickedOnce == true) // double click
             {

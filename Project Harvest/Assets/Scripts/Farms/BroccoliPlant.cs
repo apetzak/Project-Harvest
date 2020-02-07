@@ -8,7 +8,7 @@ public class BroccoliPlant : Farm
     public GameObject prop2;
     private int pickCount;
 
-    public override void Start()
+    protected override void Start()
     {
         growthEnd = 14;
         prop2.GetComponent<MeshRenderer>().enabled = false;
@@ -20,14 +20,14 @@ public class BroccoliPlant : Farm
         base.Start();
     }
 
-    public override void GrowProp()
+    protected override void GrowProp()
     {
         prop.transform.localScale += new Vector3(5, 5, 5);
     }
 
-    public override void Update()
+    protected override void Update()
     {
-        if (state == FarmState.PlantGrowing) // grow plant first
+        if (state == State.PlantGrowing) // grow plant first
         {
             plantGrowthTime--;
             prop2.transform.localScale += new Vector3(.25f, .25f, .25f);
@@ -35,7 +35,7 @@ public class BroccoliPlant : Farm
             if (plantGrowthTime <= 0)
             {
                 propMesh.enabled = true;
-                state = FarmState.Growing;
+                state = State.Growing;
                 plantGrowthTime = 16;
             }
         }
@@ -47,31 +47,31 @@ public class BroccoliPlant : Farm
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             prop2.GetComponent<MeshRenderer>().enabled = true;
-            state = FarmState.PlantGrowing;
+            state = State.PlantGrowing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             Pick(1);
             propMesh.enabled = true;
-            state = FarmState.Growing;
+            state = State.Growing;
             pickCount--;
             if (pickCount <= 0) // stop growing troops
             {
                 propMesh.enabled = false;
                 System.Random rand = new System.Random();
                 pickCount = rand.Next(2, 4);
-                state = FarmState.Dead;
+                state = State.Dead;
             }
             else // grow another troop
             {
@@ -79,12 +79,12 @@ public class BroccoliPlant : Farm
                 prop.transform.localScale = new Vector3(0, 0, 0);
             }
         }
-        else if (state == FarmState.Dead)
+        else if (state == State.Dead)
         {
             prop.transform.localScale = new Vector3(0, 0, 0);
             prop2.transform.localScale = new Vector3(0, 0, 0);
             prop2.GetComponent<MeshRenderer>().enabled = false;
-            state = FarmState.Empty;
+            state = State.Empty;
         }
 
         base.LeftClick();

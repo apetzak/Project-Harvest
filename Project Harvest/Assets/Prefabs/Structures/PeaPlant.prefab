@@ -275,7 +275,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
-  maxHealth: 0
+  maxHealth: 500
+  isDying: 0
+  fruit: 0
+  selected: 0
   minX: 0
   maxX: 0
   maxY: 0

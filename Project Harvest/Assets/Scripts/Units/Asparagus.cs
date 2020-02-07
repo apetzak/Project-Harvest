@@ -17,9 +17,9 @@ public class Asparagus : Veggie
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         burst.Pop();
-        base.TriggerAttack();
+        base.InflictDamage();
     }
 }

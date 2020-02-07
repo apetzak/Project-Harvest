@@ -18,10 +18,10 @@ public class Banana : Fruit
         base.Update();
     }
 
-    public override void TriggerAttack()
+    public override void InflictDamage()
     {
         burst.Pop();
-        base.TriggerAttack();
+        base.InflictDamage();
     }
 
     public override void RotateTowards(float x, float z)

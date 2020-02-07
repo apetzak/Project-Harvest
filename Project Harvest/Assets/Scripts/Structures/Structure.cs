@@ -15,19 +15,39 @@ public class Structure : Entity
     public float maxY;
     public float minY;
 
-    void Start()
+    protected virtual void Start()
     {
+        health = maxHealth;
+    }
 
+    protected virtual void Update()
+    {
+        if (isDying)
+            Destroy(gameObject);
+        else if (health <= 0)
+            isDying = true;
     }
 
     protected virtual void LeftClick()
     {
-        
+        Debug.Log("left click");
+        UnitUtils.ClearSelection();
+        Game.Instance.ChangeSelection();
+        Game.Instance.selectedUnit = this;
     }
 
     protected virtual void RightClick()
     {
+        if (Game.Instance.troopIsSelected)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
+            if (!Physics.Raycast(ray, out hit))
+                return;
 
+            foreach (Troop t in Game.Instance.selectedUnits)
+                t.TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
+        }
     }
 
     protected virtual void OnMouseEnter()

@@ -13,14 +13,18 @@ public class Hub : Structure
     public int maxUnits;
     public bool spawning;
 
-    void Start()
+    protected override void Start()
     {
-
+        base.Start();
     }
 
     protected override void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(3);
+        if (Game.Instance.troopIsSelected)
+            CursorSwitcher.Instance.Set(1);
+
+        else if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(3);
     }
 
     protected virtual void GrowUnits()
@@ -33,7 +37,7 @@ public class Hub : Structure
 
     }
 
-    void Update()
+    protected override void Update()
     {
         if (unitsGrown >= maxUnits) // stop growing units at max capacity
             return;
@@ -42,9 +46,10 @@ public class Hub : Structure
 
         if (growthTimer >= growthEnd)
         {
-            GrowUnits(); // 
+            GrowUnits();
             growthTimer = 0;
         }
+        base.Update();
     }
 
     protected override void LeftClick()
@@ -53,6 +58,9 @@ public class Hub : Structure
         ReleaseUnits();
     }
 
+    /// <summary>
+    /// Spawn workers, hide props, restart growth cycle
+    /// </summary>
     protected virtual void Pick()
     {
         for (int i = 0; i < unitsGrown; i++)
@@ -62,7 +70,7 @@ public class Hub : Structure
         unitsGrown = growthTimer = 0;
     }
 
-    void SpawnWorker(int i)
+    private void SpawnWorker(int i)
     {
         GameObject b = props[i];
         Worker w = Instantiate(workerPrefab, b.transform.position, b.transform.rotation);
@@ -71,6 +79,10 @@ public class Hub : Structure
         w.Spawn();
     }
 
+    /// <summary>
+    /// Enable or disable all prop objects.
+    /// </summary>
+    /// <param name="b"></param>
     protected void ShowProps(bool b = true)
     {
         foreach (GameObject prop in props)

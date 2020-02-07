@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BananaTree : FruitTree
 {
-    public override void Start()
+    protected override void Start()
     {
         // dont use propMesh
         spawnTime = 52;
@@ -19,5 +19,6 @@ public class BananaTree : FruitTree
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 15;
         index = 2;
+        health = 300;
     }
 }

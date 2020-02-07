@@ -13,6 +13,7 @@ public class PeaPlant : Hub
         growthTimer = growthEnd = 300;
         maxUnits = 9;
         HidePods();
+        base.Start();
     }
 
     protected override void GrowUnits()
@@ -42,8 +43,8 @@ public class PeaPlant : Hub
 
     private void HidePods()
     {
-        pod1.GetComponent<MeshRenderer>().enabled = false;
-        pod2.GetComponent<MeshRenderer>().enabled = false;
+        pod1.GetComponent<MeshRenderer>().enabled = 
+        pod2.GetComponent<MeshRenderer>().enabled = 
         pod3.GetComponent<MeshRenderer>().enabled = false;
     }
 }

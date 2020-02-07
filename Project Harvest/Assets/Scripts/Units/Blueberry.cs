@@ -6,11 +6,11 @@ public class Blueberry : Worker
 {
     void Start()
     {
-        transform.Rotate(0, 90, 0, Space.Self);
+        //transform.Rotate(0, 90, 0, Space.Self);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         base.Update();
     }

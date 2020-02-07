@@ -5,7 +5,7 @@ using System;
 
 public class CornStalk : Farm
 {
-    public override void Start()
+    protected override void Start()
     {
         growthEnd = 90;
         spawnTime = 90;
@@ -13,20 +13,20 @@ public class CornStalk : Farm
         base.Start();
     }
 
-    public override void GrowProp()
+    protected override void GrowProp()
     {
         prop.transform.localScale += new Vector3(.1f, .1f, .1f);
     }
 
-    public override void Update()
+    protected override void Update()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
         {
             spawnTime--;
             if (spawnTime <= 0)
             {
                 spawnTime = spawnStart;
-                state = FarmState.Dead;
+                state = State.Dead;
             }
             else
             {
@@ -46,21 +46,21 @@ public class CornStalk : Farm
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             propMesh.enabled = true;
             prop.transform.localScale = new Vector3(0,  0, 0);
-            state = FarmState.Growing;
+            state = State.Growing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             System.Random rand = new System.Random();
             troops = Pick(rand.Next(2, 4));
@@ -70,13 +70,13 @@ public class CornStalk : Farm
 
             propMesh.enabled = true;
 
-            state = FarmState.Spawning;
+            state = State.Spawning;
         }
-        else if (state == FarmState.Dead)
+        else if (state == State.Dead)
         {
             propMesh.enabled = false;
             prop.transform.Rotate(-90, 0, 0, Space.Self);
-            state = FarmState.Empty;
+            state = State.Empty;
         }
 
         base.LeftClick();

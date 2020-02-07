@@ -15,7 +15,7 @@ public class FruitTree : Farm
     public float plantGrowthIncrement;
     public float stopHeight;
 
-    public override void Start()
+    protected override void Start()
     {
         ShowFruit(false);
         base.Start();
@@ -25,9 +25,9 @@ public class FruitTree : Farm
         plantGrowthStart = plantGrowthTime;
     }
 
-    public override void Update()
+    protected override void Update()
     {
-        if (state == FarmState.PlantGrowing) // grow tree
+        if (state == State.PlantGrowing) // grow tree
         {
             plantGrowthTime--;
             prop.transform.localScale += new Vector3(plantGrowthIncrement, plantGrowthIncrement, plantGrowthIncrement);
@@ -35,22 +35,22 @@ public class FruitTree : Farm
             if (plantGrowthTime <= 0)
             {
                 dirtMesh.enabled = false;
-                state = FarmState.Growing;
+                state = State.Growing;
                 plantGrowthTime = plantGrowthStart;
             }
         }
-        else if (state == FarmState.Growing) // tree is grown, grow fruits
+        else if (state == State.Growing) // tree is grown, grow fruits
         {
             growthTime++;
 
             if (growthTime >= growthEnd)
             {
                 ShowFruit();
-                state = FarmState.Pickable;
+                state = State.Pickable;
                 growthTime = 0;
             }
         }
-        else if (state == FarmState.Spawning) // harvest has been picked, drop and grow troops
+        else if (state == State.Spawning) // harvest has been picked, drop and grow troops
         {
             spawnTime--;
 
@@ -68,30 +68,35 @@ public class FruitTree : Farm
                 pickCount--;
 
                 if (pickCount == 0)
-                    state = FarmState.Dead;
+                    state = State.Dead;
                 else
-                    state = FarmState.Growing;
+                    state = State.Growing;
             }
         }
+
+        if (isDying)
+            Destroy(gameObject);
+        else if (health <= 0)
+            isDying = true;
     }
 
     protected override void LeftClick()
     {
-        if (state == FarmState.Spawning)
+        if (state == State.Spawning)
             return;
 
-        if (state == FarmState.Empty)
+        if (state == State.Empty)
         {
             dirtMesh.enabled = true;
-            state = FarmState.Planting;
+            state = State.Planting;
         }
-        else if (state == FarmState.Planting)
+        else if (state == State.Planting)
         {
             if (propMesh != null)
                 propMesh.enabled = true;
-            state = FarmState.PlantGrowing;
+            state = State.PlantGrowing;
         }
-        else if (state == FarmState.Pickable)
+        else if (state == State.Pickable)
         {
             troops = Pick(harvestCount);
             if (propMesh != null)
@@ -104,14 +109,14 @@ public class FruitTree : Farm
             }
 
             ShowFruit(false);
-            state = FarmState.Spawning;
+            state = State.Spawning;
         }
-        else if (state == FarmState.Dead)
+        else if (state == State.Dead)
         {
             pickCount = 3;
             prop.transform.localScale = new Vector3(0, 0, 0);
             dirtMesh.enabled = false;
-            state = FarmState.Empty;
+            state = State.Empty;
         }
 
         base.LeftClick();

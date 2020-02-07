@@ -127,8 +127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0be4ca526d87f9a48928bc08bdbb3cf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 0
+  health: 300
+  maxHealth: 300
+  isDying: 0
+  fruit: 0
+  selected: 0
   minX: 0
   maxX: 0
   maxY: 0
@@ -146,7 +149,9 @@ MonoBehaviour:
   spawnTime: 0
   spawnStart: 0
   sproutTime: 30
+  index: 0
   plantGrowthTime: 100
+  plantGrowthStart: 0
   props:
   - {fileID: 4607908239616565804}
   - {fileID: 718116239241776523}

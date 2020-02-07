@@ -32,12 +32,12 @@ public class Worker : Unit
 
     private void DropThenMoveToSpawnPoint()
     {
-        if (transform.position.y > 10) // drop
+        if (transform.position.y > 11) // drop
         {
             transform.Translate(0, -.5f, 0);
 
-            if (transform.position.y <= 10) // set on ground
-                transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+            if (transform.position.y <= 11) // set on ground
+                transform.position = new Vector3(transform.position.x, 11, transform.position.z);
         }
         else if (moving) // move towards destination
         {

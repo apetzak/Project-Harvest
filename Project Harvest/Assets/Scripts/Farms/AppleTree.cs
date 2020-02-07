@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AppleTree : FruitTree
 {
-    public override void Start()
+    protected override void Start()
     {
         spawnTime = 50;
         harvestCount = 6;
