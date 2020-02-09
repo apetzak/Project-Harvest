@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 5951419564423113311}
   - component: {fileID: 81649104584857799}
   m_Layer: 0
-  m_Name: Blueberry (2)
+  m_Name: Blueberry
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -197,7 +197,6 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   isDying: 0
-  fruit: 0
   selected: 0
   selector: {fileID: 4000152184134317197}
   index: 0
