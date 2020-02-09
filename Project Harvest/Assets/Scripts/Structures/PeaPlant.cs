@@ -16,6 +16,11 @@ public class PeaPlant : Hub
         base.Start();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+    }
+
     protected override void GrowUnits()
     {
         if (unitsGrown == 0)

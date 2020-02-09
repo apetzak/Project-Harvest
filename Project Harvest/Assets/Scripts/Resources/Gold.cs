@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gold : Resource
 {
-    protected void Start()
+    protected override void Start()
     {
         // pick one of four props
         int var = Random.Range(0, 3);
@@ -25,7 +25,7 @@ public class Gold : Resource
 
     protected override void LeftClick()
     {
-
+        Shrink();
     }
 
     void OnMouseEnter()

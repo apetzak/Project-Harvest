@@ -5,13 +5,15 @@ using UnityEngine;
 public class Resource : Entity
 {
     public bool occupied;
-
     public GameObject prop;
+    public int stage = 0;
 
     protected virtual void Start()
     {
+        float size = Random.Range(.75f, 1.25f);
         transform.Rotate(0, Random.Range(0, 360), 0);
-        transform.localScale *= Random.Range(.75f, 1.25f);
+        transform.localScale *= size;
+        maxHealth = health = size * 1000;
     }
 
     void Update()
@@ -40,5 +42,14 @@ public class Resource : Entity
     public void GatherFrom()
     {
 
+    }
+
+    protected void Shrink()
+    {
+        stage++;
+        transform.localScale *= .85f;
+
+        if (stage == 5)
+            Destroy(gameObject);
     }
 }

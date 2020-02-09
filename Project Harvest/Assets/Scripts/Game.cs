@@ -20,6 +20,7 @@ public class Game : MonoBehaviour
     public List<Structure> fruitStructures { get; set; }
     public List<Structure> veggieStructures { get; set; }
     public List<Unit> selectedUnits { get; set; }
+    public List<Resource> resources { get; set; }
     public Entity selectedUnit;
     public GameObject selectorBox;
     public bool holdingDown = false;
@@ -29,6 +30,15 @@ public class Game : MonoBehaviour
     public bool troopIsSelected = false;
 
     void Start()
+    {
+        InstantiateGlobalProperties();
+        GetObjectsInScene();
+        //AddSquad(10, 2);
+        //AddWorkers();
+        selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
+    }
+
+    private void InstantiateGlobalProperties()
     {
         Instance.peaPrefab = peaPrefab;
         Instance.bbPrefab = bbPrefab;
@@ -40,10 +50,33 @@ public class Game : MonoBehaviour
         Instance.fruitStructures = new List<Structure>();
         Instance.veggieStructures = new List<Structure>();
         Instance.selectedUnits = new List<Unit>();
+        Instance.resources = new List<Resource>();
+    }
 
-        //AddSquad(10, 2);
-        //AddWorkers();
-        selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
+    private void GetObjectsInScene()
+    {
+        foreach (Resource r in GameObject.FindObjectsOfType(typeof(Resource)))
+            Instance.resources.Add(r);
+
+        foreach (Structure s in GameObject.FindObjectsOfType(typeof(Structure)))
+        {
+            if (s.fruit)
+                Instance.fruitStructures.Add(s);
+            else
+                Instance.veggieStructures.Add(s);
+        }
+
+        foreach (Structure s in Instance.fruitStructures)
+        {
+            if (s is Farm)
+                (s as Farm).FindRallyPoint();
+        }
+
+        foreach (Structure s in Instance.veggieStructures)
+        {
+            if (s is Farm)
+                (s as Farm).FindRallyPoint();
+        }
     }
 
     void AddWorkers()

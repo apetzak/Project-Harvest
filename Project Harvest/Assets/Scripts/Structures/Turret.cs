@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Targets and fires at closest enemy unit within attack range
+/// </summary>
 public class Turret : Structure
 {
     public GameObject gun;
     public Burst burst;
     private int attackTime = 60;
-    public bool attacking = false;
     public Entity target;
     private float facingAngle = 90;
 
@@ -17,7 +19,7 @@ public class Turret : Structure
         {
             FindTarget();
         }
-        else if (attacking)
+        else
         {
             attackTime--;
 
@@ -25,10 +27,9 @@ public class Turret : Structure
             {
                 Vector3 diff = transform.position - target.transform.position;
 
-                if (diff.magnitude > 60) // unit left range
+                if (diff.magnitude > 120) // unit left range
                 {
                     target = null;
-                    attacking = false;
                     return;
                 }
                 else
@@ -50,33 +51,45 @@ public class Turret : Structure
 
         burst.Pop();
         attackTime = 60;
-        target.health -= 20;
+        target.health -= 50;
 
         if (target.health <= 0)
         {
             target.isDying = true;
             target = null;
-            attacking = false;
         }
     }
 
     private void FindTarget()
     {
-        foreach (Fruit f in Game.Instance.fruits)
+        if (fruit)
         {
-            if (f.isDying)
-                continue;
-
-            Vector3 diff = transform.position - f.transform.position;
-            //Debug.Log(diff.magnitude + " searching for target");
-
-            if (diff.magnitude < 60)
+            foreach (Veggie v in Game.Instance.veggies)
             {
-                //Debug.Log("target found");
-                target = f;
-                attacking = true;
-                RotateTowardsTarget();
-                break;
+                if (v.isDying)
+                    continue;
+                Vector3 diff = transform.position - v.transform.position;
+                if (diff.magnitude < 120) // target found
+                {
+                    target = v;
+                    RotateTowardsTarget();
+                    break;
+                }
+            }
+        }
+        else
+        {
+            foreach (Fruit f in Game.Instance.fruits)
+            {
+                if (f.isDying)
+                    continue;
+                Vector3 diff = transform.position - f.transform.position;
+                if (diff.magnitude < 120) // target found
+                {
+                    target = f;
+                    RotateTowardsTarget();
+                    break;
+                }
             }
         }
     }

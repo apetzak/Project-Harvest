@@ -64,8 +64,9 @@ public class FruitTree : Farm
 
             if (spawnTime <= 0)
             {
-                spawnTime = spawnStart;
                 pickCount--;
+                spawnTime = spawnStart;
+                MoveToRallyPoint();
 
                 if (pickCount == 0)
                     state = State.Dead;
@@ -87,8 +88,7 @@ public class FruitTree : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
@@ -98,9 +98,7 @@ public class FruitTree : Farm
         }
         else if (state == State.Pickable)
         {
-            troops = Pick(harvestCount);
-            if (propMesh != null)
-                propMesh.enabled = true;
+            Pick(harvestCount);
 
             for (int i = 0; i < harvestCount; i++)
             {
@@ -109,7 +107,7 @@ public class FruitTree : Farm
             }
 
             ShowFruit(false);
-            state = State.Spawning;
+            StartSpawning();
         }
         else if (state == State.Dead)
         {

@@ -26,6 +26,7 @@ public class Audio : MonoBehaviour
         {
             GameObject o = new GameObject();
             AudioSource s = o.AddComponent<AudioSource>();
+            s.volume *= .5f;
             Instance.objects.Add(o);
         }
         //Debug.Log(Instance.objects);
@@ -43,6 +44,11 @@ public class Audio : MonoBehaviour
     public void PlayDeath(int index)
     {
         PlaySound(Resources.Load<AudioClip>($"Audio/wilhelm"));
+    }
+
+    public void PlayExplosion()
+    {
+        PlaySound(Resources.Load<AudioClip>($"Audio/explosion"));
     }
 
     public void PlayAttack(int index)

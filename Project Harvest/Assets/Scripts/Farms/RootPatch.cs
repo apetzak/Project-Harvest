@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class RootPatch : Farm
 {
-    private Troop troop;
-
     protected override void GrowProp()
     {
         prop.transform.localScale += new Vector3(1, 1, 1);
@@ -19,7 +17,7 @@ public class RootPatch : Farm
 
             if (spawnTime > 35)
             {
-                troop.transform.Translate(new Vector3(0, .5f, 0), Space.World);
+                troops[0].transform.Translate(new Vector3(0, .5f, 0), Space.World);
             }
             else if (spawnTime > 30)
             {
@@ -27,10 +25,11 @@ public class RootPatch : Farm
             }
             else if (spawnTime > 0)
             {
-                troop.transform.Translate(new Vector3(0, -.127f, 0), Space.World);
+                troops[0].transform.Translate(new Vector3(0, -.127f, 0), Space.World);
             }
             else
             {
+                MoveToRallyPoint();
                 spawnTime = spawnStart;
                 state = State.Empty;
             }
@@ -48,20 +47,18 @@ public class RootPatch : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
-            propMesh.enabled = true;
             prop.transform.localScale = new Vector3(1, 1, 1);
-            state = State.Growing;
+            StartGrowing();
         }
         else if (state == State.Pickable)
         {
-            troop = Pick(1)[0];
-            troop.transform.position = prop.transform.position;
-            troop.transform.Translate(new Vector3(0, -5, 0), Space.World);
+            Pick(1);
+            troops[0].transform.position = prop.transform.position;
+            troops[0].transform.Translate(new Vector3(0, -5, 0), Space.World);
             state = State.Spawning;
         }
 

@@ -47,7 +47,7 @@ public class Zone : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (!Physics.Raycast(ray, out hit))    
             return;
-        UnitUtils.SetGroupLocation(hit);
+        UnitUtils.SetGroupLocation(hit.point);
     }
 
     void OnMouseDown()

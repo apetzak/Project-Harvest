@@ -12,6 +12,11 @@ public class BlueberryBush : Hub
         base.Start();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+    }
+
     protected override void GrowUnits()
     {
         props[unitsGrown].GetComponent<MeshRenderer>().enabled = true;

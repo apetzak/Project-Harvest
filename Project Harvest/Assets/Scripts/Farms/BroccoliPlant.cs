@@ -52,8 +52,7 @@ public class BroccoliPlant : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
@@ -63,8 +62,9 @@ public class BroccoliPlant : Farm
         else if (state == State.Pickable)
         {
             Pick(1);
-            propMesh.enabled = true;
-            state = State.Growing;
+            MoveToRallyPoint();
+            spawnTime = spawnStart;
+            StartGrowing();
             pickCount--;
             if (pickCount <= 0) // stop growing troops
             {

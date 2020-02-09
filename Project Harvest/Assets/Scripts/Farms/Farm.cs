@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class Farm : Structure
 {
@@ -31,6 +30,7 @@ public class Farm : Structure
     public int spawnStart;
     public int sproutTime = 30;
     public int index;
+    public Vector3 rallyPoint;
 
     /// <summary>
     /// Set/disable prop and dirt mesh, set spawnStart
@@ -41,7 +41,6 @@ public class Farm : Structure
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = propMesh.enabled = false;
         spawnStart = spawnTime;
-        health = 200;
         base.Start();
     }
 
@@ -55,6 +54,13 @@ public class Farm : Structure
     /// </summary>
     protected override void Update()
     {
+        //if ((state == State.Empty || state == State.Dead) && rallyPoint != new Vector3())
+        //{
+        //    foreach (Troop t in troops)
+        //        t.SetDestination(rallyPoint);
+        //    rallyPoint = new Vector3();
+        //}
+
         if (state == State.Growing)
         {
             growthTime++;
@@ -70,17 +76,18 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Retrieve troops from pickable farm and select them
+    /// Retrieve troops from pickable farm
     /// </summary>
     /// <param name="count">Quantity to pick</param>
     /// <returns>Harvested troops</returns>
-    public List<Troop> Pick(int count)
+    public void Pick(int count)
     {
+        troops.Clear();
+
         if (propMesh != null)
             propMesh.enabled = false;
         dirtMesh.enabled = false;
 
-        var list = new List<Troop>();
         Vector3 pos = prop.transform.position;
         // todo: try to use Game.Instance.unitPrefabs[1]
 
@@ -93,15 +100,86 @@ public class Farm : Structure
                 pos.x += 3;
 
             t.Spawn();
-            t.ToggleSelected(true);
-            list.Add(t);
+            troops.Add(t);
         }
 
-        Game.Instance.ChangeSelection();
         state = State.Empty;
-        return list;
     }
 
+    /// <summary>
+    /// Locate ally RallyPoint
+    /// </summary>
+    public void FindRallyPoint()
+    {
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in list)
+        {
+            if (!(s is RallyPoint))
+                continue;
+            float dist = (transform.position - s.transform.position).magnitude;
+            if (dist < 120)
+            {
+                rallyPoint = s.transform.position;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set troops destination to rallyPoint, clear troops.
+    /// </summary>
+    public void MoveToRallyPoint()
+    {
+        if (rallyPoint == new Vector3())
+            return;
+        foreach (Troop t in troops)
+        {
+            Vector3 v = new Vector3(rallyPoint.x + Random.Range(-15, 15), rallyPoint.y, rallyPoint.z + Random.Range(-15, 15));
+            t.SetDestination(v);
+        }
+        troops.Clear();
+    }
+
+    /// <summary>
+    /// Show dirt pile, switch to planting state
+    /// </summary>
+    protected void StartPlanting()
+    {
+        dirtMesh.enabled = true;
+        state = State.Planting;
+    }
+
+    /// <summary>
+    /// Show plant prop, switch to growing state
+    /// </summary>
+    protected void StartGrowing()
+    {
+        propMesh.enabled = true;
+        state = State.Growing;
+    }
+
+    /// <summary>
+    /// Show plant prop, switch to spawning state
+    /// </summary>
+    protected void StartSpawning()
+    {
+        if (propMesh != null)
+            propMesh.enabled = true;
+        state = State.Spawning;
+    }
+
+    /// <summary>
+    /// Hide plant prop, switch to empty state
+    /// </summary>
+    protected void Clear()
+    {
+        propMesh.enabled = false;
+        state = State.Empty;
+    }
+
+    /// <summary>
+    /// Set cursor (context sensitive)
+    /// </summary>
     protected override void OnMouseEnter()
     {
         if (Game.Instance.troopIsSelected)
@@ -112,6 +190,7 @@ public class Farm : Structure
     }
 
     /// <summary>
+    /// Start planting if state is empty.
     /// Switch cursor, if only worker(s) are selected
     /// </summary>
     protected override void LeftClick()

@@ -25,6 +25,7 @@ public class CornStalk : Farm
             spawnTime--;
             if (spawnTime <= 0)
             {
+                MoveToRallyPoint();
                 spawnTime = spawnStart;
                 state = State.Dead;
             }
@@ -51,32 +52,27 @@ public class CornStalk : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
-            propMesh.enabled = true;
+            StartGrowing();
             prop.transform.localScale = new Vector3(0,  0, 0);
-            state = State.Growing;
         }
         else if (state == State.Pickable)
         {
             System.Random rand = new System.Random();
-            troops = Pick(rand.Next(2, 4));
+            Pick(rand.Next(2, 4));
 
             foreach (Troop t in troops)
                 t.transform.localScale = new Vector3(0, 0, 0);
 
-            propMesh.enabled = true;
-
-            state = State.Spawning;
+            StartSpawning();
         }
         else if (state == State.Dead)
         {
-            propMesh.enabled = false;
             prop.transform.Rotate(-90, 0, 0, Space.Self);
-            state = State.Empty;
+            Clear();
         }
 
         base.LeftClick();

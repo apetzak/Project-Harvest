@@ -18,7 +18,7 @@ public class Stone : Resource
 
     protected override void LeftClick()
     {
-
+        Shrink();
     }
 
     void OnMouseEnter()

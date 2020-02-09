@@ -24,6 +24,7 @@ public class StrawberryBush : Farm
             spawnTime--;
             if (spawnTime <= 0)
             {
+                MoveToRallyPoint();
                 spawnTime = spawnStart;
                 state = State.Dead;
                 // todo: tip over
@@ -47,29 +48,25 @@ public class StrawberryBush : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
-            propMesh.enabled = true;
             prop.transform.localScale = new Vector3(0, 0, 0);
-            state = State.Growing;
+            StartGrowing();
         }
         else if (state == State.Pickable)
         {
-            troops = Pick(2);
-            state = State.Spawning;
+            Pick(2);
 
             foreach (Troop t in troops)
                 t.transform.localScale = new Vector3(0, 0, 0);
 
-            propMesh.enabled = true;
+            StartSpawning();
         }
         else if (state == State.Dead)
         {
-            propMesh.enabled = false;
-            state = State.Empty;
+            Clear();
         }
 
         base.LeftClick();

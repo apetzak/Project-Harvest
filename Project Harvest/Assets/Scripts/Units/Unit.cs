@@ -25,7 +25,10 @@ public class Unit : Entity
     private static float rad = 180.0f / Mathf.PI;
     private Collider coll;
 
-    public void Start()
+    /// <summary>
+    /// Set collider
+    /// </summary>
+    protected virtual void Start()
     {
         coll = GetComponent<Collider>();
     }
@@ -190,7 +193,7 @@ public class Unit : Entity
                 if (t.target != null && t.target == this)
                     t.target = null;
             }
-            Destroy();
+            base.Remove();
         }
     }
 

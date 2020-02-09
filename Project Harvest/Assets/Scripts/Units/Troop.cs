@@ -14,12 +14,10 @@ public class Troop : Unit
     public float attackSpeed;
     public float attackRange;
     public float attackDamage;
-    public float timeUntilNextAttack;
+    public float timeUntilNextAttack = 0;
 
-    public void Start()
+    protected override void Start()
     {
-        //Cursor.lockState = CursorLockMode.Confined;
-        timeUntilNextAttack = attackSpeed * 60;
         health = maxHealth;
         deathTimer = 300;
         base.Start();
@@ -39,9 +37,10 @@ public class Troop : Unit
                 else
                     AttackStructure();
             }
-
             else if (attacking)
+            {
                 FindClosestTarget();
+            }
         }
 
         base.Update();
@@ -99,6 +98,7 @@ public class Troop : Unit
         else if (timeUntilNextAttack == 0)
         {
             TriggerAttack();
+            (target as Structure).TakeDamage();
         }
     }
 
@@ -155,23 +155,24 @@ public class Troop : Unit
             }
             else
             {
-                //foreach (Structure s in GetEnemyStructures())
-                //{
-                //    if (s.isDying)
-                //        continue;
-                //    Vector3 diff = transform.position - s.transform.position;
+                foreach (Structure s in GetEnemyStructures())
+                {
+                    if (s.isDying)
+                        continue;
+                    Vector3 diff = transform.position - s.transform.position;
 
-                //    if (diff.magnitude < closest)
-                //    {
-                //        closest = diff.magnitude;
-                //        index = GetEnemyStructures().IndexOf(s);
-                //    }
-                //}
+                    if (diff.magnitude < closest)
+                    {
+                        closest = diff.magnitude;
+                        index = GetEnemyStructures().IndexOf(s);
+                    }
+                }
 
-                //if (closest != 10000)
-                //{
-                //    Attack(GetEnemyStructures()[index]);
-                //}
+                if (closest != 10000)
+                {
+                    TargetStructure(GetEnemyStructures()[index],
+                    GetEnemyStructures()[index].transform.position);
+                }
             }
         }
 
@@ -182,6 +183,9 @@ public class Troop : Unit
         }
     }
 
+    /// <summary>
+    /// Reduce targets health by attackDamage
+    /// </summary>
     public virtual void InflictDamage()
     {
         if (target != null)

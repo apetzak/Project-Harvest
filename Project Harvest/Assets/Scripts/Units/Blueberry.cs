@@ -20,7 +20,7 @@ public class Blueberry : Worker
         Game.Instance.blueberries.Add(this);
     }
 
-    public override void Destroy()
+    public override void Remove()
     {
         Game.Instance.blueberries.Remove(this);
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WaterWell : Structure
+public class WaterTower : Structure
 {
     protected override void Start()
     {

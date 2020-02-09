@@ -13,6 +13,9 @@ public class CameraMovement : MonoBehaviour
         MoveCamera();
     }
 
+    /// <summary>
+    /// Move camera with WASD or mouse on edge of screen
+    /// </summary>
     void MoveCamera()
     {
         float mouseX = Input.mousePosition.x;

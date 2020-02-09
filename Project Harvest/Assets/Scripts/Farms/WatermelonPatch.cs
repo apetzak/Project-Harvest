@@ -38,19 +38,18 @@ public class WatermelonPatch : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
-            propMesh.enabled = true;
             prop.transform.localScale = new Vector3(0, 0, 0);
-            state = State.Growing;
+            StartGrowing();
         }
         else if (state == State.Pickable)
         {
-            Troop t = Pick(1)[0];
-
+            Pick(1);
+            spawnTime = spawnStart;
+            MoveToRallyPoint();
             //t.transform.position = new Vector3(-.25f, 5.68f, -7.08f) + transform.position;
             //t.transform.Rotate(0, 0, -90, Space.Self);
             //t.transform.position = dummy.transform.position;

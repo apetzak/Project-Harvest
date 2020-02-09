@@ -14,7 +14,7 @@ public class Pea : Worker
         Game.Instance.peas.Add(this);
     }
 
-    public override void Destroy()
+    public override void Remove()
     {
         Game.Instance.peas.Remove(this);
     }

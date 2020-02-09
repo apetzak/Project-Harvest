@@ -29,17 +29,16 @@ public class AsparagusPatch : Farm
 
         if (state == State.Empty)
         {
-            dirtMesh.enabled = true;
-            state = State.Planting;
+            StartPlanting();
         }
         else if (state == State.Planting)
         {
-            propMesh.enabled = true;
-            state = State.Growing;
+            StartGrowing();
         }
         else if (state == State.Pickable)
         {
             Pick(1);
+            MoveToRallyPoint();
             prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         }
 

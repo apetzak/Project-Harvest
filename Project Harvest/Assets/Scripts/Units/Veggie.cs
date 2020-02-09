@@ -9,7 +9,7 @@ public class Veggie : Troop
         Game.Instance.veggies.Add(this);
     }
 
-    public override void Destroy()
+    public override void Remove()
     {
         Game.Instance.veggies.Remove(this);
         Destroy(gameObject);
