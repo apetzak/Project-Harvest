@@ -13,24 +13,24 @@ public class RootPatch : Farm
     {
         if (state == State.Spawning)
         {
-            spawnTime--;
+            spawnTime++;
 
-            if (spawnTime > 35)
+            if (spawnTime < 25)
             {
                 troops[0].transform.Translate(new Vector3(0, .5f, 0), Space.World);
             }
-            else if (spawnTime > 30)
+            else if (spawnTime < 30)
             {
                 // hold still
             }
-            else if (spawnTime > 0)
+            else if (spawnTime < spawnEnd)
             {
                 troops[0].transform.Translate(new Vector3(0, -.127f, 0), Space.World);
             }
             else
             {
                 MoveToRallyPoint();
-                spawnTime = spawnStart;
+                spawnTime = 0;
                 state = State.Empty;
             }
         }

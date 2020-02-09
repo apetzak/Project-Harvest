@@ -6,14 +6,12 @@ public class Corn : Veggie
 {
     public Projectile cannonBall;
 
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(90, 0, 180, Space.Self);
-        transform.Translate(0, 5, 0, Space.World);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         if (cannonBall.hit)
         {
@@ -26,12 +24,5 @@ public class Corn : Veggie
     public override void InflictDamage()
     {
         cannonBall.Spawn(destination, target);
-    }
-
-    public override void RotateTowards(float x, float z)
-    {
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, 0, -diff, Space.Self);
-        facingAngle += diff;
     }
 }

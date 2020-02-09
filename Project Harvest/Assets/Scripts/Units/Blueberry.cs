@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class Blueberry : Worker
 {
-    void Start()
+    protected override void Start()
     {
-        //transform.Rotate(0, 90, 0, Space.Self);
         base.Start();
     }
 

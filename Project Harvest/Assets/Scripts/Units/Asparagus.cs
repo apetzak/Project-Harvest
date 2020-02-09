@@ -6,13 +6,12 @@ public class Asparagus : Veggie
 {
     public Burst burst;
 
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(0, 90, 0, Space.Self);
         base.Start();
     }
 
-    public void Update()
+    protected override void Update()
     {
         base.Update();
     }

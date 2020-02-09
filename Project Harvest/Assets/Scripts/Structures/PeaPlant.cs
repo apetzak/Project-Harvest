@@ -8,7 +8,7 @@ public class PeaPlant : Hub
     public GameObject pod2;
     public GameObject pod3;
 
-    void Start()
+    protected override void Start()
     {
         growthTimer = growthEnd = 300;
         maxUnits = 9;

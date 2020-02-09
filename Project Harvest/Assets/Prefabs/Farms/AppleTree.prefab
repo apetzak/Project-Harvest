@@ -460,28 +460,30 @@ MonoBehaviour:
   health: 300
   maxHealth: 300
   isDying: 0
-  fruit: 0
   selected: 0
+  ring: {fileID: 0}
   minX: 0
   maxX: 0
   maxY: 0
   minY: 0
+  fruit: 1
   state: 0
   prop: {fileID: 6500218705289101392}
   dirtMound: {fileID: 6903815174386097256}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
-  prefab: {fileID: -5232442228165917311, guid: 185dbccf2feb0fe41b140907aca541a1, type: 3}
   troops: []
   size: 0
   growthTime: 0
   growthEnd: 0
   spawnTime: 0
-  spawnStart: 0
+  spawnEnd: 0
   sproutTime: 30
+  sproutEnd: 0
   index: 0
-  plantGrowthTime: 200
-  plantGrowthStart: 0
+  rallyPoint: {x: 0, y: 0, z: 0}
+  plantGrowthTime: 0
+  plantGrowthEnd: 200
   props:
   - {fileID: 5492639259040000645}
   - {fileID: 3678858916961553947}

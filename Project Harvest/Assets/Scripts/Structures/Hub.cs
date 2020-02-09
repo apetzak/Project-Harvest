@@ -6,12 +6,12 @@ public class Hub : Structure
 {
     public GameObject prop;
     public List<GameObject> props;
-    public Worker workerPrefab;
     public int growthTimer;
     public int growthEnd;
     public int unitsGrown = 0;
     public int maxUnits;
     public bool spawning;
+    public Worker workerPrefab;
 
     protected override void Start()
     {
@@ -74,6 +74,7 @@ public class Hub : Structure
     {
         GameObject b = props[i];
         Worker w = Instantiate(workerPrefab, b.transform.position, b.transform.rotation);
+        w.facingAngle = 90;
         var t = gameObject.transform.position;
         w.SetDestination(new Vector3(t.x + i * 5, t.y, t.z - 35));
         w.Spawn();

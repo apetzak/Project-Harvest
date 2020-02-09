@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Pea : Worker
 {
-    void Update()
+    protected override void Update()
     {
         base.Update();
     }

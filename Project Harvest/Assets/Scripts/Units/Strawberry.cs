@@ -6,14 +6,12 @@ public class Strawberry : Fruit
 {
     public Projectile arrow;
 
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(0, 0, -70, Space.Self);
-        transform.Translate(0, 4f, 0, Space.World);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         if (arrow.hit)
         {
@@ -26,12 +24,5 @@ public class Strawberry : Fruit
     public override void InflictDamage()
     {
         arrow.Spawn(destination, target);
-    }
-
-    public override void RotateTowards(float x, float z)
-    {
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, diff, 0, Space.World);
-        facingAngle += diff;
     }
 }

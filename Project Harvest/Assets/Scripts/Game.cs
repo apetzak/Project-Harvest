@@ -66,17 +66,14 @@ public class Game : MonoBehaviour
                 Instance.veggieStructures.Add(s);
         }
 
+        #region Set Rally Points
         foreach (Structure s in Instance.fruitStructures)
-        {
             if (s is Farm)
                 (s as Farm).FindRallyPoint();
-        }
-
         foreach (Structure s in Instance.veggieStructures)
-        {
             if (s is Farm)
                 (s as Farm).FindRallyPoint();
-        }
+        #endregion
     }
 
     void AddWorkers()

@@ -8,14 +8,12 @@ public class Carrot : Veggie
     private bool spinning = false;
     public GameObject katana;
 
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(90, 0, 180, Space.Self);
-        transform.Translate(0, 5, 0, Space.World);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         if (spinning && !isDying)
             Spin();
@@ -43,15 +41,5 @@ public class Carrot : Veggie
     {
         spinning = true;
         katana.gameObject.transform.Rotate(0, 90, 0, Space.Self);
-    }
-
-    public override void RotateTowards(float x, float z)
-    {
-        if (spinning)
-            return;
-
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, 0, -diff, Space.Self);
-        facingAngle += diff;
     }
 }

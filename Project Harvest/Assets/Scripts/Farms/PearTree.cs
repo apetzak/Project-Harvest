@@ -6,7 +6,7 @@ public class PearTree : FruitTree
 {
     protected override void Start()
     {
-        spawnTime = 65;
+        spawnEnd = 50;
         harvestCount = 5;
         growthEnd = 80;
         plantGrowthIncrement = .025f;

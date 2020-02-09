@@ -7,8 +7,8 @@ using UnityEngine;
 /// </summary>
 public class FruitTree : Farm
 {
-    public int plantGrowthTime = 200;
-    public int plantGrowthStart;
+    public int plantGrowthTime = 0;
+    public int plantGrowthEnd = 200;
     private int pickCount = 3;
     public List<GameObject> props;
     public int harvestCount;
@@ -22,21 +22,20 @@ public class FruitTree : Farm
         propMesh.enabled = true;
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 11;
-        plantGrowthStart = plantGrowthTime;
     }
 
     protected override void Update()
     {
         if (state == State.PlantGrowing) // grow tree
         {
-            plantGrowthTime--;
+            plantGrowthTime++;
             prop.transform.localScale += new Vector3(plantGrowthIncrement, plantGrowthIncrement, plantGrowthIncrement);
 
-            if (plantGrowthTime <= 0)
+            if (plantGrowthTime >= plantGrowthEnd)
             {
                 dirtMesh.enabled = false;
                 state = State.Growing;
-                plantGrowthTime = plantGrowthStart;
+                plantGrowthTime = 0;
             }
         }
         else if (state == State.Growing) // tree is grown, grow fruits
@@ -52,20 +51,20 @@ public class FruitTree : Farm
         }
         else if (state == State.Spawning) // harvest has been picked, drop and grow troops
         {
-            spawnTime--;
+            spawnTime++;
 
             for (int i = 0; i < harvestCount; i++)
             {
-                troops[i].transform.localScale += new Vector3(1, 1, 1);
+                troops[i].transform.localScale += new Vector3(.02f, .02f, .02f);
 
                 if (troops[i].transform.position.y > stopHeight)
                     troops[i].transform.position -= new Vector3(0, .5f, 0);
             }
 
-            if (spawnTime <= 0)
+            if (spawnTime >= spawnEnd)
             {
                 pickCount--;
-                spawnTime = spawnStart;
+                spawnTime = 0;
                 MoveToRallyPoint();
 
                 if (pickCount == 0)

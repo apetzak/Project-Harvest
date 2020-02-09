@@ -8,7 +8,7 @@ public class CornStalk : Farm
     protected override void Start()
     {
         growthEnd = 90;
-        spawnTime = 90;
+        spawnEnd = 90;
         index = 5;
         base.Start();
     }
@@ -22,19 +22,19 @@ public class CornStalk : Farm
     {
         if (state == State.Spawning)
         {
-            spawnTime--;
-            if (spawnTime <= 0)
+            spawnTime++;
+            if (spawnTime >= spawnEnd)
             {
                 MoveToRallyPoint();
-                spawnTime = spawnStart;
+                spawnTime = 0;
                 state = State.Dead;
             }
             else
             {
-                if (spawnTime > 55)
+                if (spawnTime > 40)
                 {
                     foreach (Troop t in troops)
-                        t.transform.localScale += new Vector3(1, 1, 1);
+                        t.transform.localScale += new Vector3(.02f, .02f, .02f);
                 }
                 prop.transform.Rotate(1, 0, 0, Space.Self);
             }
@@ -57,7 +57,7 @@ public class CornStalk : Farm
         else if (state == State.Planting)
         {
             StartGrowing();
-            prop.transform.localScale = new Vector3(0,  0, 0);
+            prop.transform.localScale = new Vector3(0, 0, 0);
         }
         else if (state == State.Pickable)
         {

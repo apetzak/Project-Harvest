@@ -7,7 +7,7 @@ public class StrawberryBush : Farm
     protected override void Start()
     {
         growthEnd = 20;
-        spawnTime = 90;
+        spawnEnd = 90;
         index = 6;
         base.Start();
     }
@@ -21,18 +21,21 @@ public class StrawberryBush : Farm
     {
         if (state == State.Spawning)
         {
-            spawnTime--;
-            if (spawnTime <= 0)
+            spawnTime++;
+            if (spawnTime >= spawnEnd)
             {
                 MoveToRallyPoint();
-                spawnTime = spawnStart;
+                spawnTime = 0;
                 state = State.Dead;
-                // todo: tip over
             }
-            else if (spawnTime > 25)
+            else
             {
-                foreach (Troop t in troops)
-                    t.transform.localScale += new Vector3(2, 2, 2);
+                if (spawnTime < 50)
+                {
+                    foreach (Troop t in troops)
+                        t.transform.localScale += new Vector3(.02f, .02f, .02f);
+                }
+                prop.transform.Rotate(1, 0, 0, Space.Self);
             }
         }
         else
@@ -66,6 +69,7 @@ public class StrawberryBush : Farm
         }
         else if (state == State.Dead)
         {
+            prop.transform.Rotate(-90, 0, 0, Space.Self);
             Clear();
         }
 

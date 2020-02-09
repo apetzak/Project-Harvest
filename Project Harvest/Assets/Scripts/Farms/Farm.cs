@@ -21,26 +21,25 @@ public class Farm : Structure
     public GameObject dirtMound;
     public MeshRenderer propMesh;
     public MeshRenderer dirtMesh;
-    public Troop prefab;
     public List<Troop> troops;
     public int size;
     public int growthTime = 0;
     public int growthEnd;
-    public int spawnTime;
-    public int spawnStart;
-    public int sproutTime = 30;
+    public int spawnTime = 0;
+    public int spawnEnd;
+    public int sproutTime = 0;
+    public int sproutEnd;
     public int index;
     public Vector3 rallyPoint;
 
     /// <summary>
-    /// Set/disable prop and dirt mesh, set spawnStart
+    /// Set/disable prop and dirt mesh
     /// </summary>
     protected override void Start()
     {
         propMesh = prop.GetComponent<MeshRenderer>();
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = propMesh.enabled = false;
-        spawnStart = spawnTime;
         base.Start();
     }
 
@@ -54,13 +53,6 @@ public class Farm : Structure
     /// </summary>
     protected override void Update()
     {
-        //if ((state == State.Empty || state == State.Dead) && rallyPoint != new Vector3())
-        //{
-        //    foreach (Troop t in troops)
-        //        t.SetDestination(rallyPoint);
-        //    rallyPoint = new Vector3();
-        //}
-
         if (state == State.Growing)
         {
             growthTime++;
@@ -89,11 +81,10 @@ public class Farm : Structure
         dirtMesh.enabled = false;
 
         Vector3 pos = prop.transform.position;
-        // todo: try to use Game.Instance.unitPrefabs[1]
 
         for (int i = 0; i < count; i++)
         {
-            Troop t = Instantiate(prefab, pos, Quaternion.identity);
+            Troop t = Instantiate(Game.Instance.unitPrefabs[index], pos, Quaternion.identity);
 
             // spread out
             if (count > 1)
@@ -190,7 +181,6 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Start planting if state is empty.
     /// Switch cursor, if only worker(s) are selected
     /// </summary>
     protected override void LeftClick()

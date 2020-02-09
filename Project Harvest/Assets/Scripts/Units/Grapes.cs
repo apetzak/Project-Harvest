@@ -4,21 +4,13 @@ using UnityEngine;
 
 public class Grapes : Fruit
 {
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(0, 0, 180, Space.Self);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         base.Update();
-    }
-
-    public override void RotateTowards(float x, float z)
-    {
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, 0, -diff, Space.Self);
-        facingAngle += diff;
     }
 }

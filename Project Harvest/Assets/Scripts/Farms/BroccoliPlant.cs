@@ -63,7 +63,7 @@ public class BroccoliPlant : Farm
         {
             Pick(1);
             MoveToRallyPoint();
-            spawnTime = spawnStart;
+            spawnTime = 0;
             StartGrowing();
             pickCount--;
             if (pickCount <= 0) // stop growing troops

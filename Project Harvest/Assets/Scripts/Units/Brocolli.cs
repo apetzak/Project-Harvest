@@ -7,14 +7,12 @@ public class Brocolli : Veggie
     public Burst burst1;
     public Burst burst2;
 
-    void Start()
+    protected override void Start()
     {
-        //transform.Rotate(65, 0, 0, Space.World);
-        transform.Translate(0, 4, 0, Space.World);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         base.Update();
     }
@@ -24,12 +22,5 @@ public class Brocolli : Veggie
         burst1.Pop();
         burst2.Pop();
         base.InflictDamage();
-    }
-
-    public override void RotateTowards(float x, float z)
-    {
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, diff, 0, Space.World);
-        facingAngle += diff;
     }
 }

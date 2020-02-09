@@ -7,12 +7,12 @@ public class Pear : Fruit
     public Burst burst;
     public Projectile rocket;
 
-    void Start()
+    protected override void Start()
     {
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         if (rocket.hit) // explosion!
         {

@@ -9,13 +9,13 @@ public class Apple : Fruit
     public int swingTimer = 20;
     public bool swinging = false;
 
-    void Start()
+    protected override void Start()
     {
         initPosition = sword.transform.position;
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         if (swinging)
             SwingSword();

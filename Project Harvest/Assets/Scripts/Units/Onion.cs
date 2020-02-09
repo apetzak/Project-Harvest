@@ -6,13 +6,12 @@ public class Onion : Veggie
 {
     public Burst burst;
 
-    void Start()
+    protected override void Start()
     {
-        transform.Rotate(0, 90, 0, Space.World);
         base.Start();
     }
 
-    void Update()
+    protected override void Update()
     {
         base.Update();
     }
