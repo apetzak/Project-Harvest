@@ -15,7 +15,6 @@ public class Structure : Entity
     public float maxX;
     public float maxY;
     public float minY;
-    public bool fruit;
 
     /// <summary>
     /// Set health to maxHealth
@@ -40,7 +39,6 @@ public class Structure : Entity
 
         ToggleRing();
 
-        //Debug.Log("left click");
         UnitUtils.ClearSelection();
         Game.Instance.ChangeSelection();
         Game.Instance.selectedUnit = this;
@@ -91,5 +89,17 @@ public class Structure : Entity
     {
         if (ring != null)
             ring.GetComponent<MeshRenderer>().enabled = b;
+    }
+
+    public override void Remove()
+    {
+        Audio.Instance.PlayExplosion();
+
+        if (fruit)
+            Game.Instance.fruitStructures.Remove(this);
+        else
+            Game.Instance.veggieStructures.Remove(this);
+
+        Destroy(gameObject);
     }
 }

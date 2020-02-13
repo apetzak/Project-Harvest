@@ -129,6 +129,7 @@ MonoBehaviour:
   health: 0
   maxHealth: 250
   isDying: 0
+  fruit: 1
   selected: 0
   selector: {fileID: 6436127005807147133}
   index: 10
@@ -138,6 +139,7 @@ MonoBehaviour:
   speed: 3
   currentSpeed: 0
   facingAngle: 0
+  angleToRotate: 0
   lineOfSight: 0
   deathTimer: 150
   target: {fileID: 0}
@@ -263,6 +265,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Selector
       objectReference: {fileID: 0}
+    - target: {fileID: 4498243164997813922, guid: 87a72e74feac211448930ac52f6e74a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5602875993243110503, guid: 87a72e74feac211448930ac52f6e74a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -332,11 +339,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4498243164997813922, guid: 87a72e74feac211448930ac52f6e74a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87a72e74feac211448930ac52f6e74a3, type: 3}

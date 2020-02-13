@@ -8,7 +8,7 @@ public class SelectorBox : MonoBehaviour
     public bool holdingDown = false;
     public Vector3 start;
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0) && !holdingDown)
             OpenPanel();
@@ -20,14 +20,14 @@ public class SelectorBox : MonoBehaviour
             SelectUnits();
     }
 
-    void OpenPanel()
+    private void OpenPanel()
     {
         holdingDown = true;
         start = Input.mousePosition;
         selectorBox.transform.position = Input.mousePosition;
     }
 
-    void DragPanel()
+    private void DragPanel()
     {
         var rt = selectorBox.GetComponent<RectTransform>();
         float xDiff = start.x - Input.mousePosition.x;
@@ -36,10 +36,8 @@ public class SelectorBox : MonoBehaviour
         rt.transform.position = new Vector3(start.x - xDiff / 2, start.y - yDiff / 2);
     }
 
-    void SelectUnits()
+    private void SelectUnits()
     {
-        //UnitUtils.ClearUnitSelection();
-
         holdingDown = false;
         var rt = selectorBox.GetComponent<RectTransform>();
         var end = Input.mousePosition;
@@ -49,17 +47,20 @@ public class SelectorBox : MonoBehaviour
         float minY = end.y < start.y ? end.y : start.y;
         int selectedCount = 0;
 
-        if (maxX - minX < 5)
+        if (maxX - minX < 5 || maxY - minY < 5)
+        {
+            rt.transform.localScale = new Vector3(0, 0, 0);
             return;
+        }
+
+        UnitUtils.ClearSelection();
 
         foreach (Troop t in Game.Instance.fruits)
         {
             var v = Camera.main.WorldToScreenPoint(t.transform.position);
-
             if (selectedCount > 84)
                 break;
-
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying && !t.selected)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying)
             {
                 t.ToggleSelected(true);
                 selectedCount++;
@@ -69,11 +70,9 @@ public class SelectorBox : MonoBehaviour
         foreach (Troop t in Game.Instance.veggies)
         {
             var v = Camera.main.WorldToScreenPoint(t.transform.position);
-
             if (selectedCount > 84)
                 break;
-
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying && !t.selected)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying)
             {
                 t.ToggleSelected(true);
                 selectedCount++;
@@ -83,11 +82,9 @@ public class SelectorBox : MonoBehaviour
         foreach (Worker w in Game.Instance.blueberries)
         {
             var v = Camera.main.WorldToScreenPoint(w.transform.position);
-
             if (selectedCount > 84)
                 break;
-
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying && !w.selected)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying)
             {
                 w.ToggleSelected(true);
                 selectedCount++;
@@ -97,11 +94,9 @@ public class SelectorBox : MonoBehaviour
         foreach (Worker w in Game.Instance.peas)
         {
             var v = Camera.main.WorldToScreenPoint(w.transform.position);
-
             if (selectedCount > 84)
                 break;
-
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying && !w.selected)
+            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying)
             {
                 w.ToggleSelected(true);
                 selectedCount++;

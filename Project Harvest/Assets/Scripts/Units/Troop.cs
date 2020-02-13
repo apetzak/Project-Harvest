@@ -25,6 +25,8 @@ public class Troop : Unit
 
     protected override void Update()
     {
+        diff = transform.position - destination;
+
         if (!isDying)
         {
             if (timeUntilNextAttack > 0)
@@ -44,6 +46,16 @@ public class Troop : Unit
         }
 
         base.Update();
+    }
+
+    protected override void Move()
+    {
+        if (Mathf.Abs(diff.x) < 2 && Mathf.Abs(diff.z) < 2)
+            StopMoving();
+        else if (!attacking || (attacking && diff.magnitude > attackRange))
+            transform.Translate(velocity * currentSpeed / 10, Space.World);
+
+        base.Move();
     }
 
     public override void OnMouseOver()
@@ -74,26 +86,24 @@ public class Troop : Unit
     /// </summary>
     private void PursueUnit()
     {
-        destination = target.transform.position;
-        Vector3 diff = transform.position - destination;
-        moving = diff.magnitude >= attackRange;
-
-        if (timeUntilNextAttack == 0 && !moving)
-            TriggerAttack();
-
         if ((target as Unit).moving)
         {
-            velocity = GetVelocity(diff.x, diff.z);
-            RotateTowards(diff.x, diff.z);
+            destination = target.transform.position;
+            angleToRotate = GetAngle();
+            velocity = GetVelocity();
         }
+
+        moving = angleToRotate != 0 || diff.magnitude >= attackRange;
+
+        if (timeUntilNextAttack == 0 && Mathf.Abs(angleToRotate) < 2 && diff.magnitude < attackRange)
+            TriggerAttack();
     }
 
     private void AttackStructure()
     {
         if (moving)
         {
-            Vector3 diff = transform.position - destination;
-            moving = diff.magnitude >= attackRange;
+            moving = angleToRotate != 0 || diff.magnitude >= attackRange;
         }
         else if (timeUntilNextAttack == 0)
         {

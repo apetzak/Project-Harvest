@@ -12,7 +12,7 @@ public class Entity : MonoBehaviour
     public float health;
     public float maxHealth;
     public bool isDying = false;
-    //public bool fruit;
+    public bool fruit;
     public bool selected;
 
     /// <summary>
@@ -23,17 +23,13 @@ public class Entity : MonoBehaviour
         if (health <= 0 && !isDying)
         {
             isDying = true;
-
-            if (this is Structure)
-                Audio.Instance.PlayExplosion();
-
-            Destroy(gameObject);
+            Remove();
         }
     }
 
     public virtual void Remove()
     {
-
+        //Destroy(gameObject);
     }
 
     public virtual void Spawn()

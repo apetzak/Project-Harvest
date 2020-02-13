@@ -20,6 +20,8 @@ public class Worker : Unit
 
     protected override void Update()
     {
+        diff = transform.position - destination;
+
         if (state == State.Spawning)
         {
             DropThenMoveToSpawnPoint();
@@ -27,6 +29,21 @@ public class Worker : Unit
         else
         {
             base.Update();
+        }
+    }
+
+    protected override void Move()
+    {
+        if (angleToRotate == 0) // facing destination, move forward
+        {
+            if (Mathf.Abs(diff.x) < 2 && Mathf.Abs(diff.z) < 2)
+                StopMoving();
+            else
+                transform.Translate(velocity * currentSpeed / 10, Space.World);
+        }
+        else
+        {
+            base.Move();
         }
     }
 

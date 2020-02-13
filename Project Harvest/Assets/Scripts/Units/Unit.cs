@@ -15,15 +15,18 @@ public class Unit : Entity
     public Vector3 velocity;
     public bool moving;
     public float speed;
+    protected float rotSpeed;
     public float currentSpeed;
     public float facingAngle;
+    public float angleToRotate;
     public float lineOfSight;
     public int deathTimer = 300;
     private int clickTimer;
     private bool clickedOnce = false;
     public Entity target;
     private static float rad = 180.0f / Mathf.PI;
-    private Collider coll;
+    protected Collider coll;
+    protected Vector3 diff;
 
     /// <summary>
     /// Set collider
@@ -31,6 +34,7 @@ public class Unit : Entity
     protected virtual void Start()
     {
         coll = GetComponent<Collider>();
+        rotSpeed = speed + 4;
     }
 
     protected virtual void Update()
@@ -43,6 +47,10 @@ public class Unit : Entity
 
         else if (moving)
             Move();
+
+        // bandaid for weird bug (colliders don't move with object)
+        coll.enabled = false;
+        coll.enabled = true;
     }
 
     public virtual void RightClick()
@@ -103,33 +111,37 @@ public class Unit : Entity
         Game.Instance.holdingDown = false;
     }
 
-    public void Move()
+    protected virtual void Move()
     {
-        Vector3 v = transform.position - destination;
-
-        if (Mathf.Abs(v.x) < 2 && Mathf.Abs(v.z) < 2)
-            StopMoving();
-        else
-            transform.Translate(velocity * currentSpeed / 10, Space.World);
-
-        // bandaid for weird bug (colliders don't move with object)
-        coll.enabled = false;
-        coll.enabled = true;
+        if (Mathf.Abs(angleToRotate) > 10) // rotating towards destination
+        {
+            float deg = angleToRotate > 0 ? rotSpeed : rotSpeed * -1;
+            facingAngle += deg;
+            transform.Rotate(0, deg, 0, Space.Self);
+            angleToRotate -= deg;
+        }
+        else if (angleToRotate != 0) // finished rotating, start moving
+        {
+            facingAngle += angleToRotate;
+            transform.Rotate(0, angleToRotate, 0, Space.Self);
+            angleToRotate = 0;
+            velocity = GetVelocity();
+        }
     }
 
     public void SetDestination(Vector3 v)
     {
         currentSpeed = speed;
         destination = v;
-        Vector3 diff = transform.position - v;
-        velocity = GetVelocity(diff.x, diff.z);
-        RotateTowards(diff.x, diff.z);
+        diff = transform.position - v;
+        velocity = GetVelocity();
+        angleToRotate = GetAngle();
         moving = true;
     }
 
-    public Vector3 GetVelocity(float x, float z)
+    public Vector3 GetVelocity()
     {
-        return new Vector3(-x, 0, -z).normalized;
+        return new Vector3(-diff.x, 0, -diff.z).normalized;
     }
 
     public void StopMoving()
@@ -139,16 +151,14 @@ public class Unit : Entity
         destination = transform.position;
     }
 
-    public virtual void RotateTowards(float x, float z)
+    public float GetAngle()
     {
-        float diff = GetAngle(x, z);
-        transform.Rotate(0, diff, 0, Space.Self);
-        facingAngle += diff;
-    }
-
-    public float GetAngle(float x, float z)
-    {
-        return Mathf.Atan2(x, z) * rad - facingAngle;
+        float f = Mathf.Atan2(diff.x, diff.z) * rad - facingAngle;
+        if (f > 180)
+            f -= 360;
+        else if (f < -180)      
+            f += 360;
+        return f;
     }
  
     void OnMouseEnter()

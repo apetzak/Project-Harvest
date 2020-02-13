@@ -24,7 +24,7 @@ public class Carrot : Veggie
     {
         if (spinTimer >= 0)
         {
-            gameObject.transform.Rotate(0, 0, -12, Space.Self);
+            gameObject.transform.Rotate(0, 12, 0, Space.Self);
         }
         else
         {

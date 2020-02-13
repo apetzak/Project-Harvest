@@ -15,6 +15,28 @@ public class RallyPoint : Structure
         base.Start();
     }
 
+    public override void Remove()
+    {
+        if (fruit)
+        {
+            foreach (Structure s in Game.Instance.fruitStructures)
+            {
+                if (s is Farm && (s as Farm).rallyPoint == transform.position)
+                    (s as Farm).rallyPoint = new Vector3();
+            }
+        }
+        else
+        {
+            foreach (Structure s in Game.Instance.veggieStructures)
+            {
+                if (s is Farm && (s as Farm).rallyPoint == transform.position)
+                    (s as Farm).rallyPoint = new Vector3();
+            }
+        }
+
+        base.Remove();
+    }
+
     protected override void Update()
     {
         base.Update();

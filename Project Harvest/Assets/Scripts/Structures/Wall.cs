@@ -15,13 +15,10 @@ public class Wall : Structure
     {
         if (health < 100 && stage == 3)
             Drop();
-
         else if (health < 200 && stage == 2)
             Drop();
-
         else if (health < 300 && stage == 1)
             Drop();
-
         else if (health < 400 && stage == 0)
             Drop();
 

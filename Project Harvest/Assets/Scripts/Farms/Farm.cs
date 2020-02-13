@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Spawns troops (each has associated subclass of farm).
+/// Has various growth stages.
+/// Built and maintained by workers.
+/// </summary>
 public class Farm : Structure
 {
     public enum State
@@ -17,6 +22,9 @@ public class Farm : Structure
     }
 
     public State state = State.Empty;
+    /// <summary>
+    /// Main object of the farm (plant, tree, bush, etc), grows during growing state
+    /// </summary>
     public GameObject prop;
     public GameObject dirtMound;
     public MeshRenderer propMesh;
@@ -24,10 +32,19 @@ public class Farm : Structure
     public List<Troop> troops;
     public int size;
     public int growthTime = 0;
+    /// <summary>
+    /// Time it takes prop to fully grow
+    /// </summary>
     public int growthEnd;
     public int spawnTime = 0;
+    /// <summary>
+    /// Time it takes for troop to spawn (reach normal size and position)
+    /// </summary>
     public int spawnEnd;
     public int sproutTime = 0;
+    /// <summary>
+    /// Time it takes plant to start growing after planted
+    /// </summary>
     public int sproutEnd;
     public int index;
     public Vector3 rallyPoint;

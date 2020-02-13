@@ -30,6 +30,11 @@ public class Veggie : Troop
         return Game.Instance.blueberries;
     }
 
+    public override List<Structure> GetEnemyStructures()
+    {
+        return Game.Instance.fruitStructures;
+    }
+
     public override void SelectType()
     {
         int selectedCount = 0;
