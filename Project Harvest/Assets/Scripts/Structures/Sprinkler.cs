@@ -17,7 +17,7 @@ public class Sprinkler : Structure
 
         MoveDrops();
 
-        head.transform.Rotate(0, 1, 0);
+        head.transform.Rotate(0, 1, 0); // spin around
     }
 
     private void SpawnWaterDrop()

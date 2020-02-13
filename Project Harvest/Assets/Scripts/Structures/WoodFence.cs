@@ -9,6 +9,6 @@ public class WoodFence : Wall
         base.Drop();
 
         if (stage == 4)
-            Destroy(gameObject);
+            Remove();
     }
 }

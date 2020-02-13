@@ -12,6 +12,6 @@ public class StoneWall : Wall
         base.Drop();
 
         if (stage == 5)
-            Destroy(gameObject);
+            Remove();
     }
 }

@@ -63,7 +63,7 @@ MonoBehaviour:
   deathTimer: 300
   target: {fileID: 0}
   attacking: 0
-  attackSpeed: 1
+  attackSpeed: 0.5
   attackRange: 50
   attackDamage: 10
   timeUntilNextAttack: 0
