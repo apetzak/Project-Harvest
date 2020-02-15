@@ -42,7 +42,7 @@ public class WatermelonPatch : Farm
         }
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -68,6 +68,6 @@ public class WatermelonPatch : Farm
             Clear();
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

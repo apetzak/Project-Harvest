@@ -44,7 +44,7 @@ public class StrawberryBush : Farm
         }
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -73,6 +73,6 @@ public class StrawberryBush : Farm
             Clear();
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

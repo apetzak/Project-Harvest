@@ -9,7 +9,6 @@ using System;
 /// </summary>
 public class Unit : Entity
 {
-    public GameObject selector;
     public int index;
     public Vector3 destination;
     public Vector3 velocity;
@@ -21,8 +20,6 @@ public class Unit : Entity
     public float angleToRotate;
     public float lineOfSight;
     public int deathTimer = 300;
-    private int clickTimer;
-    private bool clickedOnce = false;
     public Entity target;
     private static float rad = 180.0f / Mathf.PI;
     protected Collider coll;
@@ -37,6 +34,9 @@ public class Unit : Entity
         rotSpeed = speed + 4;
     }
 
+    /// <summary>
+    /// Die if dying or move if moving
+    /// </summary>
     protected virtual void Update()
     {
         if (isDying)
@@ -53,11 +53,13 @@ public class Unit : Entity
         coll.enabled = true;
     }
 
-    public virtual void RightClick()
+    protected override void LeftClick()
     {
-        if (isDying)
-            return;
+        base.LeftClick();
+    }
 
+    protected override void RightClick()
+    {
         foreach (Troop t in GetEnemyTroops())
         {
             if (!t.selected)
@@ -66,51 +68,19 @@ public class Unit : Entity
         }
     }
 
-    public virtual void SelectType()
+    protected override void OnMouseOver()
     {
-
+        base.OnMouseOver();
     }
 
-    public virtual void OnMouseOver()
-    {
-        if (isDying)
-            return;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            UnitUtils.ClearSelection();
-
-            if (clickedOnce == true) // double click
-            {
-                SelectType();
-            }
-            else
-            {
-                ToggleSelected(true);
-                clickedOnce = true;
-            }
-            Game.Instance.ChangeSelection();
-        }
-        else if (Input.GetMouseButtonDown(1))
-        {
-            RightClick();
-        }
-
-        if (clickedOnce)
-            clickTimer++;
-
-        if (clickTimer == 20) // cancel double click after 20
-        {
-            clickTimer = 0;
-            clickedOnce = false;
-        }
-    }
-
-    void OnMouseDown()
+    private void OnMouseDown()
     {
         Game.Instance.holdingDown = false;
     }
 
+    /// <summary>
+    /// Rotate towards destination then set moving velocity
+    /// </summary>
     protected virtual void Move()
     {
         if (Mathf.Abs(angleToRotate) > 10) // rotating towards destination
@@ -129,6 +99,10 @@ public class Unit : Entity
         }
     }
 
+    /// <summary>
+    /// Set currentSpeed to normal, destination, diff, velocity, angleToRotate, and moving = true
+    /// </summary>
+    /// <param name="v"></param>
     public void SetDestination(Vector3 v)
     {
         currentSpeed = speed;
@@ -161,7 +135,7 @@ public class Unit : Entity
         return f;
     }
  
-    void OnMouseEnter()
+    private void OnMouseEnter()
     {
         if (Game.Instance.troopIsSelected && !isDying)
             CursorSwitcher.Instance.Set(1);
@@ -207,6 +181,19 @@ public class Unit : Entity
         }
     }
 
+    public override void ToggleSelected(bool b)
+    {
+        if (b)
+            Game.Instance.selectedUnits.Add(this);
+
+        base.ToggleSelected(b);
+    }
+
+    private void Explore()
+    {
+
+    }
+
     public virtual List<Troop> GetEnemyTroops()
     {
         return null;
@@ -215,16 +202,5 @@ public class Unit : Entity
     public virtual List<Unit> GetSameType()
     {
         return null;
-    }
-
-    public override void ToggleSelected(bool b)
-    {
-        //Debug.Log("toggle selected");
-
-        var mr = selector.GetComponentInChildren<MeshRenderer>();
-        mr.enabled = selected = b;
-
-        if (b)
-            Game.Instance.selectedUnits.Add(this);
     }
 }

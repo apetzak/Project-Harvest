@@ -7,6 +7,8 @@ public class Resource : Entity
     public bool occupied;
     public GameObject prop;
     public int stage = 0;
+    protected Worker.State workerstate;
+    protected int cursorIndex = 0;
 
     protected virtual void Start()
     {
@@ -16,25 +18,19 @@ public class Resource : Entity
         maxHealth = health = size * 1000;
     }
 
-    void Update()
+    protected override void RightClick()
     {
-        
+        foreach (Unit u in Game.Instance.selectedUnits)
+        {
+            if (u is Worker)
+            {
+                (u as Worker).SwitchState(workerstate);
+                u.SetDestination(transform.position);
+            }
+        }
     }
 
-    public void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-            LeftClick();
-        else if (Input.GetMouseButtonDown(1))
-            RightClick();
-    }
-
-    protected virtual void LeftClick()
-    {
-
-    }
-
-    protected virtual void RightClick()
+    protected override void LeftClick()
     {
 
     }
@@ -44,6 +40,9 @@ public class Resource : Entity
 
     }
 
+    /// <summary>
+    /// Increment stage, shrink object, destroy at stage 5
+    /// </summary>
     protected void Shrink()
     {
         stage++;
@@ -51,5 +50,12 @@ public class Resource : Entity
 
         if (stage == 5)
             Destroy(gameObject);
+    }
+
+
+    protected virtual void OnMouseEnter()
+    {
+        if (Game.Instance.workerIsSelected)
+            CursorSwitcher.Instance.Set(cursorIndex);
     }
 }

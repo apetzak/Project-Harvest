@@ -9,6 +9,9 @@ public class Sprinkler : Structure
     private List<GameObject> drops = new List<GameObject>();
     private int timeBeforeShot = 20;
 
+    /// <summary>
+    /// Periodically spawn water drops, move all water drops, rotate head
+    /// </summary>
     protected override void Update()
     {
         timeBeforeShot--;
@@ -17,9 +20,12 @@ public class Sprinkler : Structure
 
         MoveDrops();
 
-        head.transform.Rotate(0, 1, 0); // spin around
+        head.transform.Rotate(0, 1, 0);
     }
 
+    /// <summary>
+    /// Spawn drop in a 20 degree range from spout, reset spawn timer
+    /// </summary>
     private void SpawnWaterDrop()
     {
         GameObject o = Instantiate(waterDrop, waterDrop.transform.position, waterDrop.transform.rotation);
@@ -29,6 +35,10 @@ public class Sprinkler : Structure
         timeBeforeShot = Random.Range(2, 12);
     }
 
+    /// <summary>
+    /// Propel drops towards destination (forward and slightly down)
+    /// Then destroy once below ground.
+    /// </summary>
     private void MoveDrops()
     {
         float dropDist = Random.Range(.05f, .15f);
@@ -46,6 +56,9 @@ public class Sprinkler : Structure
         }
     }
 
+    /// <summary>
+    /// If health is below zero, destroy sprinkler and all water drops
+    /// </summary>
     public override void TakeDamage()
     {
         if (health <= 0)

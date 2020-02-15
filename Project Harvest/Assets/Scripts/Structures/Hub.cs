@@ -25,6 +25,8 @@ public class Hub : Structure
 
         else if (Game.Instance.workerIsSelected)
             CursorSwitcher.Instance.Set(3);
+
+        base.OnMouseEnter();
     }
 
     protected virtual void GrowUnits()
@@ -52,7 +54,7 @@ public class Hub : Structure
         base.Update();
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         Pick();
         ReleaseUnits();

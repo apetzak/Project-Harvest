@@ -22,7 +22,7 @@ public class AsparagusPatch : Farm
         base.Update();
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -42,6 +42,6 @@ public class AsparagusPatch : Farm
             prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

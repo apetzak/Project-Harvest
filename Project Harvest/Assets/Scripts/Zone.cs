@@ -5,17 +5,17 @@ using System;
 
 public class Zone : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
         
     }
 
-    void Update()
+    private void Update()
     {
 
     }
 
-    void OnMouseOver()
+    private void OnMouseOver()
     {
         if (Input.GetMouseButtonDown(0))
             LeftClick();
@@ -29,19 +29,19 @@ public class Zone : MonoBehaviour
         }
     }
 
-    void LeftClick()
+    private void LeftClick()
     {
         UnitUtils.ClearSelection();
         Game.Instance.ChangeSelection();
     }
 
-    void RightClick()
+    private void RightClick()
     {
         SetDestinations();
         UnitUtils.ClearTargets();       
     }
 
-    void SetDestinations()
+    private void SetDestinations()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
@@ -50,12 +50,12 @@ public class Zone : MonoBehaviour
         UnitUtils.SetGroupLocation(hit.point);
     }
 
-    void OnMouseDown()
+    private void OnMouseDown()
     {
 
     }
 
-    void OnMouseEnter()
+    private void OnMouseEnter()
     {
         CursorSwitcher.Instance.Set(0);
     }

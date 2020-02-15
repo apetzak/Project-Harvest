@@ -10,6 +10,22 @@ using System;
 /// </summary>
 public class Troop : Unit
 {
+    public enum AttackState
+    {
+        Agressive,
+        Defensive,
+        Passive,
+    }
+
+    public enum FocusState
+    {
+        Troops,
+        Workers,
+        Structures
+    }
+
+    public AttackState attackState;
+    public FocusState focusState;
     public bool attacking;
     public float attackSpeed;
     public float attackRange;
@@ -23,8 +39,54 @@ public class Troop : Unit
         base.Start();
     }
 
+    private void Formate()
+    {
+        foreach (Troop t in Game.Instance.fruits)
+        {
+            if (t == this)
+                continue;
+
+            Vector3 diff = t.destination - destination;
+
+            float dist = 1f;
+
+            if (diff.magnitude < 2)
+            {
+                if (Mathf.Abs(destination.x - t.destination.x) < 1.5f)
+                {
+                    if (destination.x > t.destination.x)
+                    {
+                        destination += new Vector3(dist, 0, 0);
+                        t.destination += new Vector3(-dist, 0, 0);
+                    }
+                    else
+                    {
+                        destination += new Vector3(-dist, 0, 0);
+                        t.destination += new Vector3(dist, 0, 0);
+                    }
+                }
+
+                if (Mathf.Abs(destination.z - t.destination.z) < 1.5f)
+                {
+                    if (destination.z > t.destination.z)
+                    {
+                        destination += new Vector3(0, 0, dist);
+                        t.destination += new Vector3(0, 0, -dist);
+                    }
+                    else
+                    {
+                        destination += new Vector3(0, 0, -dist);
+                        t.destination += new Vector3(0, 0, dist);
+                    }
+                }
+            }
+        }
+    }
+
     protected override void Update()
     {
+        //Formate();
+
         diff = transform.position - destination;
 
         if (!isDying)
@@ -58,7 +120,7 @@ public class Troop : Unit
         base.Move();
     }
 
-    public override void OnMouseOver()
+    protected override void OnMouseOver()
     {
         base.OnMouseOver();
     }

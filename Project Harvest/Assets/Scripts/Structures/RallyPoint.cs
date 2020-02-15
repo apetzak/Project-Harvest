@@ -17,6 +17,12 @@ public class RallyPoint : Structure
 
     public override void Remove()
     {
+        ClearPointOnFarms();
+        base.Remove();
+    }
+
+    private void ClearPointOnFarms()
+    {
         if (fruit)
         {
             foreach (Structure s in Game.Instance.fruitStructures)
@@ -33,8 +39,6 @@ public class RallyPoint : Structure
                     (s as Farm).rallyPoint = new Vector3();
             }
         }
-
-        base.Remove();
     }
 
     protected override void Update()

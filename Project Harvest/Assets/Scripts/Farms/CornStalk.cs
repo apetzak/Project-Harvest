@@ -45,7 +45,7 @@ public class CornStalk : Farm
         }
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -75,6 +75,6 @@ public class CornStalk : Farm
             Clear();
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

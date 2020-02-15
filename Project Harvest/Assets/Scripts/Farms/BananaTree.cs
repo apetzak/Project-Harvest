@@ -16,7 +16,7 @@ public class BananaTree : FruitTree
         dirtMesh.enabled = false;
         ShowFruit(false);
         prop.transform.localScale = new Vector3(0, 0, 0);
-        stopHeight = 15;
+        stopHeight = 10.5f;
         index = 2;
         health = 300;
     }

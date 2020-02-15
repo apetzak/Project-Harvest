@@ -9,14 +9,18 @@ using UnityEngine;
 /// </summary>
 public class Entity : MonoBehaviour
 {
+    public GameObject selector;
     public float health;
     public float maxHealth;
     public bool isDying = false;
     public bool fruit;
     public bool selected;
+    public string description;
+    protected int clickTimer;
+    protected bool clickedOnce = false;
 
     /// <summary>
-    /// Destroy if health is below zero
+    /// Destroy if health is below zero and not dying
     /// </summary>
     public virtual void TakeDamage()
     {
@@ -27,6 +31,9 @@ public class Entity : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Empty
+    /// </summary>
     public virtual void Remove()
     {
         //Destroy(gameObject);
@@ -37,7 +44,67 @@ public class Entity : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Set selected, enabled/disable selector mesh renderer
+    /// </summary>
+    /// <param name="b"></param>
     public virtual void ToggleSelected(bool b)
+    {
+        selector.GetComponentInChildren<MeshRenderer>().enabled = selected = b;
+    }
+
+
+    public virtual void SelectType()
+    {
+
+    }
+
+    /// <summary>
+    /// Call left or right click on mouse down
+    /// </summary>
+    protected virtual void OnMouseOver()
+    {
+        if (isDying)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
+            LeftClick();
+        else if (Input.GetMouseButtonDown(1))
+            RightClick();
+
+        if (clickedOnce)
+            clickTimer++;
+
+        if (clickTimer == 20) // cancel double click after 20
+        {
+            clickTimer = 0;
+            clickedOnce = false;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void LeftClick()
+    {
+        UnitUtils.ClearSelection();
+
+        if (clickedOnce == true) // double click
+        {
+            SelectType();
+        }
+        else
+        {
+            ToggleSelected(true);
+            clickedOnce = true;
+        }
+        Game.Instance.ChangeSelection();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void RightClick()
     {
 
     }

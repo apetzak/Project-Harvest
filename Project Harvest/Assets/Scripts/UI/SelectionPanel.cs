@@ -43,9 +43,9 @@ public class SelectionPanel : MonoBehaviour
         {
             Game.Instance.selectionChanged = false;
 
-            if (Game.Instance.selectedUnit == null) // && Game.Instance.selectedUnits.Count != 1)
+            if (Game.Instance.selectedEntity == null) // && Game.Instance.selectedUnits.Count != 1)
                 HideSingle();
-            else if (Game.Instance.selectedUnit != entity)
+            else if (Game.Instance.selectedEntity != entity)
                 ShowSingle();
 
             HideUnitBoxes();
@@ -120,7 +120,7 @@ public class SelectionPanel : MonoBehaviour
     /// </summary>
     private void ShowSingle()
     {
-        entity = Game.Instance.selectedUnit;
+        entity = Game.Instance.selectedEntity;
         if (entity is Unit)
         {
             foreach (RawImage i in images)
@@ -142,6 +142,8 @@ public class SelectionPanel : MonoBehaviour
 
     private string GetText()
     {
+        string team = entity.fruit ? "Fruit" : "Veggie";
+
         if (entity is Troop)
         {
             Troop t = entity as Troop;
@@ -155,18 +157,17 @@ public class SelectionPanel : MonoBehaviour
         }
         else if (entity is Farm)
         {
-            return "farm";
+            return $"{entity.name}\nTeam        {team}\nHealth        {entity.maxHealth}"
+            + $"\nState        {(entity as Farm).state}";
         }
         else if (entity is Turret)
         {
             Turret t = entity as Turret;
-            string team = t.fruit ? "Fruit" : "Veggie";
             return $"turret\nTeam        {team}";
         }
         else if (entity is Structure)
         {
             Structure s = entity as Structure;
-            string team = s.fruit ? "Fruit" : "Veggie";
             return $"{s.name}\nHealth        {s.maxHealth}\nTeam        {team}";
         }
         else if (entity is Gold)

@@ -5,28 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 
+/// </summary>
 public class Map : MonoBehaviour, IPointerClickHandler
 {
     public GameObject viewBox;
     public bool leftButtonDown;
 
-    void Start()
+    private void Start()
     {
         var r = gameObject.GetComponent<RectTransform>();
     }
 
-    void Update()
-    {
-        //if (leftButtonDown)
-        //{
-        //    if (!Input.GetMouseButtonDown(0))
-        //        leftButtonDown = false;
-        //    else
-        //        MoveCamera(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-        //}
-    }
-
-    void OnGUI()
+    private void OnGUI()
     {
         if (leftButtonDown)
         {
@@ -76,7 +68,7 @@ public class Map : MonoBehaviour, IPointerClickHandler
         UnitUtils.SetGroupLocation(point);
     }
 
-    void DrawUnits()
+    private void DrawUnits()
     {
         foreach (Entity e in Game.Instance.fruits)
             DrawEntity(e);

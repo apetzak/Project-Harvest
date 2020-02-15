@@ -20,8 +20,9 @@ public class Game : MonoBehaviour
     public List<Structure> fruitStructures { get; set; }
     public List<Structure> veggieStructures { get; set; }
     public List<Unit> selectedUnits { get; set; }
+    public List<Structure> selectedStructures { get; set; }
     public List<Resource> resources { get; set; }
-    public Entity selectedUnit;
+    public Entity selectedEntity;
     public GameObject selectorBox;
     public bool holdingDown = false;
     public Vector3 boxPoint;
@@ -51,6 +52,7 @@ public class Game : MonoBehaviour
         Instance.veggieStructures = new List<Structure>();
         Instance.selectedUnits = new List<Unit>();
         Instance.resources = new List<Resource>();
+        Instance.selectedStructures = new List<Structure>();
     }
 
     private void GetObjectsInScene()
@@ -123,33 +125,38 @@ public class Game : MonoBehaviour
     }
 
     /// <summary>
-    /// Set/clear selectedUnit, toggle selectionChanged flag, set workerIsSelected and troopIsSelected
+    /// Set/clear selectedEntity, toggle selectionChanged flag, set workerIsSelected and troopIsSelected
     /// </summary>
     public void ChangeSelection()
     {
         if (selectedUnits.Count == 1)
-            selectedUnit = Instance.selectedUnits[0];
+            selectedEntity = Instance.selectedUnits[0];
+        else if (selectedStructures.Count == 1)
+            selectedEntity = Instance.selectedStructures[0];
         else
-            selectedUnit = null;
+            selectedEntity = null;
 
         selectionChanged = true;
         workerIsSelected = troopIsSelected = false;
 
-        foreach (Unit u in selectedUnits)
+        if (selectedUnits.Count > 0)
         {
-            if (u is Worker)
+            foreach (Unit u in selectedUnits)
             {
-                workerIsSelected = true;
-                break;
+                if (u is Worker)
+                {
+                    workerIsSelected = true;
+                    break;
+                }
             }
-        }
 
-        foreach (Unit u in selectedUnits)
-        {
-            if (u is Troop)
+            foreach (Unit u in selectedUnits)
             {
-                troopIsSelected = true;
-                break;
+                if (u is Troop)
+                {
+                    troopIsSelected = true;
+                    break;
+                }
             }
         }
     }

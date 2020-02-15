@@ -6,6 +6,9 @@ public class Stone : Resource
 {
     protected override void Start()
     {
+        workerstate = Worker.State.StoneMining;
+        cursorIndex = 6;
+
         // pick one of two rocks
         int i = Random.Range(0, 1);
         prop = transform.GetChild(i).gameObject;
@@ -19,11 +22,5 @@ public class Stone : Resource
     protected override void LeftClick()
     {
         Shrink();
-    }
-
-    void OnMouseEnter()
-    {
-        if (Game.Instance.workerIsSelected)
-            CursorSwitcher.Instance.Set(6);
     }
 }

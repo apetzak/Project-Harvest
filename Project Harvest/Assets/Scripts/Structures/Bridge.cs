@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Water : Resource
+public class Bridge : Structure
 {
+    public int length;
+
     protected override void Start()
     {
-        workerstate = Worker.State.CollectingWater;
-        cursorIndex = 3;
         base.Start();
     }
 
-    private void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }

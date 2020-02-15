@@ -9,10 +9,12 @@ public class Tree : Resource
 
     protected override void Start()
     {
+        workerstate = Worker.State.Chopping;
+        cursorIndex = 8;
         base.Start();
     }
 
-    void Update()
+    private void Update()
     {
         if (falling)
         {
@@ -32,14 +34,13 @@ public class Tree : Resource
         falling = true;
     }
 
+    protected override void RightClick()
+    {
+        base.RightClick();
+    }
+
     private void FallOver()
     {
 
-    }
-
-    void OnMouseEnter()
-    {
-        if (Game.Instance.workerIsSelected)
-            CursorSwitcher.Instance.Set(8);
     }
 }

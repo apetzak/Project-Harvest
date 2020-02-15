@@ -40,7 +40,7 @@ public class RootPatch : Farm
         }
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -62,6 +62,6 @@ public class RootPatch : Farm
             state = State.Spawning;
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

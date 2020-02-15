@@ -15,6 +15,7 @@ public class Structure : Entity
     public float maxX;
     public float maxY;
     public float minY;
+    //public ParticleSystem fire;
 
     /// <summary>
     /// Set health to maxHealth
@@ -24,6 +25,9 @@ public class Structure : Entity
         health = maxHealth;
     }
 
+    /// <summary>
+    /// Empty
+    /// </summary>
     protected virtual void Update()
     {
 
@@ -32,19 +36,20 @@ public class Structure : Entity
     /// <summary>
     /// Clear unit selection, set selected unit to this
     /// </summary>
-    protected virtual void LeftClick()
+    protected override void LeftClick()
     {
-        if (Game.Instance.selectedUnit == this)
-            return;
+        //UnitUtils.ClearSelection();
+        //Game.Instance.ChangeSelection();
+        //Game.Instance.selectedEntity = this;
+        //ToggleRing();
 
-        ToggleRing();
-
-        UnitUtils.ClearSelection();
-        Game.Instance.ChangeSelection();
-        Game.Instance.selectedUnit = this;
+        base.LeftClick();
     }
 
-    protected virtual void RightClick()
+    /// <summary>
+    /// TargetStructure() for all selected troops
+    /// </summary>
+    protected override void RightClick()
     {
         if (Game.Instance.troopIsSelected)
         {
@@ -59,19 +64,23 @@ public class Structure : Entity
                     (t as Troop).TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
             }
         }
+        if (Game.Instance.workerIsSelected)
+        {
+            foreach (Unit u in Game.Instance.selectedUnits)
+            {
+                if (u is Worker)
+                    (u as Worker).SwitchState(Worker.State.Building);
+            }
+        }
     }
 
-    protected void OnMouseOver()
-    {
-        if (Input.GetMouseButtonDown(0))
-            LeftClick();
-        else if (Input.GetMouseButtonDown(1))
-            RightClick();
-    }
-
+    /// <summary>
+    /// Show ring, switch cursor
+    /// </summary>
     protected virtual void OnMouseEnter()
     {
         ToggleRing();
+        ToggleSelector();
 
         if (Game.Instance.troopIsSelected)
             CursorSwitcher.Instance.Set(1);
@@ -79,18 +88,42 @@ public class Structure : Entity
             CursorSwitcher.Instance.Set(7);
     }
 
+    /// <summary>
+    /// Toggle off ring if not selected
+    /// </summary>
     private void OnMouseExit()
     {
-        if (Game.Instance.selectedUnit != this)
+        if (!selected)
+        {
             ToggleRing(false);
+            ToggleSelector(false);
+        }
     }
 
+    /// <summary>
+    /// Show area ring
+    /// </summary>
+    /// <param name="b"></param>
     private void ToggleRing(bool b = true)
     {
         if (ring != null)
             ring.GetComponent<MeshRenderer>().enabled = b;
     }
 
+    /// <summary>
+    /// Show selector
+    /// </summary>
+    /// <param name="b"></param>
+    private void ToggleSelector(bool b = true)
+    {
+        Debug.Log(selector +  " " + this.name);
+        if (selector != null)
+            selector.GetComponent<MeshRenderer>().enabled = b;
+    }
+
+    /// <summary>
+    /// Play explosion, remove from collection, destroy
+    /// </summary>
     public override void Remove()
     {
         Audio.Instance.PlayExplosion();
@@ -99,7 +132,46 @@ public class Structure : Entity
             Game.Instance.fruitStructures.Remove(this);
         else
             Game.Instance.veggieStructures.Remove(this);
-
+       
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Add to selectedStructures, enable/disable ring
+    /// </summary>
+    /// <param name="b"></param>
+    public override void ToggleSelected(bool b)
+    {
+        if (b)
+            Game.Instance.selectedStructures.Add(this);
+
+        if (ring != null)
+            ring.GetComponent<MeshRenderer>().enabled = b;
+
+        if (selector != null)
+            base.ToggleSelected(b);
+        else
+            selected = b;
+    }
+
+    public override void SelectType()
+    {
+        int selectedCount = 0;
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+
+        foreach (Structure s in list)
+        {
+            if (selectedCount > 84)
+                break;
+
+            if (s.fruit != fruit || s.GetType() != GetType())
+                continue;
+
+            selectedCount++;
+            s.ToggleSelected(true);
+            s.ToggleRing(true);
+        }
+
+        Game.Instance.ChangeSelection();
     }
 }

@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 public class UnitUtils
 {
     public static void ClearTargets()
@@ -19,17 +22,22 @@ public class UnitUtils
     }
 
     /// <summary>
-    /// Hide ring if structure is selected, toggle all selectedUnits off, clear selectedUnits
+    /// Toggle all selectedUnits/selectedStructures off, clear selectedUnits/selectedStructures
     /// </summary>
     public static void ClearSelection()
     {
-        if (Game.Instance.selectedUnit is Structure && 
-           (Game.Instance.selectedUnit as Structure).ring != null)
-            (Game.Instance.selectedUnit as Structure).ring.GetComponent<MeshRenderer>().enabled = false;
-
-        foreach (Unit u in Game.Instance.selectedUnits)
-            u.ToggleSelected(false);
-        Game.Instance.selectedUnits = new List<Unit>();
+        if (Game.Instance.selectedUnits.Count > 0)
+        {
+            foreach (Unit u in Game.Instance.selectedUnits)
+                u.ToggleSelected(false);
+            Game.Instance.selectedUnits = new List<Unit>();
+        }
+        else if (Game.Instance.selectedStructures.Count > 0)
+        {
+            foreach (Structure s in Game.Instance.selectedStructures)
+                s.ToggleSelected(false);
+            Game.Instance.selectedStructures = new List<Structure>();
+        }
     }
 
     /// <summary>
@@ -53,6 +61,9 @@ public class UnitUtils
                 Debug.Log("dead in selected");
                 continue;
             }
+
+            if (u is Worker)
+                (u as Worker).SwitchState(Worker.State.Idle);
 
             if (u.speed < lowestSpeed)
                 lowestSpeed = u.speed;

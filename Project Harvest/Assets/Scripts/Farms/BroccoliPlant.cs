@@ -45,7 +45,7 @@ public class BroccoliPlant : Farm
         }
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -87,6 +87,6 @@ public class BroccoliPlant : Farm
             state = State.Empty;
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 }

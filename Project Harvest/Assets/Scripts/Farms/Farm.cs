@@ -200,7 +200,7 @@ public class Farm : Structure
     /// <summary>
     /// Switch cursor, if only worker(s) are selected
     /// </summary>
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (!Game.Instance.troopIsSelected && Game.Instance.workerIsSelected)
             SwitchCursors();

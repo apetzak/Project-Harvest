@@ -80,7 +80,7 @@ public class FruitTree : Farm
             isDying = true;
     }
 
-    protected override void LeftClick()
+    protected override void RightClick()
     {
         if (state == State.Spawning)
             return;
@@ -116,7 +116,7 @@ public class FruitTree : Farm
             state = State.Empty;
         }
 
-        base.LeftClick();
+        base.RightClick();
     }
 
     public void ShowFruit(bool b = true)
