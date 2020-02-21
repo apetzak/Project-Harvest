@@ -11,6 +11,8 @@ public class Pea : Worker
 
     public override void Spawn()
     {
+    //    facingAngle = 90;
+    //    transform.Rotate(0, -90, 0, Space.Self);
         Game.Instance.peas.Add(this);
     }
 

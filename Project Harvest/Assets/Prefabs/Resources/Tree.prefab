@@ -108,7 +108,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94afaab6b307a9545968f61dbd611446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  startingAmount: 0
+  selector: {fileID: 0}
+  health: 100
+  maxHealth: 100
+  isDying: 0
+  fruit: 0
+  selected: 0
+  description: 
   occupied: 0
   prop: {fileID: 0}
+  stage: 0
+  workerstate: 0

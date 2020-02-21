@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    float speed = 4;
+    private float speed = 4;
 
-    void Update()
+    private void Update()
     {
         if (Input.mouseScrollDelta.y != 0)
             Camera.main.transform.Translate(0, 0, Input.mouseScrollDelta.y * 4);
@@ -16,26 +16,36 @@ public class CameraMovement : MonoBehaviour
     /// <summary>
     /// Move camera with WASD or mouse on edge of screen
     /// </summary>
-    void MoveCamera()
+    private void MoveCamera()
     {
         float mouseX = Input.mousePosition.x;
         float mouseY = Input.mousePosition.y;
         float camY = Camera.main.transform.position.y;       
 
-        if (mouseX < 0 || Input.GetKey("a"))
+        //if (mouseX < 0 || Input.GetKey("a"))
+        //    Camera.main.transform.Translate(-speed, 0, 0);
+        //else if (mouseX >= Screen.width - 5 || Input.GetKey("d"))
+        //    Camera.main.transform.Translate(speed, 0, 0);
+
+        //if (mouseY < 0 || Input.GetKey("s"))
+        //    Camera.main.transform.Translate(0, 0, -speed);
+        //else if (mouseY >= Screen.height || Input.GetKey("w"))
+        //    Camera.main.transform.Translate(0, 0, speed);
+
+        if (Input.GetKey("a"))
             Camera.main.transform.Translate(-speed, 0, 0);
-        else if (mouseX >= Screen.width - 5 || Input.GetKey("d"))
+        else if (Input.GetKey("d"))
             Camera.main.transform.Translate(speed, 0, 0);
 
-        if (mouseY < 0 || Input.GetKey("s"))
+        if (Input.GetKey("s"))
             Camera.main.transform.Translate(0, 0, -speed);
-        else if (mouseY >= Screen.height || Input.GetKey("w"))
+        else if (Input.GetKey("w"))
             Camera.main.transform.Translate(0, 0, speed);
 
         RevertChangeInY(camY);
     }
 
-    void RevertChangeInY(float camY)
+    private void RevertChangeInY(float camY)
     {
         float camX = Camera.main.transform.position.x;
         float camZ = Camera.main.transform.position.z;

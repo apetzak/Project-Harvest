@@ -118,6 +118,9 @@ public class Unit : Entity
         return new Vector3(-diff.x, 0, -diff.z).normalized;
     }
 
+    /// <summary>
+    /// Set moving = false, velocity = new, desination = self
+    /// </summary>
     public void StopMoving()
     {
         moving = false;
@@ -125,6 +128,7 @@ public class Unit : Entity
         destination = transform.position;
     }
 
+    // todo: make this better
     public float GetAngle()
     {
         float f = Mathf.Atan2(diff.x, diff.z) * rad - facingAngle;
@@ -145,6 +149,9 @@ public class Unit : Entity
     {
         if (deathTimer == 300)
         {
+            if (target is Resource)
+                (target as Resource).occupied = false;
+
             if (selected)
             {
                 ToggleSelected(false);
@@ -177,7 +184,7 @@ public class Unit : Entity
                 if (t.target != null && t.target == this)
                     t.target = null;
             }
-            base.Remove();
+            Remove();
         }
     }
 

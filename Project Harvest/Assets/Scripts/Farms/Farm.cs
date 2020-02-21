@@ -204,6 +204,7 @@ public class Farm : Structure
     {
         if (!Game.Instance.troopIsSelected && Game.Instance.workerIsSelected)
             SwitchCursors();
+        base.RightClick();
     }
 
     /// <summary>

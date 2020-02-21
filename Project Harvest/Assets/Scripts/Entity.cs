@@ -83,11 +83,11 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// ClearSelection, select, select type on double click, change selection
     /// </summary>
     protected virtual void LeftClick()
     {
-        UnitUtils.ClearSelection();
+        EntityUtils.ClearSelection();
 
         if (clickedOnce == true) // double click
         {

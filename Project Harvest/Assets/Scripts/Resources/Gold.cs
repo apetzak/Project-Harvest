@@ -17,6 +17,9 @@ public class Gold : Resource
         base.Start();
     }
 
+    /// <summary>
+    /// Delete the other 3 props after randomly choosing one
+    /// </summary>
     private void DeleteOtherProps()
     {
         for (int i = 3; i >= 0; i--)
@@ -24,10 +27,5 @@ public class Gold : Resource
             if (transform.GetChild(i).gameObject != prop)
                 Destroy(transform.GetChild(i).gameObject);
         }
-    }
-
-    protected override void LeftClick()
-    {
-        Shrink();
     }
 }

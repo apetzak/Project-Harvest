@@ -22,6 +22,16 @@ public class Game : MonoBehaviour
     public List<Unit> selectedUnits { get; set; }
     public List<Structure> selectedStructures { get; set; }
     public List<Resource> resources { get; set; }
+    public int fruitResourceWater;
+    public int fruitResourceWood;
+    public int fruitResourceStone;
+    public int fruitResourceGold;
+    public int fruitResourceFertilizer;
+    public int veggieResourceWater;
+    public int veggieResourceWood;
+    public int veggieResourceStone;
+    public int veggieResourceGold;
+    public int veggieResourceFertilizer;
     public Entity selectedEntity;
     public GameObject selectorBox;
     public bool holdingDown = false;
@@ -30,7 +40,7 @@ public class Game : MonoBehaviour
     public bool workerIsSelected = false;
     public bool troopIsSelected = false;
 
-    void Start()
+    private void Start()
     {
         InstantiateGlobalProperties();
         GetObjectsInScene();
@@ -78,7 +88,7 @@ public class Game : MonoBehaviour
         #endregion
     }
 
-    void AddWorkers()
+    private void AddWorkers()
     {
         for (int i = 0; i < 10; i++)
         {
@@ -91,7 +101,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    void AddSquad(int rows, int columns)
+    private void AddSquad(int rows, int columns)
     {
         for (int z = 0; z < 10; z++)
         {
@@ -161,7 +171,7 @@ public class Game : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         //if (Input.GetMouseButtonDown(0))
         //{

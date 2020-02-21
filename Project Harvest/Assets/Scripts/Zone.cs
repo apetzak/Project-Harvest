@@ -23,22 +23,19 @@ public class Zone : MonoBehaviour
         else if (Input.GetMouseButtonDown(1))
             RightClick();
 
-        else if (Input.GetMouseButtonDown(2)) // middle
-        {
-
-        }
+        //else if (Input.GetMouseButtonDown(2)) // middle
     }
 
     private void LeftClick()
     {
-        UnitUtils.ClearSelection();
+        EntityUtils.ClearSelection();
         Game.Instance.ChangeSelection();
     }
 
     private void RightClick()
     {
         SetDestinations();
-        UnitUtils.ClearTargets();       
+        EntityUtils.ClearTargets();       
     }
 
     private void SetDestinations()
@@ -47,7 +44,7 @@ public class Zone : MonoBehaviour
         RaycastHit hit = new RaycastHit();
         if (!Physics.Raycast(ray, out hit))    
             return;
-        UnitUtils.SetGroupLocation(hit.point);
+        EntityUtils.SetGroupLocation(hit.point);
     }
 
     private void OnMouseDown()

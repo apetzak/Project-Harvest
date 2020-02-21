@@ -37,7 +37,10 @@ public class SelectionPanel : MonoBehaviour
     private void LateUpdate()
     {
         if (entity != null)
+        {
             UpdateHealthBar();
+            txt.text = GetText();
+        }
 
         if (Game.Instance.selectionChanged)
         {
@@ -104,6 +107,9 @@ public class SelectionPanel : MonoBehaviour
             u.transform.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     private void HideSingle()
     {
         if (!txt.enabled)
@@ -121,16 +127,19 @@ public class SelectionPanel : MonoBehaviour
     private void ShowSingle()
     {
         entity = Game.Instance.selectedEntity;
+        foreach (RawImage i in images)
+            i.enabled = false;
         if (entity is Unit)
         {
-            foreach (RawImage i in images)
-                i.enabled = false;
             images[(entity as Unit).index].enabled = true;
         }
         txt.enabled = green.enabled = red.enabled = true;
         txt.text = GetText();
     }
 
+    /// <summary>
+    /// Update size of selected target health bar
+    /// </summary>
     private void UpdateHealthBar()
     {
         var barLength = 175 / entity.maxHealth * entity.health * 1.15f * .75f;
@@ -144,45 +153,56 @@ public class SelectionPanel : MonoBehaviour
     {
         string team = entity.fruit ? "Fruit" : "Veggie";
 
+        string text = string.Empty;
+        text += $"Name           {entity.name}\n";
+        if (!(entity is Resource))
+            text += $"Team           {team}\n";
+        text += $"Health         {entity.health}/{entity.maxHealth}\n";
+
         if (entity is Troop)
         {
             Troop t = entity as Troop;
-            return $"Health        {t.maxHealth}\nSpeed        {t.speed}" +
-            $"\nDamage     {t.attackDamage}\nA. Speed    {t.attackSpeed}\nA. Range    {t.attackRange}";
+            text += $"Speed         {t.speed}\n";
+            text += $"Damage       {t.attackDamage}\n";
+            text += $"A. Speed    {t.attackSpeed}\n";
+            text += $"Range         {t.attackRange}\n";
         }
         else if (entity is Worker)
         {
             Worker w = entity as Worker;
-            return $"Health        {w.maxHealth}\nSpeed        {w.speed}\nLoad      0/10";
+            text += $"State          {w.state}\n";
+            text += $"Load           {w.resourceCount}/{w.resourceCapacity}\n";
         }
         else if (entity is Farm)
         {
-            return $"{entity.name}\nTeam        {team}\nHealth        {entity.maxHealth}"
-            + $"\nState        {(entity as Farm).state}";
+            Farm f = entity as Farm;
+            text += $"State           {f.state}\n";
+            text += $"Rally Point   {f.rallyPoint}\n";
         }
-        else if (entity is Turret)
-        {
-            Turret t = entity as Turret;
-            return $"turret\nTeam        {team}";
-        }
+        //else if (entity is Turret)
+        //{
+        //    Turret t = entity as Turret;
+        //    text += $"Range          {t.ring.transform.localScale}";
+        //}
         else if (entity is Structure)
         {
             Structure s = entity as Structure;
-            return $"{s.name}\nHealth        {s.maxHealth}\nTeam        {team}";
+            if (s.ring != null)
+                text += $"Range          {s.ring.transform.localScale}";
         }
-        else if (entity is Gold)
+        else if (entity is Resource)
         {
-            return "";
+            text += $"Occupied        {(entity as Resource).occupied}";
         }
-        else if (entity is Stone)
-        {
-            return "";
-        }
-        else if (entity is Tree)
-        {
-            return "";
-        }
+        //else if (entity is Stone)
+        //{
 
-        return "";
+        //}
+        //else if (entity is Tree)
+        //{
+
+        //}
+
+        return text;
     }
 }

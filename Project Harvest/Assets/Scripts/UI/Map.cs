@@ -65,7 +65,7 @@ public class Map : MonoBehaviour, IPointerClickHandler
         float x = (data.position.x - 1620) * 5;
         float z = data.position.y * 5;
         Vector3 point = new Vector3(x, 10, z);
-        UnitUtils.SetGroupLocation(point);
+        EntityUtils.SetGroupLocation(point);
     }
 
     private void DrawUnits()

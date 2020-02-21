@@ -15,7 +15,7 @@ public class Structure : Entity
     public float maxX;
     public float maxY;
     public float minY;
-    //public ParticleSystem fire;
+    public bool isBuilt;
 
     /// <summary>
     /// Set health to maxHealth
@@ -34,15 +34,10 @@ public class Structure : Entity
     }
 
     /// <summary>
-    /// Clear unit selection, set selected unit to this
+    /// base
     /// </summary>
     protected override void LeftClick()
     {
-        //UnitUtils.ClearSelection();
-        //Game.Instance.ChangeSelection();
-        //Game.Instance.selectedEntity = this;
-        //ToggleRing();
-
         base.LeftClick();
     }
 
@@ -69,7 +64,11 @@ public class Structure : Entity
             foreach (Unit u in Game.Instance.selectedUnits)
             {
                 if (u is Worker)
+                {
+                    u.target = this;
+                    u.SetDestination(transform.position);
                     (u as Worker).SwitchState(Worker.State.Building);
+                }
             }
         }
     }
@@ -116,7 +115,6 @@ public class Structure : Entity
     /// <param name="b"></param>
     private void ToggleSelector(bool b = true)
     {
-        Debug.Log(selector +  " " + this.name);
         if (selector != null)
             selector.GetComponent<MeshRenderer>().enabled = b;
     }
@@ -137,16 +135,15 @@ public class Structure : Entity
     }
 
     /// <summary>
-    /// Add to selectedStructures, enable/disable ring
+    /// Enable/disable selector and ring
     /// </summary>
-    /// <param name="b"></param>
+    /// <param name="b">If true, add this to selectedStructures</param>
     public override void ToggleSelected(bool b)
     {
         if (b)
             Game.Instance.selectedStructures.Add(this);
 
-        if (ring != null)
-            ring.GetComponent<MeshRenderer>().enabled = b;
+        ToggleRing(b);
 
         if (selector != null)
             base.ToggleSelected(b);

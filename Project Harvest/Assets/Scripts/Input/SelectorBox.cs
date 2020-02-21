@@ -53,7 +53,7 @@ public class SelectorBox : MonoBehaviour
             return;
         }
 
-        UnitUtils.ClearSelection();
+        EntityUtils.ClearSelection();
 
         foreach (Troop t in Game.Instance.fruits)
         {

@@ -4,43 +4,29 @@ using UnityEngine;
 
 public class Tree : Resource
 {
-    private bool falling = false;
     private int fallCounter = 0;
 
     protected override void Start()
     {
-        workerstate = Worker.State.Chopping;
+        workerstate = Worker.State.WoodCutting;
         cursorIndex = 8;
         base.Start();
     }
 
     private void Update()
     {
-        if (falling)
+        if (isDying)
         {
             fallCounter++;
             transform.Rotate(.5f, 0, 0);
 
             if (fallCounter >= 90)
-            {
-                falling = false;
-                Destroy(gameObject);
-            }
+                Remove();
         }
     }
 
-    protected override void LeftClick()
+    public void FallOver()
     {
-        falling = true;
-    }
-
-    protected override void RightClick()
-    {
-        base.RightClick();
-    }
-
-    private void FallOver()
-    {
-
+        isDying = true;
     }
 }

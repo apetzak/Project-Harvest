@@ -9,6 +9,12 @@ public class Sprinkler : Structure
     private List<GameObject> drops = new List<GameObject>();
     private int timeBeforeShot = 20;
 
+    protected override void Start()
+    {
+        head.transform.Rotate(0, Random.Range(0, 360), 0);
+        base.Start();
+    }
+
     /// <summary>
     /// Periodically spawn water drops, move all water drops, rotate head
     /// </summary>
@@ -66,7 +72,6 @@ public class Sprinkler : Structure
             foreach (GameObject o in drops)
                 Destroy(o);
         }
-
         base.TakeDamage();
     }
 }

@@ -18,9 +18,4 @@ public class Stone : Resource
 
         base.Start();
     }
-
-    protected override void LeftClick()
-    {
-        Shrink();
-    }
 }

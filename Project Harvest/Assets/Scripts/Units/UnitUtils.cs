@@ -8,14 +8,16 @@ using UnityEngine;
 /// <summary>
 /// 
 /// </summary>
-public class UnitUtils
+public class EntityUtils
 {
+    /// <summary>
+    /// Sets target to null for all selectedUnits, set attacking to false for troops
+    /// </summary>
     public static void ClearTargets()
     {
         foreach (Unit u in Game.Instance.selectedUnits)
         {
             u.target = null;
-
             if (u is Troop)
                 (u as Troop).attacking = false;
         }

@@ -18395,6 +18395,7 @@ MonoBehaviour:
   maxX: 0
   maxY: 0
   minY: 0
+  isBuilt: 0
   head: {fileID: 4931817500779361705}
   waterDrop: {fileID: 1360334405076889447}
 --- !u!136 &4363463242882494889
@@ -18716,11 +18717,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944558, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
       propertyPath: m_CastShadows
@@ -18735,6 +18731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944558, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944554, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
@@ -18838,15 +18839,15 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 5997509332766612893, guid: d6967e6b8bf8b10488e8edfb6ef1aa14,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5997509332766612962, guid: d6967e6b8bf8b10488e8edfb6ef1aa14,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5997509332766612893, guid: d6967e6b8bf8b10488e8edfb6ef1aa14,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6967e6b8bf8b10488e8edfb6ef1aa14, type: 3}

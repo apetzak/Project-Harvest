@@ -35,7 +35,7 @@ public class StrawberryBush : Farm
                     foreach (Troop t in troops)
                         t.transform.localScale += new Vector3(.02f, .02f, .02f);
                 }
-                prop.transform.Rotate(1, 0, 0, Space.Self);
+                prop.transform.Rotate(1, 0, 0, Space.Self); // fall down
             }
         }
         else

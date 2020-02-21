@@ -48,14 +48,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f5ab834b4bd7cd4ca70c4e4930fcd94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selector: {fileID: 0}
   health: 0
   maxHealth: 0
   isDying: 0
   fruit: 0
   selected: 0
+  description: 
   occupied: 0
   prop: {fileID: 0}
   stage: 0
+  workerstate: 0
 --- !u!135 &101349849179008888
 SphereCollider:
   m_ObjectHideFlags: 0
