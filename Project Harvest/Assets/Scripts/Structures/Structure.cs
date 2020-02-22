@@ -23,7 +23,10 @@ public class Structure : Entity
     protected virtual void Start()
     {
         health = maxHealth;
+
         //Debug.Log($"{name} bounds: {c.bounds} | center: {transform.position}");
+        //if (isPlaced)
+            CreateSelector();
         SetBounds();
     }
 
@@ -34,6 +37,39 @@ public class Structure : Entity
         maxX = transform.position.x + c.bounds.extents.x;
         minY = transform.position.z - c.bounds.extents.z;
         maxY = transform.position.z + c.bounds.extents.z;
+    }
+
+    public void CreateSelector()
+    {
+        if (selector == null || selector.transform.childCount == 0)
+            return;
+
+        for (int i = 0; i < 4; i++)
+        {
+            selector.transform.GetChild(i).localPosition = new Vector3();
+            selector.transform.GetChild(i).GetComponent<MeshRenderer>().material =
+                fruit ? TroopClass.Instance.materials[0] : TroopClass.Instance.materials[1];
+        }
+
+        var c = GetComponent<Collider>();
+
+        var v1 = selector.transform.GetChild(0).transform.localScale;  
+        selector.transform.GetChild(0).transform.localScale = 
+        selector.transform.GetChild(1).transform.localScale =
+            new Vector3(c.bounds.extents.x * 2 + 2, v1.y, v1.z);
+
+        var v2 = selector.transform.GetChild(2).transform.localScale;
+        selector.transform.GetChild(2).transform.localScale =
+        selector.transform.GetChild(3).transform.localScale =
+            new Vector3(v2.x, v2.y, c.bounds.extents.z * 2 + 1);
+
+        var xDist = c.bounds.extents.x + .5f;
+        var zDist = c.bounds.extents.z + .5f;
+
+        selector.transform.GetChild(0).Translate(0, 0, zDist, Space.Self);
+        selector.transform.GetChild(1).Translate(0, 0, -zDist, Space.Self);
+        selector.transform.GetChild(2).Translate(xDist, 0, 0, Space.Self);
+        selector.transform.GetChild(3).Translate(-xDist, 0, 0, Space.Self);
     }
 
     public virtual void Init()
@@ -137,8 +173,8 @@ public class Structure : Entity
     /// <param name="b"></param>
     public void ToggleSelector(bool b = true)
     {
-        if (selector != null)
-            selector.GetComponent<MeshRenderer>().enabled = b;
+        if (selector != null && selector.transform.childCount > 0)
+            selector.SetActive(b);
     }
 
     /// <summary>
@@ -147,8 +183,11 @@ public class Structure : Entity
     /// <param name="m"></param>
     public void ToggleSelectorColor(Material m)
     {
-        if (selector != null) // todo: set to fruit or veggie color
-            selector.GetComponent<MeshRenderer>().material = m;
+        if (selector != null && selector.transform.childCount > 0)
+        {
+            for (int i = 0; i < 4; i++)
+                selector.transform.GetChild(i).GetComponent<MeshRenderer>().material = m;
+        }
     }
 
     /// <summary>
@@ -176,11 +215,8 @@ public class Structure : Entity
             Game.Instance.selectedStructures.Add(this);
 
         ToggleRing(b);
-
-        if (selector != null)
-            base.ToggleSelected(b);
-        else
-            selected = b;
+        ToggleSelector(b);
+        selected = b;
     }
 
     public override void SelectType()

@@ -22,10 +22,12 @@ public class TroopClass : MonoBehaviour
     public float attackSpeed;
     public float lineOfSight;
     public List<AudioClip> sounds;
+    public List<Material> materials;
 
-    void Start()
+    private void Awake()
     {
         Instance.list = GetProperties();
+        Instance.materials = materials;
         //Debug.Log(Instance.list);
     }
 

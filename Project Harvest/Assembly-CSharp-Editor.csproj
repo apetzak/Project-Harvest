@@ -338,11 +338,11 @@
     <Reference Include="UnityEditor.iOS.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.1f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="ProBuilderEditor-Unity5">
-      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Editor/ProBuilderEditor-Unity5.dll</HintPath>
+    <Reference Include="ProBuilderCore-Unity5">
+      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ProBuilderCore-Unity5.dll</HintPath>
     </Reference>
-    <Reference Include="Poly2Tri">
-      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ClassesLib/Poly2Tri.dll</HintPath>
+    <Reference Include="ProBuilderMeshOps-Unity5">
+      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ProBuilderMeshOps-Unity5.dll</HintPath>
     </Reference>
     <Reference Include="KdTreeLib">
       <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ClassesLib/KdTreeLib.dll</HintPath>
@@ -350,11 +350,11 @@
     <Reference Include="pb_Stl">
       <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ClassesLib/pb_Stl.dll</HintPath>
     </Reference>
-    <Reference Include="ProBuilderCore-Unity5">
-      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ProBuilderCore-Unity5.dll</HintPath>
+    <Reference Include="Poly2Tri">
+      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ClassesLib/Poly2Tri.dll</HintPath>
     </Reference>
-    <Reference Include="ProBuilderMeshOps-Unity5">
-      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Classes/ProBuilderMeshOps-Unity5.dll</HintPath>
+    <Reference Include="ProBuilderEditor-Unity5">
+      <HintPath>D:/Projects/Github Repos/Project Harvest/Assets/Assets/ProBuilder/Editor/ProBuilderEditor-Unity5.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>D:/Projects/Github Repos/Project Harvest/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>

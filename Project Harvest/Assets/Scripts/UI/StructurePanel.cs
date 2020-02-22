@@ -49,7 +49,9 @@ public class StructurePanel : MonoBehaviour
         }
         else
         {
-            placingObject.ToggleSelectorColor(matWhite);
+            Material m = placingObject.fruit ? TroopClass.Instance.materials[0] : TroopClass.Instance.materials[1];
+
+            placingObject.ToggleSelectorColor(m);
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -127,6 +129,7 @@ public class StructurePanel : MonoBehaviour
 
         Structure s = Instantiate(prefab, hit.point, Quaternion.identity);
         s.fruit = Game.Instance.fruit;
+        s.CreateSelector();
         s.ToggleRing();
         s.ToggleSelector();
         placingObject = s;

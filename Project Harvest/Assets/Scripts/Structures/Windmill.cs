@@ -34,4 +34,9 @@ public class Windmill : Structure
         vane.transform.Rotate(0, 0, 1);
         base.Update();
     }
+
+    private void Activate()
+    {
+
+    }
 }
