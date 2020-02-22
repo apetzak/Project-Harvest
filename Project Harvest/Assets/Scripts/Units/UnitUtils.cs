@@ -84,4 +84,18 @@ public class EntityUtils
         foreach (Unit u in Game.Instance.selectedUnits)
             u.currentSpeed = lowestSpeed;
     }
+
+    public static void War()
+    {
+        foreach (Unit u in Game.Instance.fruits)
+        {
+            if (u is Troop)
+                (u as Troop).attacking = true;
+        }
+        foreach (Unit u in Game.Instance.veggies)
+        {
+            if (u is Troop)
+                (u as Troop).attacking = true;
+        }
+    }
 }

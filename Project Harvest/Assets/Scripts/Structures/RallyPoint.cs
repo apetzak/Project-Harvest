@@ -23,21 +23,21 @@ public class RallyPoint : Structure
 
     private void ClearPointOnFarms()
     {
-        if (fruit)
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in list)
         {
-            foreach (Structure s in Game.Instance.fruitStructures)
-            {
-                if (s is Farm && (s as Farm).rallyPoint == transform.position)
-                    (s as Farm).rallyPoint = new Vector3();
-            }
+            if (s is Farm && (s as Farm).rallyPoint == transform.position)
+                (s as Farm).rallyPoint = new Vector3();
         }
-        else
+    }
+
+    public void SetPointOnFarms()
+    {
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in list)
         {
-            foreach (Structure s in Game.Instance.veggieStructures)
-            {
-                if (s is Farm && (s as Farm).rallyPoint == transform.position)
-                    (s as Farm).rallyPoint = new Vector3();
-            }
+            if (s is Farm && (s as Farm).rallyPoint == new Vector3())
+                (s as Farm).FindRallyPoint();
         }
     }
 

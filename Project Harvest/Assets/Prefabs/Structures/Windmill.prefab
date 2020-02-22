@@ -59,6 +59,7 @@ MonoBehaviour:
   maxX: 0
   maxY: 0
   minY: 0
+  isPlaced: 0
   vane: {fileID: 4884283656602982565}
 --- !u!136 &3728032467733924561
 CapsuleCollider:
@@ -94,7 +95,7 @@ PrefabInstance:
     - target: {fileID: 5997509332766612892, guid: d6967e6b8bf8b10488e8edfb6ef1aa14,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.58
+      value: 0.91
       objectReference: {fileID: 0}
     - target: {fileID: 5997509332766612892, guid: d6967e6b8bf8b10488e8edfb6ef1aa14,
         type: 3}
@@ -200,7 +201,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 6775504d86f8a024ca042369d8ee7121,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.49
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6775504d86f8a024ca042369d8ee7121,
         type: 3}
@@ -301,7 +302,7 @@ PrefabInstance:
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.49
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}

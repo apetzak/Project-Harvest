@@ -15,7 +15,7 @@ public class Structure : Entity
     public float maxX;
     public float maxY;
     public float minY;
-    public bool isBuilt;
+    public bool isPlaced = false;
 
     /// <summary>
     /// Set health to maxHealth
@@ -23,6 +23,22 @@ public class Structure : Entity
     protected virtual void Start()
     {
         health = maxHealth;
+        //Debug.Log($"{name} bounds: {c.bounds} | center: {transform.position}");
+        SetBounds();
+    }
+
+    public void SetBounds()
+    {
+        var c = GetComponent<Collider>();
+        minX = transform.position.x - c.bounds.extents.x;
+        maxX = transform.position.x + c.bounds.extents.x;
+        minY = transform.position.z - c.bounds.extents.z;
+        maxY = transform.position.z + c.bounds.extents.z;
+    }
+
+    public virtual void Init()
+    {
+
     }
 
     /// <summary>
@@ -78,6 +94,9 @@ public class Structure : Entity
     /// </summary>
     protected virtual void OnMouseEnter()
     {
+        if (!isPlaced)
+            return;
+
         ToggleRing();
         ToggleSelector();
 
@@ -92,6 +111,9 @@ public class Structure : Entity
     /// </summary>
     private void OnMouseExit()
     {
+        if (!isPlaced)
+            return;
+
         if (!selected)
         {
             ToggleRing(false);
@@ -103,7 +125,7 @@ public class Structure : Entity
     /// Show area ring
     /// </summary>
     /// <param name="b"></param>
-    private void ToggleRing(bool b = true)
+    public void ToggleRing(bool b = true)
     {
         if (ring != null)
             ring.GetComponent<MeshRenderer>().enabled = b;
@@ -113,10 +135,20 @@ public class Structure : Entity
     /// Show selector
     /// </summary>
     /// <param name="b"></param>
-    private void ToggleSelector(bool b = true)
+    public void ToggleSelector(bool b = true)
     {
         if (selector != null)
             selector.GetComponent<MeshRenderer>().enabled = b;
+    }
+
+    /// <summary>
+    /// Change selector material
+    /// </summary>
+    /// <param name="m"></param>
+    public void ToggleSelectorColor(Material m)
+    {
+        if (selector != null) // todo: set to fruit or veggie color
+            selector.GetComponent<MeshRenderer>().material = m;
     }
 
     /// <summary>

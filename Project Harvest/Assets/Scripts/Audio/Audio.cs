@@ -26,7 +26,7 @@ public class Audio : MonoBehaviour
         {
             GameObject o = new GameObject();
             AudioSource s = o.AddComponent<AudioSource>();
-            s.volume *= .5f;
+            s.volume *= .1f;
             Instance.objects.Add(o);
         }
         //Debug.Log(Instance.objects);

@@ -11,6 +11,9 @@ public class CompostBin : Structure
 
     protected override void Update()
     {
+        if (!isPlaced)
+            return;
+
         base.Update();
     }
 }

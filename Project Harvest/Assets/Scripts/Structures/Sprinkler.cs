@@ -8,9 +8,12 @@ public class Sprinkler : Structure
     public GameObject waterDrop;
     private List<GameObject> drops = new List<GameObject>();
     private int timeBeforeShot = 20;
+    public bool turnedOn = true;
+    public bool hasSource;
 
     protected override void Start()
     {
+        SetSource();
         head.transform.Rotate(0, Random.Range(0, 360), 0);
         base.Start();
     }
@@ -20,6 +23,9 @@ public class Sprinkler : Structure
     /// </summary>
     protected override void Update()
     {
+        if (!isPlaced || !turnedOn || !hasSource)
+            return;
+
         timeBeforeShot--;
         if (timeBeforeShot < 0)
             SpawnWaterDrop();
@@ -27,6 +33,25 @@ public class Sprinkler : Structure
         MoveDrops();
 
         head.transform.Rotate(0, 1, 0);
+    }
+
+    public void SetSource()
+    {
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in list)
+        {
+            if (s is WaterTower)
+            {
+                Vector3 diff = transform.position - s.transform.position;
+                if (diff.magnitude < 160) // water tower in range
+                {
+                    (s as WaterTower).sprinklers.Add(this);
+                    hasSource = true;
+                    return;
+                }
+            }
+        }
+        hasSource = false;
     }
 
     /// <summary>
@@ -68,10 +93,17 @@ public class Sprinkler : Structure
     public override void TakeDamage()
     {
         if (health <= 0)
-        {
-            foreach (GameObject o in drops)
-                Destroy(o);
-        }
+            TurnOff();
+
         base.TakeDamage();
+    }
+
+    public void TurnOff()
+    {
+        turnedOn = false;
+        hasSource = false;
+        foreach (GameObject o in drops)
+            Destroy(o);
+        drops.Clear();
     }
 }

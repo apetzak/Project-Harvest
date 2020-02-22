@@ -48,6 +48,7 @@ public class Farm : Structure
     public int sproutEnd;
     public int index;
     public Vector3 rallyPoint;
+    public bool hasSprinkler;
 
     /// <summary>
     /// Set/disable prop and dirt mesh

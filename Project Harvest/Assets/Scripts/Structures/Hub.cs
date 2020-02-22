@@ -41,7 +41,7 @@ public class Hub : Structure
 
     protected override void Update()
     {
-        if (unitsGrown >= maxUnits) // stop growing units at max capacity
+        if (unitsGrown >= maxUnits || !isPlaced) // stop growing units at max capacity
             return;
 
         growthTimer++;
@@ -56,6 +56,21 @@ public class Hub : Structure
 
     protected override void RightClick()
     {
+        if (Game.Instance.troopIsSelected)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit = new RaycastHit();
+            if (!Physics.Raycast(ray, out hit))
+                return;
+
+            foreach (Unit t in Game.Instance.selectedUnits)
+            {
+                if (t is Troop)
+                    (t as Troop).TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
+            }
+            return;
+        }
+
         Pick();
         ReleaseUnits();
     }

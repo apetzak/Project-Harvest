@@ -124,8 +124,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 27.946957
-  m_Center: {x: 3.9999943, y: -2.0530586, z: 0}
+  m_Radius: 23.34113
+  m_Center: {x: 4.3860893, y: -2.5753784, z: -1.4788971}
 --- !u!114 &4539649413238195121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +142,7 @@ MonoBehaviour:
   health: 0
   maxHealth: 500
   isDying: 0
-  fruit: 0
+  fruit: 1
   selected: 0
   description: 
   ring: {fileID: 0}
@@ -150,6 +150,7 @@ MonoBehaviour:
   maxX: 0
   maxY: 0
   minY: 0
+  isBuilt: 0
   prop: {fileID: 6379810233099726154}
   props:
   - {fileID: 8987125363133044899}
@@ -632,7 +633,6 @@ MonoBehaviour:
   animEnd: 0
   collectingTime: 0
   collectingEnd: 0
-  resource: {fileID: 0}
   resourceCount: 0
   resourceCapacity: 0
   tools: []
@@ -913,10 +913,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7318682121016146780}
     m_Modifications:
-    - target: {fileID: 1730367827968638, guid: 2846c30037d6d824696c804d9ff548ea, type: 3}
-      propertyPath: m_Name
-      value: Bush
-      objectReference: {fileID: 0}
     - target: {fileID: 4275226955786776, guid: 2846c30037d6d824696c804d9ff548ea, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -972,6 +968,10 @@ PrefabInstance:
     - target: {fileID: 4275226955786776, guid: 2846c30037d6d824696c804d9ff548ea, type: 3}
       propertyPath: m_LocalScale.z
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1730367827968638, guid: 2846c30037d6d824696c804d9ff548ea, type: 3}
+      propertyPath: m_Name
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 23513279455252838, guid: 2846c30037d6d824696c804d9ff548ea,
         type: 3}

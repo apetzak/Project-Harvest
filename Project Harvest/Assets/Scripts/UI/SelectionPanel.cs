@@ -173,35 +173,40 @@ public class SelectionPanel : MonoBehaviour
             text += $"State          {w.state}\n";
             text += $"Load           {w.resourceCount}/{w.resourceCapacity}\n";
         }
-        else if (entity is Farm)
+        if (entity is Farm)
         {
             Farm f = entity as Farm;
             text += $"State           {f.state}\n";
             text += $"Rally Point   {f.rallyPoint}\n";
         }
-        //else if (entity is Turret)
-        //{
-        //    Turret t = entity as Turret;
-        //    text += $"Range          {t.ring.transform.localScale}";
-        //}
-        else if (entity is Structure)
+        if (entity is Structure)
         {
             Structure s = entity as Structure;
             if (s.ring != null)
-                text += $"Range          {s.ring.transform.localScale}";
+                text += $"Range          {s.ring.transform.localScale}\n";
+
+            text += $"{s.minX} {s.maxX} {s.minY} {s.maxY}\n";
         }
-        else if (entity is Resource)
+        if (entity is Resource)
         {
-            text += $"Occupied        {(entity as Resource).occupied}";
+            text += $"Occupied          {(entity as Resource).occupied}\n";
         }
-        //else if (entity is Stone)
-        //{
-
-        //}
-        //else if (entity is Tree)
-        //{
-
-        //}
+        if (entity is WaterTower)
+        {
+            text += $"On                {(entity as WaterTower).turnedOn}\n";
+            text += $"Water Consumed    {(entity as WaterTower).waterConsumed}\n";
+            text += $"Sprinklers        {(entity as WaterTower).sprinklers.Count}\n";
+        }
+        else if (entity is Windmill)
+        {
+            text += $"On                {(entity as Windmill).turnedOn}\n";
+            text += $"Water Collected   {(entity as Windmill).waterCollected}\n";
+        }
+        else if (entity is Sprinkler)
+        {
+            text += $"On                {(entity as Sprinkler).turnedOn}\n";
+            text += $"Has Source   {(entity as Sprinkler).hasSource}\n";
+        }
 
         return text;
     }

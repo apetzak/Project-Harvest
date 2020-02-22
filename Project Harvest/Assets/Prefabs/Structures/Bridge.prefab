@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7092258408711306565}
   - component: {fileID: 4614031985686049349}
+  - component: {fileID: 3687202143638394115}
   m_Layer: 0
   m_Name: Bridge
   m_TagString: Untagged
@@ -44,6 +45,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8c9019599fafff4fa251a5f6b34f31e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selector: {fileID: 0}
+  health: 500
+  maxHealth: 500
+  isDying: 0
+  fruit: 0
+  selected: 0
+  description: 
+  ring: {fileID: 0}
+  minX: 0
+  maxX: 0
+  maxY: 0
+  minY: 0
+  isPlaced: 0
+  length: 0
+--- !u!65 &3687202143638394115
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8313455527742915802}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 45.841602, y: 1.861103, z: 6.592393}
+  m_Center: {x: 0.017957687, y: 0.0675621, z: 0.009296417}
 --- !u!1 &8605793903356330220
 GameObject:
   m_ObjectHideFlags: 0

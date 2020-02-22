@@ -15,6 +15,9 @@ public class Turret : Structure
 
     protected override void Update()
     {
+        if (!isPlaced)
+            return;
+
         if (target == null)
         {
             FindTarget();

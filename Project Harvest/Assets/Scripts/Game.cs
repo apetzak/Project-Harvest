@@ -39,6 +39,7 @@ public class Game : MonoBehaviour
     public bool selectionChanged = false;
     public bool workerIsSelected = false;
     public bool troopIsSelected = false;
+    public bool fruit = true;
 
     private void Start()
     {
@@ -72,6 +73,7 @@ public class Game : MonoBehaviour
 
         foreach (Structure s in GameObject.FindObjectsOfType(typeof(Structure)))
         {
+            s.isPlaced = true;
             if (s.fruit)
                 Instance.fruitStructures.Add(s);
             else

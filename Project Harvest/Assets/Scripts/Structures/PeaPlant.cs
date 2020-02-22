@@ -13,6 +13,7 @@ public class PeaPlant : Hub
         growthTimer = growthEnd = 300;
         maxUnits = 9;
         HidePods();
+        transform.Rotate(0, 80, 0);
         base.Start();
     }
 

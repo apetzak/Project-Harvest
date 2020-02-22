@@ -47,10 +47,6 @@ public class Unit : Entity
 
         else if (moving)
             Move();
-
-        // bandaid for weird bug (colliders don't move with object)
-        coll.enabled = false;
-        coll.enabled = true;
     }
 
     protected override void LeftClick()
