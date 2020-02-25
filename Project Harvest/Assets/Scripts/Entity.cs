@@ -64,7 +64,7 @@ public class Entity : MonoBehaviour
     /// </summary>
     protected virtual void OnMouseOver()
     {
-        if (isDying)
+        if (isDying || Game.Instance.mouseOverUI)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -87,6 +87,9 @@ public class Entity : MonoBehaviour
     /// </summary>
     protected virtual void LeftClick()
     {
+        if (Game.Instance.mouseOverUI)
+            return;
+
         EntityUtils.ClearSelection();
 
         if (clickedOnce == true) // double click
@@ -107,5 +110,22 @@ public class Entity : MonoBehaviour
     protected virtual void RightClick()
     {
 
+    }
+
+    public bool IsAlly()
+    {
+        return fruit == Game.Instance.fruit;
+    }
+
+    protected virtual void OnMouseEnter()
+    {
+        if (isDying || Game.Instance.mouseOverUI)
+            return;
+        CursorSwitcher.Instance.Switch(this);
+    }
+
+    protected virtual void OnMouseExit()
+    {
+        //CursorSwitcher.Instance.Switch(null);
     }
 }

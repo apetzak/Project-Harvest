@@ -8,8 +8,8 @@ public class Sprinkler : Structure
     public GameObject waterDrop;
     private List<GameObject> drops = new List<GameObject>();
     private int timeBeforeShot = 20;
-    public bool turnedOn = true;
-    public bool hasSource;
+    public bool turnedOn = false;
+    public bool hasSource = false;
 
     protected override void Start()
     {
@@ -23,7 +23,7 @@ public class Sprinkler : Structure
     /// </summary>
     protected override void Update()
     {
-        if (!isPlaced || !turnedOn || !hasSource)
+        if (!isBuilt || !turnedOn || !hasSource)
             return;
 
         timeBeforeShot--;

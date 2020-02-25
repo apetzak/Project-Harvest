@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Game : MonoBehaviour
 {
@@ -35,18 +36,20 @@ public class Game : MonoBehaviour
     public Entity selectedEntity;
     public GameObject selectorBox;
     public bool holdingDown = false;
-    public Vector3 boxPoint;
+    public bool mouseOverUI = false;
     public bool selectionChanged = false;
     public bool workerIsSelected = false;
     public bool troopIsSelected = false;
     public bool fruit = true;
 
-    private void Start()
+    private void Awake()
     {
         InstantiateGlobalProperties();
         GetObjectsInScene();
         //AddSquad(10, 2);
         //AddWorkers();
+        //QualitySettings.vSyncCount = 0; // VSync must be disabled.
+        //Application.targetFrameRate = 60;
         selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
     }
 
@@ -73,7 +76,10 @@ public class Game : MonoBehaviour
 
         foreach (Structure s in GameObject.FindObjectsOfType(typeof(Structure)))
         {
-            s.isPlaced = true;
+            if (s.GetType() == typeof(Gold) || s.GetType() == typeof(Stone) || s.GetType() == typeof(Tree))
+                continue; // skip resources
+
+            s.isPlaced = s.isBuilt = true;
             if (s.fruit)
                 Instance.fruitStructures.Add(s);
             else
@@ -175,70 +181,6 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    RaycastHit hit = new RaycastHit();
 
-        //    if (Physics.Raycast(ray, out hit))
-        //    {
-        //        Debug.Log(hit.collider.gameObject.name);
-        //    }
-        //}
-        //else if (Input.GetMouseButtonDown(1))
-        //{
-
-        //}
-
-        //int count = Instance.units.Count;
-
-        //for (int i = 0; i < count; i++)
-        //{
-        //    for (int j = i + 1; j < count; j++)
-        //    {
-        //        float xDiff = Instance.units[i].transform.position.x - Instance.units[j].transform.position.x;
-        //        float zDiff = Instance.units[i].transform.position.z - Instance.units[j].transform.position.z;
-        //        float xAbs = Mathf.Abs(xDiff);
-        //        float zAbs = Mathf.Abs(zDiff);
-
-
-        //        if (xAbs < 1 && zAbs < 1)
-        //        {
-        //            Debug.Log(xDiff + " " + zDiff);
-
-        //            if (Mathf.Abs(xDiff) > Mathf.Abs(zDiff))
-        //            {
-        //                if (xDiff < 0)
-        //                    Instance.units[i].transform.Translate(2, 0, 0, Space.World);
-        //                else
-        //                    Instance.units[i].transform.Translate(-2, 0, 0, Space.World);
-
-        //            }
-        //            else
-        //            {
-        //                if (zDiff < 0)
-        //                    Instance.units[i].transform.Translate(0, 0, 2, Space.World);
-        //                else
-        //                    Instance.units[i].transform.Translate(0, 0, -2, Space.World);
-        //            }
-
-        //        }
-        //    }
-        //}
-
-        //for (int i = 0; i < Instance.troops.Count; i++)
-        //{
-        //    for (int j = i + 1; j < Instance.troops.Count; j++)
-        //    {
-        //        var c1 = Instance.troops[i].GetComponent<Collider>();
-        //        var c2 = Instance.troops[j].GetComponent<Collider>();
-
-        //        if (c1.bounds.Intersects(c2.bounds))
-        //        {
-
-        //            //Debug.Log($"collision {i} {j}");
-        //        }
-        //    }
-        //}
     }
 }

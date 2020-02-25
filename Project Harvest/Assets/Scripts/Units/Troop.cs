@@ -113,10 +113,13 @@ public class Troop : Unit
     protected override void Move()
     {
         if (Mathf.Abs(diff.x) < 2 && Mathf.Abs(diff.z) < 2)
-            StopMoving();
+        {
+            SetDestination(destination);
+        }
         else if (!attacking || (attacking && diff.magnitude > attackRange))
+        {
             transform.Translate(velocity * currentSpeed / 10, Space.World);
-
+        }
         base.Move();
     }
 
@@ -134,6 +137,7 @@ public class Troop : Unit
         target = e;
         attacking = true;
         SetDestination(target.transform.position);
+        (e as Unit).isUnderAttack = true;
     }
 
     public virtual void TargetStructure(Entity e, Vector3 dest)
@@ -197,6 +201,9 @@ public class Troop : Unit
 
             if (diff.magnitude < closest)
             {
+                if (t.isUnderAttack && UnityEngine.Random.Range(0, 2) > 1)
+                    continue;
+
                 closest = diff.magnitude;
                 index = GetEnemyTroops().IndexOf(t);
             }

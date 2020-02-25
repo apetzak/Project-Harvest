@@ -113,12 +113,14 @@
     <Compile Include="Assets\Scripts\Structures\WaterWell.cs" />
     <Compile Include="Assets\Scripts\Structures\Windmill.cs" />
     <Compile Include="Assets\Scripts\Structures\WoodFence.cs" />
+    <Compile Include="Assets\Scripts\UI\ActionPanel.cs" />
     <Compile Include="Assets\Scripts\UI\BottomPanel.cs" />
     <Compile Include="Assets\Scripts\UI\CursorSwitcher.cs" />
     <Compile Include="Assets\Scripts\UI\Map.cs" />
     <Compile Include="Assets\Scripts\UI\SelectionPanel.cs" />
     <Compile Include="Assets\Scripts\UI\StructurePanel.cs" />
     <Compile Include="Assets\Scripts\UI\UI.cs" />
+    <Compile Include="Assets\Scripts\UI\UIElement.cs" />
     <Compile Include="Assets\Scripts\UI\UnitBox.cs" />
     <Compile Include="Assets\Scripts\Units\Apple.cs" />
     <Compile Include="Assets\Scripts\Units\Asparagus.cs" />

@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class Wall : Structure
 {
+    public Wall link1;
+    public Wall link2;
     public GameObject fence;
     public int stage = 0;
     public int dropTime = 60;

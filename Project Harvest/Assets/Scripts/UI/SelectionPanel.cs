@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectionPanel : MonoBehaviour
+public class SelectionPanel : UIElement
 {
     public List<UnitBox> unitBoxes;
     public UnitBox prefab;
@@ -19,10 +19,7 @@ public class SelectionPanel : MonoBehaviour
     public GameObject pic;
     public List<RawImage> images;
     private Entity entity;
-    //private bool change = true;
     private bool visible = true;
-    //private bool unitBoxesActive = false;
-    //private int selectedCount = 0;
 
     private void Start()
     {
@@ -185,7 +182,7 @@ public class SelectionPanel : MonoBehaviour
             if (s.ring != null)
                 text += $"Range          {s.ring.transform.localScale}\n";
 
-            text += $"{s.minX} {s.maxX} {s.minY} {s.maxY}\n";
+            text += $"{s.minX} {s.maxX} {s.minZ} {s.maxZ}\n";
         }
         if (entity is Resource)
         {
@@ -206,6 +203,12 @@ public class SelectionPanel : MonoBehaviour
         {
             text += $"On                {(entity as Sprinkler).turnedOn}\n";
             text += $"Has Source   {(entity as Sprinkler).hasSource}\n";
+        }
+        else if (entity is CompostBin)
+        {
+            text += $"Is Full      {(entity as CompostBin).isFull}\n";
+            text += $"Load      {(entity as CompostBin).load}/{(entity as CompostBin).loadCapacity}\n";
+            text += $"Time    {(entity as CompostBin).fertilizeTime}\n";
         }
 
         return text;

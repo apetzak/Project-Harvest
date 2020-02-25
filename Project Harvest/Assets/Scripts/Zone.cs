@@ -17,6 +17,9 @@ public class Zone : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (Game.Instance.mouseOverUI)
+            return;
+
         if (Input.GetMouseButtonDown(0))
             LeftClick();
 
@@ -54,6 +57,6 @@ public class Zone : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        CursorSwitcher.Instance.Set(0);
+        CursorSwitcher.Instance.Switch(null);
     }
 }

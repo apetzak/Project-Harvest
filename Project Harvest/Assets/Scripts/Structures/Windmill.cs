@@ -11,12 +11,13 @@ public class Windmill : Structure
 
     protected override void Start()
     {
+        // todo: check for others
         base.Start();
     }
 
     protected override void Update()
     {
-        if (!isPlaced || !turnedOn)
+        if (!isBuilt || !turnedOn)
             return;
 
         counter--;

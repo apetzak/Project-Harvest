@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// 
 /// </summary>
-public class Map : MonoBehaviour, IPointerClickHandler
+public class Map : UIElement, IPointerClickHandler
 {
     public GameObject viewBox;
     public bool leftButtonDown;

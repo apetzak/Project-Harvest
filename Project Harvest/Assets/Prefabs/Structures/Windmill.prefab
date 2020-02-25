@@ -29,8 +29,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 5063561699736320058}
   - {fileID: 447503741238034409}
+  - {fileID: 5063561699736320058}
   - {fileID: 3434913956404968728}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -57,9 +57,11 @@ MonoBehaviour:
   ring: {fileID: 5063561699736320060}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
   isPlaced: 0
+  isBuilt: 0
   vane: {fileID: 4884283656602982565}
   turnedOn: 1
   waterCollected: 0
@@ -74,9 +76,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 10.251684
-  m_Height: 58.13011
+  m_Height: 69.70893
   m_Direction: 1
-  m_Center: {x: 0, y: 28.565056, z: 0}
+  m_Center: {x: 0, y: 34.354465, z: 0}
 --- !u!1001 &3285142359707279803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -213,7 +215,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 6775504d86f8a024ca042369d8ee7121,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6775504d86f8a024ca042369d8ee7121,
         type: 3}
@@ -276,6 +278,21 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -314,7 +331,7 @@ PrefabInstance:
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
@@ -350,21 +367,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944554, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}

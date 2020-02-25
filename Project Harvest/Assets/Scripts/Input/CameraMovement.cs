@@ -6,10 +6,19 @@ public class CameraMovement : MonoBehaviour
 {
     private float speed = 4;
 
+    private void Start()
+    {
+        speed = 2 * (Camera.main.transform.position.y / 100);
+    }
+
     private void Update()
     {
         if (Input.mouseScrollDelta.y != 0)
+        {
             Camera.main.transform.Translate(0, 0, Input.mouseScrollDelta.y * 4);
+            Debug.Log(Camera.main.transform.position.y);
+            speed = 2 * (Camera.main.transform.position.y / 100);
+        }
         MoveCamera();
     }
 

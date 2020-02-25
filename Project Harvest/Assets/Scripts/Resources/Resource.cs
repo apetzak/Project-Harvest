@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : Entity
+public class Resource : Structure
 {
     public bool occupied;
     public GameObject prop;
     public int stage = 0;
     public Worker.State workerstate;
-    protected int cursorIndex = 0;
 
     /// <summary>
     /// Randomly change size by 25% plus or minus. Rotate random amount.
     /// Set maxHealth relative to new size
     /// </summary>
-    protected virtual void Start()
+    protected override void Start()
     {
         float size = Random.Range(.75f, 1.25f);
         transform.Rotate(0, Random.Range(0, 360), 0);
         transform.localScale *= size;
         maxHealth = health = Mathf.RoundToInt(size * 100);
+        CreateSelector();
+        SetBounds();
+        isBuilt = isPlaced = true;
     }
 
     /// <summary>
@@ -70,12 +72,6 @@ public class Resource : Entity
         }
     }
 
-    protected virtual void OnMouseEnter()
-    {
-        if (Game.Instance.workerIsSelected)
-            CursorSwitcher.Instance.Set(cursorIndex);
-    }
-
     /// <summary>
     /// Remove from resources, Destroy
     /// </summary>
@@ -83,5 +79,13 @@ public class Resource : Entity
     {
         Game.Instance.resources.Remove(this);
         Destroy(gameObject);
+    }
+
+    protected override void OnMouseEnter()
+    {
+        if (isDying || Game.Instance.mouseOverUI)
+            return;
+        CursorSwitcher.Instance.Switch(this);
+        //base.OnMouseEnter();
     }
 }

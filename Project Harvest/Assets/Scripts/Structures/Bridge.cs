@@ -13,7 +13,7 @@ public class Bridge : Structure
 
     protected override void Update()
     {
-        if (!isPlaced)
+        if (!isBuilt)
             return;
 
         base.Update();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StructurePanel : MonoBehaviour
+public class StructurePanel : UIElement
 {
     public List<Structure> prefabs;
     public List<Structure> fruitPrefabs;
@@ -13,6 +13,10 @@ public class StructurePanel : MonoBehaviour
     private Structure placingObject;
     public Material matWhite;
     public Material matRed;
+    private Vector3 startPoint = new Vector3();
+    private Vector3 endPoint = new Vector3();
+    private bool facingDirectionChanged = true;
+    private string lastClicked;
 
     private void Awake()
     {
@@ -37,9 +41,49 @@ public class StructurePanel : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            placing = false;
             Destroy(placingObject.gameObject);
-            placingObject = null;
+            Reset();
+            return;
+        }
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit = new RaycastHit();
+        if (!Physics.Raycast(ray, out hit)) // todo: || (hit.collider is MeshCollider))
+            return;
+
+        Vector3 v = new Vector3(hit.point.x, 10, hit.point.z);
+
+        if (startPoint != new Vector3())
+        {
+            var diff = (startPoint - v);
+            float f = Mathf.Atan2(diff.x, diff.z) * (180.0f / Mathf.PI);
+
+            Debug.Log(placingObject.transform.rotation);
+
+            if (f < 45 && f >= -45)
+            {
+                placingObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+                //Debug.Log("down " + f);
+            }
+            else if (Mathf.Abs(f) > 135)
+            {
+                placingObject.transform.rotation = new Quaternion(0, 0, 0, 0);
+                //Debug.Log("up " + f);
+            }
+            else if (f < 135 && f >= 45)
+            {
+                placingObject.transform.rotation = new Quaternion(0, 180, 0, 0);
+                //Debug.Log("left " + f);
+            }
+            else
+            {
+                placingObject.transform.rotation = new Quaternion(0, 180, 0, 0);
+                //Debug.Log("right " + f);
+            }
+
+            //placingObject.transform.Rotate(0, f, 0);
+            // n 180, s 0, e -90, w 90
+            //Debug.Log(diff.magnitude + " " + f + " " + placingObject.transform.rotation.y);
             return;
         }
 
@@ -55,17 +99,18 @@ public class StructurePanel : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                PlaceObject();
-                return;
+                if (placingObject is Wall || placingObject is Bridge)
+                {
+                    startPoint = placingObject.transform.position;
+                }
+                else
+                {
+                    PlaceObject();
+                    return;
+                }
             }
         }
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit = new RaycastHit();
-        if (!Physics.Raycast(ray, out hit)) // todo: || (hit.collider is MeshCollider))
-            return;
-
-        Vector3 v = new Vector3(hit.point.x, 10, hit.point.z);
         placingObject.transform.position = v;
         placingObject.SetBounds();
     }
@@ -77,22 +122,34 @@ public class StructurePanel : MonoBehaviour
         else
             Game.Instance.veggieStructures.Add(placingObject);
 
-        TypeSpecificInit();
-        placing = false;
         placingObject.isPlaced = true;
-        placingObject = null;
+        placingObject.health = 1;
+
+        if (!(placingObject is Farm))
+        {
+            placingObject.transform.GetChild(0).transform.Translate(0, -placingObject.height, 0, Space.World);
+            placingObject.SendWorkersToBuild();
+        }
+        else
+        {
+            (placingObject as Farm).FindRallyPoint();
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            CreatePlacingObject(GetPrefab(lastClicked));
+        }
+        else
+        {
+            Reset();
+        }
     }
 
-    private void TypeSpecificInit()
+    private void Reset()
     {
-        if (placingObject is Farm)
-            (placingObject as Farm).FindRallyPoint();
-        else if (placingObject is RallyPoint)
-            (placingObject as RallyPoint).SetPointOnFarms();
-        else if (placingObject is WaterTower)
-            (placingObject as WaterTower).ActivateSprinklers();
-        else if (placingObject is Sprinkler)
-            (placingObject as Sprinkler).SetSource();
+        placing = false;
+        placingObject = null;
+        startPoint = endPoint = new Vector3();
     }
 
     private bool OverlapsExistingStructure()
@@ -114,8 +171,8 @@ public class StructurePanel : MonoBehaviour
     {
         if (s.maxX < placingObject.minX ||
             s.minX > placingObject.maxX ||
-            s.maxY < placingObject.minY ||
-            s.minY > placingObject.maxY)
+            s.maxZ < placingObject.minZ ||
+            s.minZ > placingObject.maxZ)
             return false;
         return true;
     }
@@ -148,16 +205,21 @@ public class StructurePanel : MonoBehaviour
             return;
         }
 
+        lastClicked = s;
         placing = true;
+        CreatePlacingObject(GetPrefab(s));
+    }
 
+    private Structure GetPrefab(string s)
+    {
         Structure prefab = prefabs[0];
-        int i = 0;
 
         if (s.Contains("Farm") || s.Contains("Hub"))
         {
+            int i = 0;
             if (s.Contains("Farm"))
                 i = System.Convert.ToInt16(s.Replace("Farm", ""));
-            prefab = Game.Instance.fruit ? fruitPrefabs[i] : veggiePrefabs[i];               
+            prefab = Game.Instance.fruit ? fruitPrefabs[i] : veggiePrefabs[i];
         }
         else
         {
@@ -172,6 +234,6 @@ public class StructurePanel : MonoBehaviour
             }
         }
 
-        CreatePlacingObject(prefab);
+        return prefab;
     }
 }

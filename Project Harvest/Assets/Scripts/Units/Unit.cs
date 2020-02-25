@@ -12,12 +12,14 @@ public class Unit : Entity
     public int index;
     public Vector3 destination;
     public Vector3 velocity;
+    public List<Vector3> movements;
     public bool moving;
     public float speed;
     protected float rotSpeed;
     public float currentSpeed;
     public float facingAngle;
     public float angleToRotate;
+    public bool isUnderAttack;
     public float lineOfSight;
     public int deathTimer = 300;
     public Entity target;
@@ -86,13 +88,18 @@ public class Unit : Entity
             transform.Rotate(0, deg, 0, Space.Self);
             angleToRotate -= deg;
         }
-        else if (angleToRotate != 0) // finished rotating, start moving
+        else if (angleToRotate != 0) // finished rotatingd, start moving
         {
-            facingAngle += angleToRotate;
-            transform.Rotate(0, angleToRotate, 0, Space.Self);
-            angleToRotate = 0;
+            FaceTarget();
             velocity = GetVelocity();
         }
+    }
+
+    protected void FaceTarget()
+    {
+        facingAngle += angleToRotate;
+        transform.Rotate(0, angleToRotate, 0, Space.Self);
+        angleToRotate = 0;
     }
 
     /// <summary>
@@ -106,6 +113,7 @@ public class Unit : Entity
         diff = transform.position - v;
         velocity = GetVelocity();
         angleToRotate = GetAngle();
+        //CalculateMovements();
         moving = true;
     }
 
@@ -133,12 +141,6 @@ public class Unit : Entity
         else if (f < -180)      
             f += 360;
         return f;
-    }
- 
-    private void OnMouseEnter()
-    {
-        if (Game.Instance.troopIsSelected && !isDying)
-            CursorSwitcher.Instance.Set(1);
     }
 
     public void Die()
@@ -190,6 +192,52 @@ public class Unit : Entity
             Game.Instance.selectedUnits.Add(this);
 
         base.ToggleSelected(b);
+    }
+
+    private void CalculateMovements()
+    {
+        float mag = diff.magnitude;
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(transform.position, velocity, mag);
+
+        if (hits.Length > 0)
+        {
+            foreach (RaycastHit h in hits)
+            {
+                Structure s = hits[0].transform.GetComponent<Structure>();
+                if (s == null || s is Farm)
+                    continue;
+
+                Vector3 dest = new Vector3();
+                bool isBelow = transform.position.x < s.transform.position.x;
+                bool isLeft = transform.position.z < s.transform.position.z;
+
+                int i = 5;
+
+                if (isBelow)
+                {
+                    if (isLeft)
+                        dest = new Vector3(s.maxX + i, 0, s.minZ - i);
+                    else
+                        dest = new Vector3(s.maxX + i, 0, s.maxZ + i);
+                }
+                else
+                {
+                    if (isLeft)
+                        dest = new Vector3(s.minX + i, 0, s.minZ + i);
+                    else
+                        dest = new Vector3(s.minX - i, 0, s.minZ - i);
+                }
+
+                movements.Add(dest);
+                //diff = transform.position - currentDestination;
+                //velocity = GetVelocity();
+                //angleToRotate = GetAngle();
+                //Debug.Log(currentDestination);
+                //return;
+            }
+            //Debug.Log(hits[0].transform.name + " " + hits[0].point + " " + bb.GetType());
+        }
     }
 
     private void Explore()

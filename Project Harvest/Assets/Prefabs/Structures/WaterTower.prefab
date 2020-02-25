@@ -46,9 +46,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 8.9647255
-  m_Height: 66.44232
+  m_Height: 58.460094
   m_Direction: 1
-  m_Center: {x: 0, y: 20.111412, z: -0.02637291}
+  m_Center: {x: 0, y: 24.102526, z: -0.02637291}
 --- !u!114 &4743194326165785352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,9 +71,11 @@ MonoBehaviour:
   ring: {fileID: 6135681719047377855}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
   isPlaced: 0
+  isBuilt: 0
   turnedOn: 0
   waterConsumed: 0
   sprinklers: []
@@ -93,6 +95,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 126
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
@@ -168,21 +185,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944554, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}

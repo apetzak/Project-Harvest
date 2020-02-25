@@ -7,7 +7,6 @@ public class Water : Resource
     protected override void Start()
     {
         workerstate = Worker.State.CollectingWater;
-        cursorIndex = 3;
         base.Start();
     }
 

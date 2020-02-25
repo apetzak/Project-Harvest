@@ -9,7 +9,6 @@ public class Tree : Resource
     protected override void Start()
     {
         workerstate = Worker.State.WoodCutting;
-        cursorIndex = 8;
         base.Start();
     }
 

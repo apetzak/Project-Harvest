@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 /// <summary>
 /// Produces units or provides upgrades/utility/defense.
@@ -13,9 +14,13 @@ public class Structure : Entity
     public GameObject ring;
     public float minX;
     public float maxX;
-    public float maxY;
-    public float minY;
+    public float maxZ;
+    public float minZ;
+    public float height;
     public bool isPlaced = false;
+    public bool isBuilt;
+    public bool isVisible;
+    private float div = .1f;
 
     /// <summary>
     /// Set health to maxHealth
@@ -35,8 +40,9 @@ public class Structure : Entity
         var c = GetComponent<Collider>();
         minX = transform.position.x - c.bounds.extents.x;
         maxX = transform.position.x + c.bounds.extents.x;
-        minY = transform.position.z - c.bounds.extents.z;
-        maxY = transform.position.z + c.bounds.extents.z;
+        minZ = transform.position.z - c.bounds.extents.z;
+        maxZ = transform.position.z + c.bounds.extents.z;
+        height = c.bounds.extents.y * 2;
     }
 
     public void CreateSelector()
@@ -90,7 +96,8 @@ public class Structure : Entity
     /// </summary>
     protected override void LeftClick()
     {
-        base.LeftClick();
+        if (isPlaced)
+            base.LeftClick();
     }
 
     /// <summary>
@@ -111,14 +118,47 @@ public class Structure : Entity
                     (t as Troop).TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
             }
         }
-        if (Game.Instance.workerIsSelected)
+
+        SendWorkersToDeposit();
+
+        SendWorkersToBuild();
+    }
+
+    private void SendWorkersToDeposit()
+    {
+        //if (isBuilt && Game.Instance.workerIsSelected)
+        //{
+        //    foreach (Unit u in Game.Instance.selectedUnits)
+        //    {
+        //        if (u is Troop)
+        //            continue;
+
+
+        //        if (u is Worker && (u as Worker).resourceCount > 0)
+        //        {
+        //            Worker w = u as Worker;
+
+        //            Type t = state == State.WoodCutting ? typeof(LumberMill) :
+        //            state == State.CollectingWater ? typeof(WaterWell) : typeof(MiningCamp);
+
+        //            u.SetDestination(GetWorkerDestination(u as Worker));
+        //        }
+        //    }
+        //}
+    }
+
+    public void SendWorkersToBuild()
+    {
+        //Debug.Log(Game.Instance.workerIsSelected && health < maxHealth);
+
+        if (Game.Instance.workerIsSelected && health < maxHealth)
         {
             foreach (Unit u in Game.Instance.selectedUnits)
             {
-                if (u is Worker)
+                if (u.fruit == fruit && u is Worker)
                 {
                     u.target = this;
-                    u.SetDestination(transform.position);
+                    u.SetDestination(GetWorkerDestination(u as Worker));
                     (u as Worker).SwitchState(Worker.State.Building);
                 }
             }
@@ -128,24 +168,21 @@ public class Structure : Entity
     /// <summary>
     /// Show ring, switch cursor
     /// </summary>
-    protected virtual void OnMouseEnter()
+    protected override void OnMouseEnter()
     {
-        if (!isPlaced)
+        if (!isPlaced || Game.Instance.mouseOverUI)
             return;
 
         ToggleRing();
         ToggleSelector();
 
-        if (Game.Instance.troopIsSelected)
-            CursorSwitcher.Instance.Set(1);
-        else if (Game.Instance.workerIsSelected)
-            CursorSwitcher.Instance.Set(7);
+        base.OnMouseEnter();
     }
 
     /// <summary>
     /// Toggle off ring if not selected
     /// </summary>
-    private void OnMouseExit()
+    protected override void OnMouseExit()
     {
         if (!isPlaced)
             return;
@@ -155,6 +192,7 @@ public class Structure : Entity
             ToggleRing(false);
             ToggleSelector(false);
         }
+        base.OnMouseExit();
     }
 
     /// <summary>
@@ -173,7 +211,12 @@ public class Structure : Entity
     /// <param name="b"></param>
     public void ToggleSelector(bool b = true)
     {
-        if (selector != null && selector.transform.childCount > 0)
+        if (selector == null || selector.transform.childCount == 0)
+            return;
+
+        if (!isBuilt)
+            selector.SetActive(true);
+        else
             selector.SetActive(b);
     }
 
@@ -238,5 +281,73 @@ public class Structure : Entity
         }
 
         Game.Instance.ChangeSelection();
+    }
+
+    public void Build()
+    {
+        if (health == maxHealth)
+            return;
+
+        if (maxHealth - health > 10)
+        {
+            health += 10;
+        }
+        else
+        {
+            health = maxHealth;
+            transform.GetChild(0).transform.Translate(0, height / 10, 0, Space.World);
+            isBuilt = true;
+            ToggleSelector(false);
+
+            if (this is RallyPoint)
+                (this as RallyPoint).SetPointOnFarms();
+            else if (this is WaterTower)
+                (this as WaterTower).ActivateSprinklers();
+            else if (this is Sprinkler)
+                (this as Sprinkler).SetSource();
+        }
+
+        // rise out of ground
+        if (health >= maxHealth * div)
+        {
+            transform.GetChild(0).transform.Translate(0, height / 10, 0, Space.World);
+            div += .1f;
+        }
+    }
+
+    public Vector3 GetWorkerDestination(Worker w)
+    {
+        Vector3 v = transform.position;
+
+        float x = transform.position.x;
+        float z = transform.position.z;
+
+        float dist = 1f;
+
+        if (GetType() == typeof(Tree))
+            dist = -2f;
+
+        if (w.transform.position.x < minX)
+            x = minX - dist;
+        else if (w.transform.position.x > maxX)
+            x = maxX + dist;
+
+        else if (w.transform.position.z < minZ)
+            z = minZ - dist;
+        else if (w.transform.position.z > maxZ)
+            z = maxZ + dist;
+
+        return new Vector3(x, 0, z);
+    }
+
+    private void OnBecameVisible()
+    {
+        //Debug.Log("visible " + gameObject);
+        isVisible = true;
+    }
+
+    private void OnBecameInvisible()
+    {
+        isVisible = false;
     }
 }

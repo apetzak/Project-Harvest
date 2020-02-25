@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BottomPanel : MonoBehaviour
+public class BottomPanel : UIElement
 {
     public Text resourceText;
     public List<Button> buttons = new List<Button>();

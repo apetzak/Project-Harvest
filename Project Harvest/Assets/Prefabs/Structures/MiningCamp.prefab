@@ -56,9 +56,11 @@ MonoBehaviour:
   ring: {fileID: 0}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
   isPlaced: 0
+  isBuilt: 0
 --- !u!65 &5012215948112855704
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -70,8 +72,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6.615182, y: 6.455315, z: 11.952142}
-  m_Center: {x: -0.038663864, y: 3.3763878, z: 0}
+  m_Size: {x: 6.6151824, y: 7.6185203, z: 11.952144}
+  m_Center: {x: 0, y: 3.9579902, z: 0}
 --- !u!1001 &1090628892391614959
 PrefabInstance:
   m_ObjectHideFlags: 0

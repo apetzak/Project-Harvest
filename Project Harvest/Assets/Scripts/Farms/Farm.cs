@@ -187,40 +187,11 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Set cursor (context sensitive)
-    /// </summary>
-    protected override void OnMouseEnter()
-    {
-        if (Game.Instance.troopIsSelected)
-            CursorSwitcher.Instance.Set(1);
-
-        else if (Game.Instance.workerIsSelected)
-            SwitchCursors();
-    }
-
-    /// <summary>
     /// Switch cursor, if only worker(s) are selected
     /// </summary>
     protected override void RightClick()
     {
-        if (!Game.Instance.troopIsSelected && Game.Instance.workerIsSelected)
-            SwitchCursors();
+        CursorSwitcher.Instance.Switch(this);
         base.RightClick();
-    }
-
-    /// <summary>
-    /// Set cursor icon to corresponding farm state
-    /// </summary>
-    protected void SwitchCursors()
-    {
-        if (state == State.Empty)
-            CursorSwitcher.Instance.Set(2);
-
-        else if (state == State.Planting || state == State.Growing 
-              || state == State.PlantGrowing || state == State.Sprouting)
-            CursorSwitcher.Instance.Set(4);
-
-        else if (state == State.Dead || state == State.Pickable)
-            CursorSwitcher.Instance.Set(5);
     }
 }

@@ -12,15 +12,24 @@ public class Turret : Structure
     private int attackTime = 60;
     public Entity target;
     private float facingAngle = 90;
+    private float scanTime = 20;
+    // todo: target closest or farthest
 
     protected override void Update()
     {
-        if (!isPlaced)
+        if (!isBuilt)
             return;
 
         if (target == null)
         {
-            FindTarget();
+            scanTime--;
+
+            // search for enemy every 20 ticks
+            if (scanTime <= 0)
+            {
+                FindTarget();
+                scanTime = 20;
+            }
         }
         else
         {
@@ -32,6 +41,7 @@ public class Turret : Structure
 
                 if (diff.magnitude > 120) // unit left range
                 {
+                    scanTime = 20;
                     target = null;
                     return;
                 }
@@ -58,7 +68,9 @@ public class Turret : Structure
 
         if (target.health <= 0)
         {
-            target.isDying = true;
+            if (target is Unit)
+                target.isDying = true;
+            target.TakeDamage();
             target = null;
         }
     }
@@ -69,32 +81,52 @@ public class Turret : Structure
         {
             foreach (Veggie v in Game.Instance.veggies)
             {
-                if (v.isDying)
-                    continue;
-                Vector3 diff = transform.position - v.transform.position;
-                if (diff.magnitude < 120) // target found
-                {
-                    target = v;
-                    RotateTowardsTarget();
-                    break;
-                }
+                if (TargetFound(v as Entity))
+                    return;
+            }
+            foreach (Structure s in Game.Instance.veggieStructures)
+            {
+                if (TargetFound(s as Entity))
+                    return;
+            }
+            foreach (Worker w in Game.Instance.peas)
+            {
+                if (TargetFound(w as Entity))
+                    return;
             }
         }
         else
         {
             foreach (Fruit f in Game.Instance.fruits)
             {
-                if (f.isDying)
-                    continue;
-                Vector3 diff = transform.position - f.transform.position;
-                if (diff.magnitude < 120) // target found
-                {
-                    target = f;
-                    RotateTowardsTarget();
-                    break;
-                }
+                if (TargetFound(f as Entity))
+                    return;
+            }
+            foreach (Structure s in Game.Instance.fruitStructures)
+            {
+                if (TargetFound(s as Entity))
+                    return;
+            }
+            foreach (Worker w in Game.Instance.blueberries)
+            {
+                if (TargetFound(w as Entity))
+                    return;
             }
         }
+    }
+
+    private bool TargetFound(Entity e)
+    {
+        if (e.isDying)
+            return false;
+        Vector3 diff = transform.position - e.transform.position;
+        if (diff.magnitude < 120) // target found
+        {
+            target = e;
+            RotateTowardsTarget();
+            return true;
+        }
+        return false;
     }
 
     private void RotateTowardsTarget()

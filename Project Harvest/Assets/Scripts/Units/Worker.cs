@@ -54,7 +54,7 @@ public class Worker : Unit
         {
             if (state == State.WoodCutting)
             {
-                if (resourceCount < resourceCapacity)
+                if (resourceCount < resourceCapacity && target != null)
                     ChopTree();
 
                 else if (!tools[9].activeSelf)
@@ -65,7 +65,7 @@ public class Worker : Unit
             }
             else if (state == State.GoldMining)
             {
-                if (resourceCount < resourceCapacity)
+                if (resourceCount < resourceCapacity && target != null)
                     MineOre();
 
                 else if (!tools[9].activeSelf)
@@ -76,7 +76,7 @@ public class Worker : Unit
             }
             else if (state == State.StoneMining)
             {
-                if (resourceCount < resourceCapacity)
+                if (resourceCount < resourceCapacity && target != null)
                     MineOre();
 
                 else if (!tools[9].activeSelf)
@@ -88,17 +88,6 @@ public class Worker : Unit
             else if (state == State.Building)
             {
                 SwingHammer();
-            }
-        }
-        else
-        {
-            // stop in front of resource
-            if (target != null && target is Resource && resourceCount < resourceCapacity)
-            {
-                int stop = target is Tree ? 5 : 7;
-
-                if ((transform.position - target.transform.position).magnitude < stop)
-                    StopMoving();
             }
         }
 
@@ -115,7 +104,7 @@ public class Worker : Unit
         int count = resourceCount;
         resourceCount = 0;
         if (target != null)
-            SetDestination(target.transform.position);
+            SetDestination((target as Structure).GetWorkerDestination(this));
         else
             FindNearestResource();
         return count;
@@ -128,6 +117,8 @@ public class Worker : Unit
     /// <param name="s"></param>
     public void SwitchState(State s)
     {
+        ResetTool((int)s);
+
         state = s;
         HideTools();
 
@@ -136,6 +127,9 @@ public class Worker : Unit
 
         if (target != null && (target is Resource))
             (target as Resource).occupied = false;
+
+        if (resourceCount > 0)
+            tools[9].SetActive(true);
     }
 
     /// <summary>
@@ -167,7 +161,16 @@ public class Worker : Unit
         else if (state == State.Sacking)
             toolIndex = 9;
 
-        tools[toolIndex].SetActive(true);
+        try
+        {
+            tools[toolIndex].SetActive(true);
+        }
+        catch
+        {
+            Debug.Log("tool " + toolIndex + " is broke");
+        }
+
+        //tools[toolIndex].SetActive(true);
     }
 
     /// <summary>
@@ -187,14 +190,30 @@ public class Worker : Unit
         Type t = state == State.WoodCutting ? typeof(LumberMill) :
                  state == State.CollectingWater ? typeof(WaterWell) : typeof(MiningCamp);
 
+        float closest = 10000;
+        int index = 0;
         foreach (Structure s in Game.Instance.fruitStructures)
         {
-            if (s.GetType() == t) // todo: check magnitude between
-            {           
-                tools[9].SetActive(true); // sacking
-                SetDestination(s.transform.position);
-                break;
+            if (s.GetType() == t)
+            {
+                float mag = (s.transform.position - transform.position).magnitude;
+
+                if (mag < closest)
+                {
+                    closest = mag;
+                    index = Game.Instance.fruitStructures.IndexOf(s);
+                }
             }
+        }
+
+        if (closest != 10000)
+        {
+            tools[9].SetActive(true); // sacking
+            SetDestination(Game.Instance.fruitStructures[index].GetWorkerDestination(this));
+        }
+        else
+        {
+            SwitchState(State.Idle);
         }
     }
 
@@ -207,7 +226,7 @@ public class Worker : Unit
         SwitchState(r.workerstate);
         target = r;
         r.occupied = true;
-        SetDestination(r.transform.position); // todo: set in front of resource
+        SetDestination(r.GetWorkerDestination(this)); // todo: set in front of resource
     }
 
     /// <summary>
@@ -236,16 +255,43 @@ public class Worker : Unit
         }
 
         if (lowestDistance == 10000)
-            SwitchState(State.Idle);
+        {
+            if (resourceCount > 0)
+            {
+                tools[9].SetActive(true);
+                FindNearestDepository();
+            }
+            else
+            {
+                SwitchState(State.Idle);
+            }
+        }
         else
+        {
             GatherFrom(Game.Instance.resources[index]);
+        }
+    }
+
+    private void FindNearestBuilding()
+    {
+        var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in list)
+        {
+            if (s.health < s.maxHealth && !(s is Farm))
+            {
+                target = s;
+                SetDestination(s.GetWorkerDestination(this));
+                return;
+            }
+        }
+        SwitchState(State.Idle);
     }
 
     private void ChopTree()
     { 
         SwingTool(0, 0, 3, 0);
 
-        if (animTime >= animEnd && target != null)
+        if (animTime >= animEnd)
         {
             TakeFromResource();
 
@@ -261,7 +307,7 @@ public class Worker : Unit
     {
         SwingTool(1, 0, 0, 3);
 
-        if (animTime >= animEnd && target != null)
+        if (animTime >= animEnd)
         {
             TakeFromResource();
             (target as Resource).Shrink();
@@ -278,14 +324,26 @@ public class Worker : Unit
     {
         SwingTool(2, 0, 3, 0);
 
-        if (animTime >= animEnd && target != null)
+        if (animTime >= animEnd)
         {
             animTime = 0;
 
             if (target.health < target.maxHealth)
             {
-                target.health += 10;
-                Game.Instance.fruitResourceWood -= 1;
+                if (!(target as Structure).isBuilt)
+                {
+                    (target as Structure).Build();
+                }
+                else
+                {
+                    target.health += 10;
+                    Game.Instance.fruitResourceWood -= 1;
+                }
+            }
+            else
+            {
+                ResetTool(2);
+                FindNearestBuilding();
             }
         }
     }
@@ -297,6 +355,11 @@ public class Worker : Unit
         else
             tools[i].transform.Rotate(-x, -y, -z);
         animTime++;
+    }
+
+    private void ResetTool(int i)
+    {
+
     }
 
     private void TakeFromResource()
@@ -350,9 +413,20 @@ public class Worker : Unit
         if (angleToRotate == 0) // facing destination, move forward
         {
             if (Mathf.Abs(diff.x) < 2 && Mathf.Abs(diff.z) < 2)
+            {
+                if (target != null)
+                {
+                    diff = transform.position - target.transform.position;
+                    angleToRotate = GetAngle();
+                    FaceTarget();
+                }
+
                 StopMoving();
+            }
             else
+            {
                 transform.Translate(velocity * currentSpeed / 10, Space.World);
+            }
         }
         else
         {

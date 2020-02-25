@@ -15,18 +15,8 @@ public class Hub : Structure
 
     protected override void Start()
     {
+        workerPrefab.fruit = fruit;
         base.Start();
-    }
-
-    protected override void OnMouseEnter()
-    {
-        if (Game.Instance.troopIsSelected)
-            CursorSwitcher.Instance.Set(1);
-
-        else if (Game.Instance.workerIsSelected)
-            CursorSwitcher.Instance.Set(3);
-
-        base.OnMouseEnter();
     }
 
     protected virtual void GrowUnits()
@@ -41,7 +31,7 @@ public class Hub : Structure
 
     protected override void Update()
     {
-        if (unitsGrown >= maxUnits || !isPlaced) // stop growing units at max capacity
+        if (unitsGrown >= maxUnits || !isBuilt) // stop growing units at max capacity
             return;
 
         growthTimer++;
@@ -56,23 +46,13 @@ public class Hub : Structure
 
     protected override void RightClick()
     {
-        if (Game.Instance.troopIsSelected)
+        if (health == maxHealth)
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
-            if (!Physics.Raycast(ray, out hit))
-                return;
-
-            foreach (Unit t in Game.Instance.selectedUnits)
-            {
-                if (t is Troop)
-                    (t as Troop).TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
-            }
-            return;
+            Pick();
+            ReleaseUnits();
         }
 
-        Pick();
-        ReleaseUnits();
+        base.RightClick();
     }
 
     /// <summary>

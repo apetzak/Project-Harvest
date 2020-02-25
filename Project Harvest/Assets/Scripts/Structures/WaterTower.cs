@@ -11,14 +11,19 @@ public class WaterTower : Structure
 
     protected override void Start()
     {
-        turnedOn = true;
         base.Start();
     }
 
     protected override void Update()
     {
-        if (!isPlaced | !turnedOn || sprinklers.Count == 0)
+        if (!isBuilt | !turnedOn || sprinklers.Count == 0)
             return;
+
+        if (fruit && Game.Instance.fruitResourceWater <= 0 || !fruit && Game.Instance.veggieResourceWater <= 0)
+        {
+            turnedOn = false;
+            return;
+        }
 
         counter--;
 
@@ -54,6 +59,8 @@ public class WaterTower : Structure
 
     public void ActivateSprinklers()
     {
+        turnedOn = fruit && Game.Instance.fruitResourceWater > 0 || !fruit && Game.Instance.veggieResourceWater > 0;
+
         var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in list)
         {
@@ -62,7 +69,7 @@ public class WaterTower : Structure
                 Vector3 diff = transform.position - s.transform.position;
                 if (diff.magnitude < 160) // sprinklers in range
                 {
-                    (s as Sprinkler).turnedOn = true;
+                    (s as Sprinkler).turnedOn = turnedOn;
                     (s as Sprinkler).hasSource = true;
                     sprinklers.Add(s as Sprinkler);
                 }

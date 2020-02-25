@@ -55,7 +55,9 @@ public class SelectorBox : MonoBehaviour
 
         EntityUtils.ClearSelection();
 
-        foreach (Troop t in Game.Instance.fruits)
+        var troops = Game.Instance.fruit ? Game.Instance.fruits : Game.Instance.veggies;
+
+        foreach (Troop t in troops)
         {
             var v = Camera.main.WorldToScreenPoint(t.transform.position);
             if (selectedCount > 84)
@@ -67,31 +69,9 @@ public class SelectorBox : MonoBehaviour
             }
         }
 
-        foreach (Troop t in Game.Instance.veggies)
-        {
-            var v = Camera.main.WorldToScreenPoint(t.transform.position);
-            if (selectedCount > 84)
-                break;
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !t.isDying)
-            {
-                t.ToggleSelected(true);
-                selectedCount++;
-            }
-        }
+        var workers = Game.Instance.fruit ? Game.Instance.blueberries : Game.Instance.peas;
 
-        foreach (Worker w in Game.Instance.blueberries)
-        {
-            var v = Camera.main.WorldToScreenPoint(w.transform.position);
-            if (selectedCount > 84)
-                break;
-            if (v.x < maxX && v.x > minX && v.y < maxY && v.y > minY && !w.isDying)
-            {
-                w.ToggleSelected(true);
-                selectedCount++;
-            }
-        }
-
-        foreach (Worker w in Game.Instance.peas)
+        foreach (Worker w in workers)
         {
             var v = Camera.main.WorldToScreenPoint(w.transform.position);
             if (selectedCount > 84)
