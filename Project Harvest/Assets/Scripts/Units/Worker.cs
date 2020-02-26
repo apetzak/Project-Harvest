@@ -104,7 +104,7 @@ public class Worker : Unit
         int count = resourceCount;
         resourceCount = 0;
         if (target != null)
-            SetDestination((target as Structure).GetWorkerDestination(this));
+            SetDestination((target as Structure).GetUnitDestination(this));
         else
             FindNearestResource();
         return count;
@@ -196,7 +196,7 @@ public class Worker : Unit
         {
             if (s.GetType() == t)
             {
-                float mag = (s.transform.position - transform.position).magnitude;
+                float mag = (s.transform.position - transform.position).sqrMagnitude;
 
                 if (mag < closest)
                 {
@@ -209,7 +209,7 @@ public class Worker : Unit
         if (closest != 10000)
         {
             tools[9].SetActive(true); // sacking
-            SetDestination(Game.Instance.fruitStructures[index].GetWorkerDestination(this));
+            SetDestination(Game.Instance.fruitStructures[index].GetUnitDestination(this));
         }
         else
         {
@@ -226,7 +226,7 @@ public class Worker : Unit
         SwitchState(r.workerstate);
         target = r;
         r.occupied = true;
-        SetDestination(r.GetWorkerDestination(this)); // todo: set in front of resource
+        SetDestination(r.GetUnitDestination(this)); // todo: set in front of resource
     }
 
     /// <summary>
@@ -245,7 +245,7 @@ public class Worker : Unit
         {
             if (!r.occupied && r.GetType() == t && !r.isDying)
             {
-                float f = (r.transform.position - transform.position).magnitude;
+                float f = (r.transform.position - transform.position).sqrMagnitude;
                 if (f < lowestDistance)
                 {
                     lowestDistance = f;
@@ -272,15 +272,18 @@ public class Worker : Unit
         }
     }
 
-    private void FindNearestBuilding()
+    public void FindNearestBuilding()
     {
         var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in list)
         {
             if (s.health < s.maxHealth && !(s is Farm))
             {
+                var slot = s.GetOpenSlot(this);
+                if (slot == new Vector3())
+                    continue;
                 target = s;
-                SetDestination(s.GetWorkerDestination(this));
+                SetDestination(slot);
                 return;
             }
         }
@@ -322,6 +325,16 @@ public class Worker : Unit
 
     private void SwingHammer()
     {
+        if (target != null && target.health == target.maxHealth)
+            target = null;
+
+        if (target == null)
+        {
+            ResetTool(2);
+            FindNearestBuilding();
+            return;
+        }
+
         SwingTool(2, 0, 3, 0);
 
         if (animTime >= animEnd)
@@ -339,11 +352,6 @@ public class Worker : Unit
                     target.health += 10;
                     Game.Instance.fruitResourceWood -= 1;
                 }
-            }
-            else
-            {
-                ResetTool(2);
-                FindNearestBuilding();
             }
         }
     }

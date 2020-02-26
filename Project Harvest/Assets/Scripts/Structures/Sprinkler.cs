@@ -42,8 +42,8 @@ public class Sprinkler : Structure
         {
             if (s is WaterTower)
             {
-                Vector3 diff = transform.position - s.transform.position;
-                if (diff.magnitude < 160) // water tower in range
+                float dist = (transform.position - s.transform.position).magnitude;
+                if (dist < 160) // water tower in range
                 {
                     (s as WaterTower).sprinklers.Add(this);
                     hasSource = true;

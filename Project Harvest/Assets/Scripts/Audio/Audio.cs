@@ -29,7 +29,6 @@ public class Audio : MonoBehaviour
             s.volume *= .1f;
             Instance.objects.Add(o);
         }
-        //Debug.Log(Instance.objects);
     }
 
     public void PlaySound(AudioClip clip)

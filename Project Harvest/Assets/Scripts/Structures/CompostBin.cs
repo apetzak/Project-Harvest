@@ -28,7 +28,7 @@ public class CompostBin : Structure
                 if (u.fruit == fruit && u is Worker && (u as Worker).state == Worker.State.Waggoning)
                 {
                     u.target = this;
-                    u.SetDestination(GetWorkerDestination(u as Worker));
+                    u.SetDestination(GetUnitDestination(u));
                 }
             }
 

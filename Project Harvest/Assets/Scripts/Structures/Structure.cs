@@ -21,18 +21,16 @@ public class Structure : Entity
     public bool isBuilt;
     public bool isVisible;
     private float div = .1f;
+    public List<Slot> slots = new List<Slot>();
 
     /// <summary>
-    /// Set health to maxHealth
+    /// Set health to maxHealth, SetBounds(), CreateSelector()
     /// </summary>
     protected virtual void Start()
     {
         health = maxHealth;
-
-        //Debug.Log($"{name} bounds: {c.bounds} | center: {transform.position}");
-        //if (isPlaced)
-            CreateSelector();
         SetBounds();
+        CreateSelector();
     }
 
     public void SetBounds()
@@ -50,32 +48,67 @@ public class Structure : Entity
         if (selector == null || selector.transform.childCount == 0)
             return;
 
+        var sides = new List<Transform>();
+
         for (int i = 0; i < 4; i++)
         {
-            selector.transform.GetChild(i).localPosition = new Vector3();
-            selector.transform.GetChild(i).GetComponent<MeshRenderer>().material =
+            sides.Add(selector.transform.GetChild(i));
+            sides[i].localPosition = new Vector3();
+            sides[i].GetComponent<MeshRenderer>().material =
                 fruit ? TroopClass.Instance.materials[0] : TroopClass.Instance.materials[1];
         }
 
         var c = GetComponent<Collider>();
 
-        var v1 = selector.transform.GetChild(0).transform.localScale;  
-        selector.transform.GetChild(0).transform.localScale = 
-        selector.transform.GetChild(1).transform.localScale =
+        var v1 = sides[0].transform.localScale;  
+        sides[0].transform.localScale = sides[1].transform.localScale =
             new Vector3(c.bounds.extents.x * 2 + 2, v1.y, v1.z);
 
-        var v2 = selector.transform.GetChild(2).transform.localScale;
-        selector.transform.GetChild(2).transform.localScale =
-        selector.transform.GetChild(3).transform.localScale =
+        var v2 = sides[2].transform.localScale;
+        sides[2].transform.localScale = sides[3].transform.localScale =
             new Vector3(v2.x, v2.y, c.bounds.extents.z * 2 + 1);
 
         var xDist = c.bounds.extents.x + .5f;
         var zDist = c.bounds.extents.z + .5f;
 
-        selector.transform.GetChild(0).Translate(0, 0, zDist, Space.Self);
-        selector.transform.GetChild(1).Translate(0, 0, -zDist, Space.Self);
-        selector.transform.GetChild(2).Translate(xDist, 0, 0, Space.Self);
-        selector.transform.GetChild(3).Translate(-xDist, 0, 0, Space.Self);
+        sides[0].Translate(0, 0, zDist, Space.Self);
+        sides[1].Translate(0, 0, -zDist, Space.Self);
+        sides[2].Translate(xDist, 0, 0, Space.Self);
+        sides[3].Translate(-xDist, 0, 0, Space.Self);
+    }
+
+    public void CreateSlots()
+    {
+        float horizLength = selector.transform.GetChild(0).transform.localScale.x;
+        float vertLength = selector.transform.GetChild(2).transform.localScale.z;
+
+        while (horizLength > 0)
+        {
+            var loc = new Vector3(minX + horizLength, 10, maxZ + 3);
+            var loc2 = new Vector3(minX + horizLength, 10, minZ - 3);
+
+            slots.Add(new Slot(loc));
+            slots.Add(new Slot(loc2));
+
+            horizLength -= 5;
+        }
+
+        while (vertLength > 0)
+        {
+            var loc = new Vector3(maxX + 3, 10, minZ + vertLength);
+            var loc2 = new Vector3(minX - 3, 10, minZ + vertLength);
+
+            slots.Add(new Slot(loc));
+            slots.Add(new Slot(loc2));
+
+            vertLength -= 5;
+        }
+    }
+
+    public void ClearSlots()
+    {
+        foreach (Slot s in slots)
+            s.occupied = false;
     }
 
     public virtual void Init()
@@ -105,22 +138,16 @@ public class Structure : Entity
     /// </summary>
     protected override void RightClick()
     {
-        if (Game.Instance.troopIsSelected)
+        if (Game.Instance.troopIsSelected && !IsAlly())
         {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit = new RaycastHit();
-            if (!Physics.Raycast(ray, out hit))
-                return;
-
             foreach (Unit t in Game.Instance.selectedUnits)
             {
                 if (t is Troop)
-                    (t as Troop).TargetStructure(this, new Vector3(hit.point.x, t.transform.position.y, hit.point.z));
+                    (t as Troop).TargetStructure(this);
             }
         }
 
         SendWorkersToDeposit();
-
         SendWorkersToBuild();
     }
 
@@ -157,8 +184,11 @@ public class Structure : Entity
             {
                 if (u.fruit == fruit && u is Worker)
                 {
+                    var slot = GetOpenSlot(u);
+                    if (slot == new Vector3())
+                        return;
                     u.target = this;
-                    u.SetDestination(GetWorkerDestination(u as Worker));
+                    u.SetDestination(GetOpenSlot(u));
                     (u as Worker).SwitchState(Worker.State.Building);
                 }
             }
@@ -286,7 +316,10 @@ public class Structure : Entity
     public void Build()
     {
         if (health == maxHealth)
+        {
+            ClearSlots();
             return;
+        }
 
         if (maxHealth - health > 10)
         {
@@ -294,6 +327,7 @@ public class Structure : Entity
         }
         else
         {
+            ClearSlots();
             health = maxHealth;
             transform.GetChild(0).transform.Translate(0, height / 10, 0, Space.World);
             isBuilt = true;
@@ -315,7 +349,38 @@ public class Structure : Entity
         }
     }
 
-    public Vector3 GetWorkerDestination(Worker w)
+    public Vector3 GetOpenSlot(Unit u)
+    {
+        Slot s = new Slot(new Vector3());
+        float closest = 100000;
+
+        foreach (Slot slot in slots)
+        {
+            if (slot.occupied == true)
+                continue;
+            float dist = (slot.location - u.transform.position).sqrMagnitude;
+            if (dist < closest)
+            {
+                closest = dist;
+                s = slot;
+            }
+        }
+
+        s.occupied = true;
+        return s.location;
+    }
+
+    public bool HasOpenSpot()
+    {
+        foreach (Slot s in slots)
+        {
+            if (!s.occupied)
+                return true;
+        }
+        return false;
+    }
+
+    public Vector3 GetUnitDestination(Unit u)
     {
         Vector3 v = transform.position;
 
@@ -327,14 +392,14 @@ public class Structure : Entity
         if (GetType() == typeof(Tree))
             dist = -2f;
 
-        if (w.transform.position.x < minX)
+        if (u.transform.position.x < minX)
             x = minX - dist;
-        else if (w.transform.position.x > maxX)
+        else if (u.transform.position.x > maxX)
             x = maxX + dist;
 
-        else if (w.transform.position.z < minZ)
+        else if (u.transform.position.z < minZ)
             z = minZ - dist;
-        else if (w.transform.position.z > maxZ)
+        else if (u.transform.position.z > maxZ)
             z = maxZ + dist;
 
         return new Vector3(x, 0, z);
@@ -349,5 +414,17 @@ public class Structure : Entity
     private void OnBecameInvisible()
     {
         isVisible = false;
+    }
+}
+
+public class Slot
+{
+    public Vector3 location;
+    public bool occupied;
+
+    public Slot (Vector3 loc)
+    {
+        location = loc;
+        occupied = false;
     }
 }

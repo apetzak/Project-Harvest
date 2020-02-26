@@ -140,11 +140,20 @@ public class Troop : Unit
         (e as Unit).isUnderAttack = true;
     }
 
-    public virtual void TargetStructure(Entity e, Vector3 dest)
+    public virtual void TargetStructure(Structure s)
     {
-        target = e;
         attacking = true;
-        SetDestination(dest);
+
+        var slot = s.GetOpenSlot(this);
+        if (slot == new Vector3())
+        {
+            FindClosestTarget();
+        }
+        else
+        {
+            target = s;
+            SetDestination(slot);
+        }
     }
 
     /// <summary>
@@ -185,82 +194,97 @@ public class Troop : Unit
         InflictDamage();
     }
 
+    #region Target Finding
+
     /// <summary>
     /// Find and target closest enemy entity
     /// </summary>
-    private void FindClosestTarget()
+    public void FindClosestTarget()
     {
-        float closest = 10000;
-        int index = 0;
+        float closest = 100000;
 
-        foreach (Troop t in GetEnemyTroops())
+        int i = FindClosestEnemyTroop(ref closest);
+        if (closest != 100000)
         {
-            if (t.isDying)
-                continue;
-            Vector3 diff = transform.position - t.transform.position;
-
-            if (diff.magnitude < closest)
-            {
-                if (t.isUnderAttack && UnityEngine.Random.Range(0, 2) > 1)
-                    continue;
-
-                closest = diff.magnitude;
-                index = GetEnemyTroops().IndexOf(t);
-            }
+            TargetUnit(GetEnemyTroops()[i]);
+            return;
         }
 
-        if (closest != 10000)
+        int i2 = FindClosestEnemyWorker(ref closest);
+        if (closest != 100000)
         {
-            TargetUnit(GetEnemyTroops()[index]);
-        }
-        else
-        {
-            foreach (Worker w in GetEnemyWorkers())
-            {
-                if (w.isDying)
-                    continue;
-                Vector3 diff = transform.position - w.transform.position;
-
-                if (diff.magnitude < closest)
-                {
-                    closest = diff.magnitude;
-                    index = GetEnemyWorkers().IndexOf(w);
-                }
-            }
-
-            if (closest != 10000)
-            {
-                TargetUnit(GetEnemyWorkers()[index]);
-            }
-            else
-            {
-                foreach (Structure s in GetEnemyStructures())
-                {
-                    if (s.isDying)
-                        continue;
-                    Vector3 diff = transform.position - s.transform.position;
-
-                    if (diff.magnitude < closest)
-                    {
-                        closest = diff.magnitude;
-                        index = GetEnemyStructures().IndexOf(s);
-                    }
-                }
-
-                if (closest != 10000)
-                {
-                    TargetStructure(GetEnemyStructures()[index],
-                    GetEnemyStructures()[index].transform.position);
-                }
-            }
+            TargetUnit(GetEnemyWorkers()[i2]);
+            return;
         }
 
-        if (closest == 10000)
+        int i3 = FindClosestEnemyStructure(ref closest);
+        if (closest != 100000)
+        {
+            TargetStructure(GetEnemyStructures()[i3]);
+            return;
+        }
+
+        if (closest == 100000)
         {
             attacking = false;
             StopMoving();
         }
     }
+
+    private int FindClosestEnemyTroop(ref float closest)
+    {
+        int index = -1;
+        foreach (Troop t in GetEnemyTroops())
+        {
+            if (t.isDying)
+                continue;
+            float dist = (transform.position - t.transform.position).sqrMagnitude;
+            if (dist < closest)
+            {
+                if (t.isUnderAttack && UnityEngine.Random.Range(0, 2) > 1)
+                    continue;
+                closest = dist;
+                index = GetEnemyTroops().IndexOf(t);
+            }
+        }
+        return index;
+    }
+
+    private int FindClosestEnemyWorker(ref float closest)
+    {
+        int index = -1;
+        foreach (Worker w in GetEnemyWorkers())
+        {
+            if (w.isDying)
+                continue;
+            float dist = (transform.position - w.transform.position).sqrMagnitude;
+            if (dist < closest)
+            {
+                closest = dist;
+                index = GetEnemyWorkers().IndexOf(w);
+            }
+        }
+        return index;
+    }
+
+    private int FindClosestEnemyStructure(ref float closest)
+    {
+        int index = -1;
+        foreach (Structure s in GetEnemyStructures())
+        {
+            if (s.isDying || !s.HasOpenSpot())
+                continue;
+            float dist = (transform.position - s.transform.position).sqrMagnitude;
+            if (dist < closest)
+            {
+                closest = dist;
+                index = GetEnemyStructures().IndexOf(s);
+            }
+        }
+        return index;
+    }
+
+    #endregion
 
     /// <summary>
     /// Reduce targets health by attackDamage

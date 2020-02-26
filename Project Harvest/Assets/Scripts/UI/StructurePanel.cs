@@ -97,7 +97,7 @@ public class StructurePanel : UIElement
 
             placingObject.ToggleSelectorColor(m);
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !Game.Instance.mouseOverUI)
             {
                 if (placingObject is Wall || placingObject is Bridge)
                 {
@@ -127,6 +127,7 @@ public class StructurePanel : UIElement
 
         if (!(placingObject is Farm))
         {
+            placingObject.CreateSlots();
             placingObject.transform.GetChild(0).transform.Translate(0, -placingObject.height, 0, Space.World);
             placingObject.SendWorkersToBuild();
         }

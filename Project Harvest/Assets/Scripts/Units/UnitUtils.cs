@@ -67,6 +67,9 @@ public class EntityUtils
             if (u is Worker)
                 (u as Worker).SwitchState(Worker.State.Idle);
 
+            if (u.target is Structure)
+                (u.target as Structure).ClearSlots(); // todo: only clear unoccupied slots
+
             if (u.speed < lowestSpeed)
                 lowestSpeed = u.speed;
 
