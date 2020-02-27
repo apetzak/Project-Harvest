@@ -117,7 +117,7 @@ public class Worker : Unit
     /// <param name="s"></param>
     public void SwitchState(State s)
     {
-        ResetTool((int)s);
+        ResetTool();
 
         state = s;
         HideTools();
@@ -190,9 +190,10 @@ public class Worker : Unit
         Type t = state == State.WoodCutting ? typeof(LumberMill) :
                  state == State.CollectingWater ? typeof(WaterWell) : typeof(MiningCamp);
 
-        float closest = 10000;
+        float closest = 100000;
         int index = 0;
-        foreach (Structure s in Game.Instance.fruitStructures)
+        var structs = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure s in structs)
         {
             if (s.GetType() == t)
             {
@@ -201,15 +202,18 @@ public class Worker : Unit
                 if (mag < closest)
                 {
                     closest = mag;
-                    index = Game.Instance.fruitStructures.IndexOf(s);
+                    index = structs.IndexOf(s);
                 }
             }
         }
 
-        if (closest != 10000)
+        if (closest != 100000)
         {
             tools[9].SetActive(true); // sacking
-            SetDestination(Game.Instance.fruitStructures[index].GetUnitDestination(this));
+            if (fruit)
+                SetDestination(Game.Instance.fruitStructures[index].GetUnitDestination(this));
+            else
+                SetDestination(Game.Instance.veggieStructures[index].GetUnitDestination(this));
         }
         else
         {
@@ -239,7 +243,7 @@ public class Worker : Unit
          state == State.StoneMining ? typeof(Stone) : typeof(Water);
 
         int index = 0;
-        float lowestDistance = 10000;
+        float lowestDistance = 100000;
 
         foreach (Resource r in Game.Instance.resources)
         {
@@ -254,7 +258,7 @@ public class Worker : Unit
             }
         }
 
-        if (lowestDistance == 10000)
+        if (lowestDistance == 100000)
         {
             if (resourceCount > 0)
             {
@@ -327,10 +331,10 @@ public class Worker : Unit
     {
         if (target != null && target.health == target.maxHealth)
             target = null;
-
+        
         if (target == null)
         {
-            ResetTool(2);
+            ResetTool();
             FindNearestBuilding();
             return;
         }
@@ -365,9 +369,22 @@ public class Worker : Unit
         animTime++;
     }
 
-    private void ResetTool(int i)
+    private void ResetTool()
     {
-
+        if (animTime > 0)
+        {
+            while (animTime < animEnd)
+            {
+                if (state == State.WoodCutting)
+                    SwingTool(0, 0, 3, 0);
+                if (state == State.GoldMining || state == State.StoneMining)
+                    SwingTool(1, 0, 0, 3);
+                else if (state == State.Building)
+                    SwingTool(2, 0, 3, 0);
+                else
+                    break;
+            }
+        }
     }
 
     private void TakeFromResource()
