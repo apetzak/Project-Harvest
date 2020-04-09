@@ -6,7 +6,7 @@ public class RootPatch : Farm
 {
     protected override void GrowProp()
     {
-        prop.transform.localScale += new Vector3(1, 1, 1);
+        prop.transform.localScale += new Vector3(.01f, .01f, .01f);
     }
 
     protected override void Update()
@@ -31,7 +31,7 @@ public class RootPatch : Farm
             {
                 MoveToRallyPoint();
                 spawnTime = 0;
-                state = State.Empty;
+                state = State.Dead;
             }
         }
         else
@@ -40,28 +40,22 @@ public class RootPatch : Farm
         }
     }
 
+    public override void StartGrowing()
+    {
+        prop.transform.localScale = new Vector3(1, 1, 1);
+        base.StartGrowing();
+    }
+
+    public override void StartPicking()
+    {
+        Pick(1);
+        troops[0].transform.position = prop.transform.position;
+        troops[0].transform.Translate(new Vector3(0, -5, 0), Space.World);
+        state = State.Spawning;
+    }
+
     protected override void RightClick()
     {
-        if (state == State.Spawning)
-            return;
-
-        if (state == State.Empty)
-        {
-            StartPlanting();
-        }
-        else if (state == State.Planting)
-        {
-            prop.transform.localScale = new Vector3(1, 1, 1);
-            StartGrowing();
-        }
-        else if (state == State.Pickable)
-        {
-            Pick(1);
-            troops[0].transform.position = prop.transform.position;
-            troops[0].transform.Translate(new Vector3(0, -5, 0), Space.World);
-            state = State.Spawning;
-        }
-
         base.RightClick();
     }
 }

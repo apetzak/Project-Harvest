@@ -134,6 +134,7 @@ public class StructurePanel : UIElement
         else
         {
             (placingObject as Farm).FindRallyPoint();
+            (placingObject as Farm).ShowGrass();
         }
 
         if (Input.GetKey(KeyCode.LeftShift))

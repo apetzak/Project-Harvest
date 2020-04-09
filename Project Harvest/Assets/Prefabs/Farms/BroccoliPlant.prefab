@@ -47,29 +47,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6630c450f7ec01c4ba964c008cb0a3f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selector: {fileID: 0}
   health: 200
   maxHealth: 200
   isDying: 0
   fruit: 0
   selected: 0
+  description: 
+  ring: {fileID: 0}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
+  isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
   state: 0
   prop: {fileID: 6936474738125182764}
   dirtMound: {fileID: 3964352406006998207}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
-  prefab: {fileID: 893957038564246179, guid: c19a2b1e6ef5dfc4a9201e670c88a42f, type: 3}
+  grassMeshes: []
   troops: []
   size: 0
+  grassCount: 0
   growthTime: 0
   growthEnd: 0
   spawnTime: 0
-  spawnStart: 0
+  spawnEnd: 0
   sproutTime: 30
+  sproutEnd: 0
   index: 0
+  rallyPoint: {x: 0, y: 0, z: 0}
+  hasSprinkler: 0
   plantGrowthTime: 16
   prop2: {fileID: 3783873186275913876}
 --- !u!65 &4263558586619613945
@@ -95,7 +106,7 @@ PrefabInstance:
     - target: {fileID: 4188132620402296623, guid: 591423d618cd8924ea1934147fe88e5b,
         type: 3}
       propertyPath: m_Name
-      value: Patch3
+      value: Patch2
       objectReference: {fileID: 0}
     - target: {fileID: 2544020326745824271, guid: 591423d618cd8924ea1934147fe88e5b,
         type: 3}

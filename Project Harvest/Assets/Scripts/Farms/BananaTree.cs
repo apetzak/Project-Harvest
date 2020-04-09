@@ -9,9 +9,9 @@ public class BananaTree : FruitTree
         // dont use propMesh
         spawnEnd = 50;
         harvestCount = 3;
-        growthEnd = 120;
-        plantGrowthEnd = 100;
-        plantGrowthIncrement = 1f;
+        growthEnd = 1200;
+        plantGrowthEnd = 1000;
+        plantGrowthIncrement = .1f;
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = false;
         ShowFruit(false);
@@ -19,5 +19,9 @@ public class BananaTree : FruitTree
         stopHeight = 10.5f;
         index = 2;
         health = 300;
+        size = GetSize();
+        grassCount = 300 * size;
+        sproutEnd = 480;
+        GetGrassMeshes();
     }
 }

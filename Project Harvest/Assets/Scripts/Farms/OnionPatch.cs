@@ -7,7 +7,7 @@ public class OnionPatch : RootPatch
     protected override void Start()
     {
         spawnEnd = 75;
-        growthEnd = 25;
+        growthEnd = 2500;
         index = 9;
         base.Start();
     }

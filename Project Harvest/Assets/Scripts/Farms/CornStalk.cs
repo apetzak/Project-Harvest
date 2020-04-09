@@ -7,7 +7,7 @@ public class CornStalk : Farm
 {
     protected override void Start()
     {
-        growthEnd = 90;
+        growthEnd = 900;
         spawnEnd = 90;
         index = 5;
         base.Start();
@@ -15,7 +15,7 @@ public class CornStalk : Farm
 
     protected override void GrowProp()
     {
-        prop.transform.localScale += new Vector3(.1f, .1f, .1f);
+        prop.transform.localScale += new Vector3(.01f, .01f, .01f);
     }
 
     protected override void Update()
@@ -45,35 +45,30 @@ public class CornStalk : Farm
         }
     }
 
+    public override void StartGrowing()
+    {
+        base.StartGrowing();
+        prop.transform.localScale = new Vector3(0, 0, 0);
+    }
+
+    public override void StartPicking()
+    {
+        System.Random rand = new System.Random();
+        Pick(rand.Next(2, 4));
+
+        foreach (Troop t in troops)
+            t.transform.localScale = new Vector3(0, 0, 0);
+
+        StartSpawning();
+    }
+
     protected override void RightClick()
     {
-        if (state == State.Spawning)
-            return;
-
-        if (state == State.Empty)
-        {
-            StartPlanting();
-        }
-        else if (state == State.Planting)
-        {
-            StartGrowing();
-            prop.transform.localScale = new Vector3(0, 0, 0);
-        }
-        else if (state == State.Pickable)
-        {
-            System.Random rand = new System.Random();
-            Pick(rand.Next(2, 4));
-
-            foreach (Troop t in troops)
-                t.transform.localScale = new Vector3(0, 0, 0);
-
-            StartSpawning();
-        }
-        else if (state == State.Dead)
-        {
-            prop.transform.Rotate(-90, 0, 0, Space.Self);
-            Clear();
-        }
+        //if (state == State.Dead)
+        //{
+        //    prop.transform.Rotate(-90, 0, 0, Space.Self);
+        //    Clear();
+        //}
 
         base.RightClick();
     }

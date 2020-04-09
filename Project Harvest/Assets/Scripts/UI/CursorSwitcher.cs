@@ -31,6 +31,10 @@ public class CursorSwitcher : MonoBehaviour
         Switch(null);
     }
 
+    /// <summary>
+    /// Change cursor image
+    /// </summary>
+    /// <param name="e"></param>
     public void Switch(Entity e)
     {
         if (e is null || e.isDying)
@@ -64,6 +68,9 @@ public class CursorSwitcher : MonoBehaviour
                         Farm f = e as Farm;
                         if (f.state == Farm.State.Empty)
                             current = cursor.Plant;
+
+                        else if (f.state == Farm.State.Grassy)
+                            current = cursor.Shovel;
 
                         else if (f.state == Farm.State.Planting || f.state == Farm.State.Growing
                               || f.state == Farm.State.PlantGrowing || f.state == Farm.State.Sprouting)

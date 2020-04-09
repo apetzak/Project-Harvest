@@ -16,12 +16,14 @@ public class Worker : Unit
         GoldMining,
         StoneMining,
         WoodCutting,
+        ChoppingFruitTree,
         Building,
         Planting,       
         Spawning,
         Digging,
         Waggoning,
-        Sacking
+        Sacking,
+        Picking
     }
 
     public State state;
@@ -52,7 +54,27 @@ public class Worker : Unit
         }
         else if (!moving)
         {
-            if (state == State.WoodCutting)
+            if (state == State.Raking)
+            {
+                Rake();
+            }
+            else if (state == State.Planting)
+            {
+                PlantSeed();
+            }
+            else if (state == State.Watering)
+            {
+                WaterPlant();
+            }
+            else if (state == State.Picking)
+            {
+                PickPlant();
+            }
+            else if (state == State.ChoppingFruitTree)
+            {
+                PickPlant();
+            }
+            else if (state == State.WoodCutting)
             {
                 if (resourceCount < resourceCapacity && target != null)
                     ChopTree();
@@ -141,7 +163,7 @@ public class Worker : Unit
         animEnd = 60;
         int toolIndex = 0;
 
-        if (state == State.WoodCutting)
+        if (state == State.WoodCutting || state == State.ChoppingFruitTree)
             toolIndex = 0;
         else if (state == State.GoldMining || state == State.StoneMining)
             toolIndex = 1;
@@ -150,10 +172,13 @@ public class Worker : Unit
         else if (state == State.CarryingWater || state == State.CollectingWater)
             toolIndex = 3;
         else if (state == State.Watering)
+        {
             toolIndex = 4;
+            animEnd = 240;
+        }
         else if (state == State.Raking)
             toolIndex = 5;
-        else if (state == State.Digging)
+        else if (state == State.Digging || state == State.Planting || state == State.Picking)
             toolIndex = 6;
         //else if (s == State.) toolIndex = 7; // sickle
         else if (state == State.Waggoning)
@@ -369,6 +394,15 @@ public class Worker : Unit
         animTime++;
     }
 
+    private void ThrustTool(int i, float x, float y, float z)
+    {
+        if (animTime < 30)
+            tools[i].transform.Translate(x, y, z);
+        else
+            tools[i].transform.Translate(-x, -y, -z);
+        animTime++;
+    }
+
     private void ResetTool()
     {
         if (animTime > 0)
@@ -381,6 +415,8 @@ public class Worker : Unit
                     SwingTool(1, 0, 0, 3);
                 else if (state == State.Building)
                     SwingTool(2, 0, 3, 0);
+                else if (state == State.Raking)
+                    ThrustTool(5, .1f, 0, 0);
                 else
                     break;
             }
@@ -408,21 +444,117 @@ public class Worker : Unit
 
     }
 
-    private void RakePatch()
+    private void Rake()
     {
+        ThrustTool(5, .1f, 0, 0);
 
+        if (animTime == animEnd)
+            animTime = 0;
+
+        (target as Farm).grassCount--;
+        if ((target as Farm).grassCount == 0)
+        {
+            ResetTool();
+            (target as Farm).ShowGrass(false);
+            SetDestination(target.transform.position);
+            SwitchState(State.Planting);
+        }
+
+        animTime++;
     }
 
     private void PlantSeed()
     {
+        if (animTime < 30)
+        {
+            tools[6].transform.Translate(0, 0, -.1f, Space.Self);
+        }
+        else
+        {
+            tools[6].transform.Translate(0, 0, .1f, Space.Self);
+            if (animTime == animEnd)
+            {
+                animTime = 0;
+                (target as Farm).StartPlanting();
+                SwitchState(State.Watering);
+            }
+        }
 
+        animTime++;
+    }
+
+    private void PickPlant()
+    {
+        if (animTime < 30)
+        {
+            tools[6].transform.Translate(0, 0, -.1f, Space.Self);
+        }
+        else
+        {
+            tools[6].transform.Translate(0, 0, .1f, Space.Self);
+            if (animTime == 60)
+            {
+                animTime = 0;
+                (target as Farm).isOccupied = false;
+                (target as Farm).StartPicking();
+                InteractWithNearestFarm();
+            }
+        }
+
+        animTime++;
     }
 
     private void WaterPlant()
     {
+        if (animTime < 30)
+        {
+            tools[4].transform.Rotate(0, 0, 1f, Space.Self);
+        }
+        else if (animTime == 240)
+        {
+            animTime = 0;
+            Farm f = target as Farm;
+            f.state = Farm.State.Sprouting;
+            f.isOccupied = false;
+            InteractWithNearestFarm();
+            return;
+        }
+        else if (animTime > 210)
+        {
+            tools[4].transform.Rotate(0, 0, -1f, Space.Self);
+        }
 
+        animTime++;
     }
-    
+
+    private void InteractWithNearestFarm()
+    {
+        var farms = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
+        foreach (Structure f in farms)
+        {
+            if (!(f is Farm) || (f as Farm).isOccupied)
+                continue;
+            if ((f as Farm).state == Farm.State.Grassy)
+
+            {
+                target = f;
+                (f as Farm).isOccupied = true;
+                SetDestination(f.GetUnitDestination(this));
+                SwitchState(State.Raking);
+                return;
+            }
+            if ((f as Farm).state == Farm.State.Pickable)
+            {
+                target = f;
+                (f as Farm).isOccupied = true;
+                SetDestination(f.GetUnitDestination(this));
+                SwitchState(State.Picking);
+                return;
+            }
+        }
+        SwitchState(State.Idle);
+    }
+
     private void ClearPatch()
     {
 

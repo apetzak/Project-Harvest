@@ -138,6 +138,14 @@ public class Structure : Entity
     /// </summary>
     protected override void RightClick()
     {
+        SendTroopsToAttack();
+
+        //SendWorkersToDeposit();
+        SendWorkersToBuild();
+    }
+
+    protected virtual void SendTroopsToAttack()
+    {
         if (Game.Instance.troopIsSelected && !IsAlly())
         {
             foreach (Unit t in Game.Instance.selectedUnits)
@@ -146,9 +154,6 @@ public class Structure : Entity
                     (t as Troop).TargetStructure(this);
             }
         }
-
-        SendWorkersToDeposit();
-        SendWorkersToBuild();
     }
 
     private void SendWorkersToDeposit()
@@ -178,7 +183,7 @@ public class Structure : Entity
     {
         //Debug.Log(Game.Instance.workerIsSelected && health < maxHealth);
 
-        if (Game.Instance.workerIsSelected && health < maxHealth)
+        if (Game.Instance.workerIsSelected && health < maxHealth && !(this is Farm))
         {
             foreach (Unit u in Game.Instance.selectedUnits)
             {
@@ -380,6 +385,11 @@ public class Structure : Entity
         return false;
     }
 
+    /// <summary>
+    /// Gets the location of closest edge relative to the unit position
+    /// </summary>
+    /// <param name="u"></param>
+    /// <returns></returns>
     public Vector3 GetUnitDestination(Unit u)
     {
         Vector3 v = transform.position;
@@ -391,6 +401,8 @@ public class Structure : Entity
 
         if (GetType() == typeof(Tree))
             dist = -2f;
+        else if (this is Farm)
+            dist = -4f;
 
         if (u.transform.position.x < minX)
             x = minX - dist;

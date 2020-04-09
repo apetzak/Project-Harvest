@@ -6,7 +6,7 @@ public class AsparagusPatch : Farm
 {
     protected override void Start()
     {
-        growthEnd = 15;
+        growthEnd = 1500;
         prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
         index = 7;
         base.Start();
@@ -14,7 +14,7 @@ public class AsparagusPatch : Farm
 
     protected override void GrowProp()
     {
-        prop.transform.Translate(new Vector3(0, 1, 0), Space.World);
+        prop.transform.Translate(new Vector3(0, .01f, 0), Space.World);
     }
 
     protected override void Update()
@@ -22,26 +22,16 @@ public class AsparagusPatch : Farm
         base.Update();
     }
 
+    public override void StartPicking()
+    {
+        Pick(1);
+        MoveToRallyPoint();
+        prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
+        state = State.Dead;
+    }
+
     protected override void RightClick()
     {
-        if (state == State.Spawning)
-            return;
-
-        if (state == State.Empty)
-        {
-            StartPlanting();
-        }
-        else if (state == State.Planting)
-        {
-            StartGrowing();
-        }
-        else if (state == State.Pickable)
-        {
-            Pick(1);
-            MoveToRallyPoint();
-            prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
-        }
-
         base.RightClick();
     }
 }

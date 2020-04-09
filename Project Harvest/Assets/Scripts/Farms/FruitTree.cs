@@ -8,12 +8,13 @@ using UnityEngine;
 public class FruitTree : Farm
 {
     public int plantGrowthTime = 0;
-    public int plantGrowthEnd = 200;
+    public int plantGrowthEnd = 2000;
     private int pickCount = 3;
     public List<GameObject> props;
     public int harvestCount;
     public float plantGrowthIncrement;
     public float stopHeight;
+    public int treeHealth;
 
     protected override void Start()
     {
@@ -22,11 +23,18 @@ public class FruitTree : Farm
         propMesh.enabled = true;
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 11;
+        plantGrowthEnd = 2000;
     }
 
     protected override void Update()
     {
-        if (state == State.PlantGrowing) // grow tree
+        if (state == State.Sprouting)
+        {
+            sproutTime++;
+            if (sproutTime == sproutEnd)
+                StartPlantGrowing();
+        }
+        else if (state == State.PlantGrowing) // grow tree
         {
             plantGrowthTime++;
             prop.transform.localScale += new Vector3(plantGrowthIncrement, plantGrowthIncrement, plantGrowthIncrement);
@@ -35,7 +43,6 @@ public class FruitTree : Farm
             {
                 dirtMesh.enabled = false;
                 state = State.Growing;
-                plantGrowthTime = 0;
             }
         }
         else if (state == State.Growing) // tree is grown, grow fruits
@@ -73,6 +80,15 @@ public class FruitTree : Farm
                     state = State.Growing;
             }
         }
+        else if (state == State.Dead)
+        {
+            decayTime++;
+            if (decayTime >= decayEnd)
+            {
+                ShowGrass();
+                state = State.Decayed;
+            }
+        }
 
         if (isDying)
             Destroy(gameObject);
@@ -80,41 +96,36 @@ public class FruitTree : Farm
             isDying = true;
     }
 
+    public override void StartPlantGrowing()
+    {
+        if (propMesh != null)
+            propMesh.enabled = true;
+        state = State.PlantGrowing;
+    }
+
+    public override void StartPicking()
+    {
+        Pick(harvestCount);
+
+        for (int i = 0; i < harvestCount; i++)
+        {
+            troops[i].transform.position = props[i].transform.position;
+            troops[i].transform.localScale = new Vector3(0, 0, 0);
+        }
+
+        ShowFruit(false);
+        StartSpawning();
+    }
+
     protected override void RightClick()
     {
-        if (state == State.Spawning)
-            return;
-
-        if (state == State.Empty)
-        {
-            StartPlanting();
-        }
-        else if (state == State.Planting)
-        {
-            if (propMesh != null)
-                propMesh.enabled = true;
-            state = State.PlantGrowing;
-        }
-        else if (state == State.Pickable)
-        {
-            Pick(harvestCount);
-
-            for (int i = 0; i < harvestCount; i++)
-            {
-                troops[i].transform.position = props[i].transform.position;
-                troops[i].transform.localScale = new Vector3(0, 0, 0);
-            }
-
-            ShowFruit(false);
-            StartSpawning();
-        }
-        else if (state == State.Dead)
-        {
-            pickCount = 3;
-            prop.transform.localScale = new Vector3(0, 0, 0);
-            dirtMesh.enabled = false;
-            state = State.Empty;
-        }
+        //if (state == State.Dead)
+        //{
+        //    pickCount = 3;
+        //    prop.transform.localScale = new Vector3(0, 0, 0);
+        //    dirtMesh.enabled = false;
+        //    state = State.Empty;
+        //}
 
         base.RightClick();
     }

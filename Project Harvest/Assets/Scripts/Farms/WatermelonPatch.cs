@@ -8,7 +8,7 @@ public class WatermelonPatch : Farm
 
     protected override void Start()
     {
-        growthEnd = 160;
+        growthEnd = 1600;
         spawnEnd = 90;
         prop.transform.localScale = new Vector3(0, 0, 0);
         index = 8;
@@ -17,7 +17,7 @@ public class WatermelonPatch : Farm
 
     protected override void GrowProp()
     {
-        prop.transform.localScale += new Vector3(.01f, .01f, .01f);
+        prop.transform.localScale += new Vector3(.001f, .001f, .001f);
     }
 
     protected override void Update()
@@ -42,31 +42,26 @@ public class WatermelonPatch : Farm
         }
     }
 
+    public override void StartGrowing()
+    {
+        prop.transform.localScale = new Vector3(0, 0, 0);
+        base.StartGrowing();
+    }
+
+    public override void StartPicking()
+    {
+        Pick(1);
+        troops[0].transform.position = spawnPoint.transform.position;
+        troops[0].transform.rotation = spawnPoint.transform.rotation;
+        state = State.Spawning;
+    }
+
     protected override void RightClick()
     {
-        if (state == State.Spawning)
-            return;
-
-        if (state == State.Empty)
-        {
-            StartPlanting();
-        }
-        else if (state == State.Planting)
-        {
-            prop.transform.localScale = new Vector3(0, 0, 0);
-            StartGrowing();
-        }
-        else if (state == State.Pickable)
-        {
-            Pick(1);
-            troops[0].transform.position = spawnPoint.transform.position;
-            troops[0].transform.rotation = spawnPoint.transform.rotation;
-            state = State.Spawning;
-        }
-        else if (state == State.Dead)
-        {
-            Clear();
-        }
+        //if (state == State.Dead)
+        //{
+        //    Clear();
+        //}
 
         base.RightClick();
     }

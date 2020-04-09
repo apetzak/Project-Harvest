@@ -8,7 +8,7 @@ public class CarrotPatch : RootPatch
     protected override void Start()
     {
         spawnEnd = 60;
-        growthEnd = 15;
+        growthEnd = 1500;
         index = 1;
         base.Start();
     }

@@ -159,23 +159,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42e8f8c6f30a0e4298a8961cf5f669f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selector: {fileID: 0}
   health: 100
   maxHealth: 100
   isDying: 0
+  fruit: 1
   selected: 0
+  description: 
   ring: {fileID: 0}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
-  fruit: 1
+  maxZ: 0
+  minZ: 0
+  height: 0
+  isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
   state: 0
   prop: {fileID: 4126049644934012185}
   dirtMound: {fileID: 2990389236820320514}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
+  grassMeshes: []
   troops: []
   size: 0
+  grassCount: 0
   growthTime: 0
   growthEnd: 0
   spawnTime: 0
@@ -184,6 +192,7 @@ MonoBehaviour:
   sproutEnd: 0
   index: 0
   rallyPoint: {x: 0, y: 0, z: 0}
+  hasSprinkler: 0
   spawnPoint: {fileID: 4651345280484830173}
 --- !u!65 &2916016665414944494
 BoxCollider:
@@ -365,6 +374,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 23601351842397542, guid: c805624329b9dab4cbcfcebb324b2123,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23601351842397542, guid: c805624329b9dab4cbcfcebb324b2123,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4666520402441418, guid: c805624329b9dab4cbcfcebb324b2123, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.6
@@ -376,16 +395,6 @@ PrefabInstance:
     - target: {fileID: 4666520402441418, guid: c805624329b9dab4cbcfcebb324b2123, type: 3}
       propertyPath: m_LocalScale.z
       value: 1.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 23601351842397542, guid: c805624329b9dab4cbcfcebb324b2123,
-        type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 23601351842397542, guid: c805624329b9dab4cbcfcebb324b2123,
-        type: 3}
-      propertyPath: m_CastShadows
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c805624329b9dab4cbcfcebb324b2123, type: 3}
@@ -496,6 +505,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Selector
       objectReference: {fileID: 0}
+    - target: {fileID: 4498243164997813922, guid: 87a72e74feac211448930ac52f6e74a3,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5602875993243110503, guid: 87a72e74feac211448930ac52f6e74a3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -566,11 +580,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4498243164997813922, guid: 87a72e74feac211448930ac52f6e74a3,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87a72e74feac211448930ac52f6e74a3, type: 3}
 --- !u!4 &1754129737606993984 stripped
@@ -589,7 +598,7 @@ PrefabInstance:
     - target: {fileID: 5745546261437356658, guid: 1e4b46bdda0ac9846aba3dc3c7031228,
         type: 3}
       propertyPath: m_Name
-      value: Patch2
+      value: Patch3
       objectReference: {fileID: 0}
     - target: {fileID: 6263757823080710482, guid: 1e4b46bdda0ac9846aba3dc3c7031228,
         type: 3}

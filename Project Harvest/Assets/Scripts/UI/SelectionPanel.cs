@@ -175,6 +175,7 @@ public class SelectionPanel : UIElement
             Farm f = entity as Farm;
             text += $"State           {f.state}\n";
             text += $"Rally Point   {f.rallyPoint}\n";
+            text += $"Grass         {f.grassCount}\n";
         }
         if (entity is Structure)
         {

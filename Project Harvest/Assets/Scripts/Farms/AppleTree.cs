@@ -8,8 +8,8 @@ public class AppleTree : FruitTree
     {
         spawnEnd = 50;
         harvestCount = 6;
-        growthEnd = 60;
-        plantGrowthIncrement = .025f;
+        growthEnd = 600;
+        plantGrowthIncrement = .0025f;
         index = 0;
         base.Start();
     }
