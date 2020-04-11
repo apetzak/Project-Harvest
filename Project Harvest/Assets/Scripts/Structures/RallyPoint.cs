@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class RallyPoint : Structure
 {
-    public Material red;
-    public Material green;
-
     protected override void Start()
     {
         var fabric = transform.GetChild(0).transform.GetChild(0);
         var mr = fabric.GetComponent<SkinnedMeshRenderer>();
-        mr.material = fruit ? red : green;
+        mr.material = fruit ? Assets.GetMaterial("Fruit") : Assets.GetMaterial("Veggie");
         base.Start();
     }
 

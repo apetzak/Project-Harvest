@@ -6,7 +6,7 @@ public class Gold : Resource
 {
     protected override void Start()
     {
-        workerstate = Worker.State.GoldMining;
+        workerState = Worker.State.GoldMining;
 
         // pick one of four props
         int var = Random.Range(0, 3);

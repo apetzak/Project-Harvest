@@ -14,6 +14,7 @@ public class PeaPlant : Hub
         maxUnits = 9;
         HidePods();
         transform.Rotate(0, 80, 0);
+        workerPrefab = Assets.Instance.pea;
         base.Start();
     }
 

@@ -8,7 +8,6 @@ public class StrawberryBush : Farm
     {
         growthEnd = 2000;
         spawnEnd = 90;
-        index = 6;
         base.Start();
     }
 

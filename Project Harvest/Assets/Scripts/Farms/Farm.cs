@@ -52,7 +52,7 @@ public class Farm : Structure
     /// Time it takes plant to start growing after planted
     /// </summary>
     public int sproutEnd;
-    public int index;
+    public string troop;
     public Vector3 rallyPoint;
     public bool hasSprinkler;
     public bool isOccupied = false;
@@ -65,12 +65,25 @@ public class Farm : Structure
         propMesh = prop.GetComponent<MeshRenderer>();
         dirtMesh = dirtMound.GetComponent<MeshRenderer>();
         dirtMesh.enabled = propMesh.enabled = false;
+        troop = GetTroopName();
         size = GetSize();
         grassCount = 300 * size;
         GetGrassMeshes();
         sproutEnd = 480;
         base.Start();
         // BananaTree doesn't call base.Start()
+    }
+
+    protected string GetTroopName()
+    {
+        string troopName = name;
+        string[] types = { "(Clone)", "Tree", "Bush", "Plant", "Patch", "Stalk", "Vine" };
+        foreach (string s in types)
+        {
+            if (name.Contains(s))
+                troopName = troopName.Replace(s, "");
+        }
+        return troopName;
     }
 
     protected int GetSize()
@@ -178,7 +191,7 @@ public class Farm : Structure
 
         for (int i = 0; i < count; i++)
         {
-            Troop t = Instantiate(Game.Instance.unitPrefabs[index], pos, Quaternion.identity);
+            Troop t = Instantiate(Assets.GetTroop(troop), pos, Quaternion.identity);
 
             // spread out
             if (count > 1)

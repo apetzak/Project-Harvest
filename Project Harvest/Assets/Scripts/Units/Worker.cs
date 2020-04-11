@@ -274,7 +274,7 @@ public class Worker : Unit
     /// <param name="r"></param>
     public void GatherFrom(Resource r)
     {
-        SwitchState(r.workerstate);
+        SwitchState(r.workerState);
         target = r;
         r.occupied = true;
         SetDestination(r.GetUnitDestination(this)); // todo: set in front of resource

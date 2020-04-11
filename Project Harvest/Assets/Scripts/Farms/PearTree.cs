@@ -10,7 +10,6 @@ public class PearTree : FruitTree
         harvestCount = 5;
         growthEnd = 600;
         plantGrowthIncrement = .0025f;
-        index = 4;
         base.Start();
     }
 }

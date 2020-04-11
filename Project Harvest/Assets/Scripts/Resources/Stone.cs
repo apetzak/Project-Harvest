@@ -6,7 +6,7 @@ public class Stone : Resource
 {
     protected override void Start()
     {
-        workerstate = Worker.State.StoneMining;
+        workerState = Worker.State.StoneMining;
 
         // pick one of two rocks
         int i = Random.Range(0, 1);

@@ -6,7 +6,7 @@ public class Water : Resource
 {
     protected override void Start()
     {
-        workerstate = Worker.State.CollectingWater;
+        workerState = Worker.State.CollectingWater;
         base.Start();
     }
 

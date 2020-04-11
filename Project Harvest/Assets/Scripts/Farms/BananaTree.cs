@@ -17,11 +17,11 @@ public class BananaTree : FruitTree
         ShowFruit(false);
         prop.transform.localScale = new Vector3(0, 0, 0);
         stopHeight = 10.5f;
-        index = 2;
         health = 300;
         size = GetSize();
         grassCount = 300 * size;
         sproutEnd = 480;
         GetGrassMeshes();
+        troop = GetTroopName();
     }
 }

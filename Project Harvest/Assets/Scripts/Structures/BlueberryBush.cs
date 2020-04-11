@@ -9,6 +9,7 @@ public class BlueberryBush : Hub
         growthTimer = growthEnd = 120;
         maxUnits = 8;
         ShowProps(false);
+        workerPrefab = Assets.Instance.bb;
         base.Start();
     }
 

@@ -9,7 +9,6 @@ public class CornStalk : Farm
     {
         growthEnd = 900;
         spawnEnd = 90;
-        index = 5;
         base.Start();
     }
 

@@ -64,6 +64,7 @@
     <Compile Include="Assets\Assets\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
     <Compile Include="Assets\Assets\ProBuilder\API Examples\Vertex Colors\HighlightNearestFace.cs" />
     <Compile Include="Assets\Scripts\AI.cs" />
+    <Compile Include="Assets\Scripts\Assets.cs" />
     <Compile Include="Assets\Scripts\Audio\Audio.cs" />
     <Compile Include="Assets\Scripts\Bot.cs" />
     <Compile Include="Assets\Scripts\Entity.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\Scripts\Input\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Input\HotkeyController.cs" />
     <Compile Include="Assets\Scripts\Input\SelectorBox.cs" />
+    <Compile Include="Assets\Scripts\NewBehaviourScript.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Resources\Gold.cs" />
     <Compile Include="Assets\Scripts\Resources\Resource.cs" />

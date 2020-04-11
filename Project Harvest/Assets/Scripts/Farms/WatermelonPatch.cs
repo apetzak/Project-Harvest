@@ -11,7 +11,6 @@ public class WatermelonPatch : Farm
         growthEnd = 1600;
         spawnEnd = 90;
         prop.transform.localScale = new Vector3(0, 0, 0);
-        index = 8;
         base.Start();
     }
 

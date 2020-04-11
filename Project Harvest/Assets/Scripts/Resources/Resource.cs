@@ -7,7 +7,7 @@ public class Resource : Structure
     public bool occupied;
     public GameObject prop;
     public int stage = 0;
-    public Worker.State workerstate;
+    public Worker.State workerState;
 
     /// <summary>
     /// Randomly change size by 25% plus or minus. Rotate random amount.
@@ -36,7 +36,7 @@ public class Resource : Structure
         {
             if (u is Worker)
             {
-                (u as Worker).state = workerstate;
+                (u as Worker).state = workerState;
 
                 if (occupied)
                     (u as Worker).FindNearestResource();

@@ -17,7 +17,6 @@ public class BroccoliPlant : Farm
         prop.transform.localScale = new Vector3(0, 0, 0);
         System.Random rand = new System.Random();
         pickCount = rand.Next(2, 4);
-        index = 3;
         base.Start();
     }
 

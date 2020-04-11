@@ -58,7 +58,7 @@ public class Structure : Entity
             sides.Add(selector.transform.GetChild(i));
             sides[i].localPosition = new Vector3();
             sides[i].GetComponent<MeshRenderer>().material =
-                fruit ? TroopClass.Instance.materials[0] : TroopClass.Instance.materials[1];
+                fruit ? Assets.GetMaterial("Fruit") : Assets.GetMaterial("Veggie");
         }
 
         var c = GetComponent<Collider>();

@@ -12,9 +12,6 @@ public class Game : MonoBehaviour
 
     public static int screenHeight;
     public static int screenWidth;
-    public Pea peaPrefab;
-    public Blueberry bbPrefab;
-    public List<Troop> unitPrefabs;
     public List<Troop> fruits { get; set; }
     public List<Troop> veggies { get; set; }
     public List<Worker> blueberries { get; set; }
@@ -24,7 +21,6 @@ public class Game : MonoBehaviour
     public List<Unit> selectedUnits { get; set; }
     public List<Structure> selectedStructures { get; set; }
     public List<Resource> resources { get; set; }
-    public Material grassDecayMat;
     public int fruitResourceWater;
     public int fruitResourceWood;
     public int fruitResourceStone;
@@ -67,9 +63,6 @@ public class Game : MonoBehaviour
 
     private void InstantiateGlobalProperties()
     {
-        Instance.peaPrefab = peaPrefab;
-        Instance.bbPrefab = bbPrefab;
-        Instance.unitPrefabs = unitPrefabs;
         Instance.fruits = new List<Troop>();
         Instance.veggies = new List<Troop>();
         Instance.blueberries = new List<Worker>();
@@ -136,7 +129,7 @@ public class Game : MonoBehaviour
     public void AddUnit(int index, int x, int z)
     {
         Vector3 pos = new Vector3(x + 20, 10f, z + 10);
-        Troop u = Instantiate(unitPrefabs[index], pos, Quaternion.identity);
+        Troop u = Instantiate(Assets.Instance.troops[index], pos, Quaternion.identity);
         u.ToggleSelected(false);
         //u.attacking = true;
     }
@@ -144,12 +137,12 @@ public class Game : MonoBehaviour
     public void AddWorker(int index, int x, int z)
     {
         Vector3 pos = new Vector3(x + 20, 10f, z + 10);
-        Worker w = Instantiate(peaPrefab, pos, Quaternion.identity);
+        Worker w = Instantiate(Assets.Instance.bb, pos, Quaternion.identity);
         w.ToggleSelected(false);
         Instance.blueberries.Add(w);
 
         pos = new Vector3(x + 30, 10f, z + 10);
-        w = Instantiate(bbPrefab, pos, Quaternion.identity);
+        w = Instantiate(Assets.Instance.pea, pos, Quaternion.identity);
         w.ToggleSelected(false);
         Instance.peas.Add(w);
     }

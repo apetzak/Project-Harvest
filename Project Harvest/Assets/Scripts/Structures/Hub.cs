@@ -11,7 +11,7 @@ public class Hub : Structure
     public int unitsGrown = 0;
     public int maxUnits;
     public bool spawning;
-    public Worker workerPrefab;
+    protected Worker workerPrefab;
 
     protected override void Start()
     {

@@ -8,7 +8,7 @@ public class Tree : Resource
 
     protected override void Start()
     {
-        workerstate = Worker.State.WoodCutting;
+        workerState = Worker.State.WoodCutting;
         base.Start();
     }
 

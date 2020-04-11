@@ -20,7 +20,7 @@ public class Audio : MonoBehaviour
 
     void BuildAudioSourceObjects()
     {
-        var v = Resources.LoadAll<AudioClip>("Audio");
+        //var v = Resources.LoadAll<AudioClip>("Audio");
         Instance.objects = new List<GameObject>();
         for (int i = 0; i < 30; i++)
         {

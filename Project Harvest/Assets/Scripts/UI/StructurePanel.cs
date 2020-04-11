@@ -5,13 +5,9 @@ using UnityEngine.UI;
 
 public class StructurePanel : UIElement
 {
-    public List<Structure> prefabs;
-    public List<Structure> fruitPrefabs;
-    public List<Structure> veggiePrefabs;
     private List<Button> buttons = new List<Button>();
     private bool placing = false;
     private Structure placingObject;
-    public Material matWhite;
     public Material matRed;
     private Vector3 startPoint = new Vector3();
     private Vector3 endPoint = new Vector3();
@@ -29,9 +25,10 @@ public class StructurePanel : UIElement
             Text t = btn.transform.GetChild(0).GetComponent<Text>();
             t.fontSize = 10;
             t.text = btn.name.Replace("btn", "");
-            btn.onClick.AddListener(() => { OnButtonClick(t.text); });
+            btn.onClick.AddListener(() => { OnButtonClick(btn.name); });
             buttons.Add(btn);
         }
+        matRed = Assets.GetMaterial("Red");
     }
 
     private void Update()
@@ -93,7 +90,7 @@ public class StructurePanel : UIElement
         }
         else
         {
-            Material m = placingObject.fruit ? TroopClass.Instance.materials[0] : TroopClass.Instance.materials[1];
+            Material m = placingObject.fruit ? Assets.GetMaterial("Fruit") : Assets.GetMaterial("Veggie");
 
             placingObject.ToggleSelectorColor(m);
 
@@ -120,7 +117,7 @@ public class StructurePanel : UIElement
         placingObject.Place();
 
         if (Input.GetKey(KeyCode.LeftShift) && HasResources(placingObject))
-            CreatePlacingObject(GetPrefab(lastClicked));
+            CreatePlacingObject(Assets.GetStructure(lastClicked));
         else
             Reset();
     }
@@ -164,65 +161,82 @@ public class StructurePanel : UIElement
 
     public void OnButtonClick(string s)
     {
-        if (s == "War")
+        if (s == "btnWar")
         {
             EntityUtils.War();
             return;
         }
-        else if (s == "Team") // swap teams
+        else if (s == "btnTeam") // swap teams
         {
             Game.Instance.fruit = !Game.Instance.fruit;
             return;
         }
 
-        Structure structure = GetPrefab(s);
+        string structureName = GetStructureName(s);
+        Structure structure = Assets.GetStructure(structureName);
 
         if (!HasResources(structure))
             return;
 
-        lastClicked = s;
+        lastClicked = structureName;
         placing = true;
         CreatePlacingObject(structure);
     }
 
     public bool HasResources(Structure s)
     {
-        //return true;
+        return true;
 
-        if (Game.Instance.fruit)
-            return Game.Instance.fruitResourceWood >= s.woodCost
-                && Game.Instance.fruitResourceStone >= s.stoneCost
-                && Game.Instance.fruitResourceGold >= s.goldCost;
+        //if (Game.Instance.fruit)
+        //    return Game.Instance.fruitResourceWood >= s.woodCost
+        //        && Game.Instance.fruitResourceStone >= s.stoneCost
+        //        && Game.Instance.fruitResourceGold >= s.goldCost;
 
-        return Game.Instance.veggieResourceWood >= s.woodCost
-            && Game.Instance.veggieResourceStone >= s.stoneCost
-            && Game.Instance.veggieResourceGold >= s.goldCost;
+        //return Game.Instance.veggieResourceWood >= s.woodCost
+        //    && Game.Instance.veggieResourceStone >= s.stoneCost
+        //    && Game.Instance.veggieResourceGold >= s.goldCost;
     }
 
-    private Structure GetPrefab(string s)
+    private string GetStructureName(string btnText)
     {
-        Structure prefab = prefabs[0];
+        string name = btnText.Replace("btn", "").Replace(" ", "");
 
-        if (s.Contains("Farm") || s.Contains("Hub"))
+        if (name.Contains("Farm"))
         {
-            int i = 0;
-            if (s.Contains("Farm"))
-                i = System.Convert.ToInt16(s.Replace("Farm", ""));
-            prefab = Game.Instance.fruit ? fruitPrefabs[i] : veggiePrefabs[i];
-        }
-        else
-        {
-            s = s.Replace(" ", "");
-            foreach (Structure structure in prefabs)
+            int i = System.Convert.ToInt16(name.Replace("Farm", ""));
+            
+            if (Game.Instance.fruit)
             {
-                if (s.Contains(structure.name))
-                {
-                    prefab = structure;
-                    break;
-                }
+                if (i == 1)
+                    return "AppleTree";
+                else if (i == 2)
+                    return "BananaTree";
+                else if (i == 3)
+                    return "PearTree";
+                else if (i == 4)
+                    return "StrawberryBush";
+                else if (i == 5)
+                    return "WatermelonPatch";
+            }
+            else
+            {
+                if (i == 1)
+                    return "AsparagusPatch";
+                else if (i == 2)
+                    return "BroccoliPlant";
+                else if (i == 3)
+                    return "CarrotPatch";
+                else if (i == 4)
+                    return "CornStalk";
+                else if (i == 5)
+                    return "OnionPatch";
             }
         }
+        else if (name == "Hub")
+        {
+            return Game.Instance.fruit ? "BlueberryBush" : "PeaPlant";
+        }
 
-        return prefab;
+        return name;
     }
 }

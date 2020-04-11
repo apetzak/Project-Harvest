@@ -8,7 +8,6 @@ public class AsparagusPatch : Farm
     {
         growthEnd = 1500;
         prop.transform.Translate(new Vector3(0, -15, 0), Space.World);
-        index = 7;
         base.Start();
     }
 
