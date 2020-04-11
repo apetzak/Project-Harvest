@@ -17,7 +17,8 @@ public class SelectionPanel : UIElement
     public GameObject text;
     private Text txt;
     public GameObject pic;
-    public List<RawImage> images;
+    public RawImage singleImage;
+    public List<Texture2D> images;
     private Entity entity;
     private bool visible = true;
 
@@ -29,6 +30,18 @@ public class SelectionPanel : UIElement
         initPosition = rt.transform.localPosition;
         txt = text.GetComponent<Text>();
         CreateUnitBoxes();
+        PopulateImages();
+    }
+
+    private void PopulateImages()
+    {
+        List<string> list = new List<string>();
+        list.Add("blueberry");
+        list.Add("pea");
+        foreach (TroopClass t in TroopClass.Instance.list)
+            list.Add(t.name);
+        foreach (string s in list)
+            images.Add(Assets.GetUnitSprite(s.ToLower()));
     }
 
     private void LateUpdate()
@@ -84,18 +97,16 @@ public class SelectionPanel : UIElement
         for (int i = 0; i < Game.Instance.selectedUnits.Count; i++)
         {
             unitBoxes[i].transform.gameObject.SetActive(true);
-            unitBoxes[i].image.texture = images[units[i].index].texture;
+            unitBoxes[i].image.texture = images[units[i].index];
             var barLength = 10 / units[i].maxHealth * units[i].health * 2.5f;
             var v = unitBoxes[i].green.GetComponent<RectTransform>();
             v.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, barLength);
-            //v.transform.localPosition = initPosition;
-            //v.transform.localPosition += new Vector3(barLength / 2 - 57.5f, 0, 0);
         }
     }
 
     public void UpdateUnitBoxHealthBar()
     {
-
+        // todo
     }
 
     private void HideUnitBoxes()
@@ -104,15 +115,11 @@ public class SelectionPanel : UIElement
             u.transform.gameObject.SetActive(false);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     private void HideSingle()
     {
         if (!txt.enabled)
             return;
-        foreach (RawImage i in images)
-            i.enabled = false;
+        singleImage.enabled = false;
         txt.enabled = green.enabled = red.enabled = false;
         entity = null;
         visible = false;
@@ -124,12 +131,21 @@ public class SelectionPanel : UIElement
     private void ShowSingle()
     {
         entity = Game.Instance.selectedEntity;
-        foreach (RawImage i in images)
-            i.enabled = false;
+        singleImage.enabled = true;
+
+        string entityName = entity.name.Replace("(Clone)", "").ToLower();
+
         if (entity is Unit)
-        {
-            images[(entity as Unit).index].enabled = true;
-        }
+            singleImage.texture = Assets.GetUnitSprite(entityName);
+        else if (entity is BlueberryBush)
+            singleImage.texture = Assets.GetStructureSprite("blueberry").texture;
+        else if (entity is PeaPlant)
+            singleImage.texture = Assets.GetStructureSprite("pea").texture;
+        else if (entity is Farm)
+            singleImage.texture = Assets.GetStructureSprite((entity as Farm).troop.ToLower()).texture;
+        else if (entity is Structure)
+            singleImage.texture = Assets.GetStructureSprite(entityName).texture;
+
         txt.enabled = green.enabled = red.enabled = true;
         txt.text = GetText();
     }
@@ -149,7 +165,6 @@ public class SelectionPanel : UIElement
     private string GetText()
     {
         string team = entity.fruit ? "Fruit" : "Veggie";
-
         string text = string.Empty;
         text += $"Name           {entity.name}\n";
         if (!(entity is Resource))

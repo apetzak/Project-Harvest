@@ -16,19 +16,27 @@ public class StructurePanel : UIElement
 
     private void Awake()
     {
+        matRed = Assets.GetMaterial("Red");
+
         for (int i = 0; i < transform.childCount; i++)
         {
             var btn = transform.GetChild(i).GetComponent<Button>();
-            if (btn == null)
+            if (btn == null || btn.name == "btnNull")
                 continue;
 
-            Text t = btn.transform.GetChild(0).GetComponent<Text>();
-            t.fontSize = 10;
-            t.text = btn.name.Replace("btn", "");
             btn.onClick.AddListener(() => { OnButtonClick(btn.name); });
             buttons.Add(btn);
+
+            if (btn.name.Contains("War") || btn.name.Contains("Team"))
+            {
+                Text t = btn.transform.GetChild(0).GetComponent<Text>();
+                t.fontSize = 12;
+                t.fontStyle = FontStyle.Bold;
+                t.text = btn.name.Replace("btn", "");
+            }
         }
-        matRed = Assets.GetMaterial("Red");
+
+        SetTeamImages();
     }
 
     private void Update()
@@ -159,6 +167,30 @@ public class StructurePanel : UIElement
         placingObject = s;
     }
 
+    private void SetTeamImages()
+    {
+        bool f = Game.Instance.fruit;
+        foreach (Button b in buttons)
+        {
+            if (!b.name.Contains("Farm") && !b.name.Contains("Hub"))
+                continue;
+            string n = b.name.Replace("btn", "");
+            Image i = b.GetComponent<Image>();
+            if (n == "Hub")
+                i.sprite = f ? Assets.GetStructureSprite("blueberry") : Assets.GetStructureSprite("pea");
+            else if (n == "Farm1")
+                i.sprite = f ? Assets.GetStructureSprite("apple") : Assets.GetStructureSprite("asparagus");
+            else if (n == "Farm2")
+                i.sprite = f ? Assets.GetStructureSprite("banana") : Assets.GetStructureSprite("broccoli");
+            else if (n == "Farm3")
+                i.sprite = f ? Assets.GetStructureSprite("pear") : Assets.GetStructureSprite("carrot");
+            else if (n == "Farm4")
+                i.sprite = f ? Assets.GetStructureSprite("strawberry") : Assets.GetStructureSprite("corn");
+            else if (n == "Farm5")
+                i.sprite = f ? Assets.GetStructureSprite("watermelon") : Assets.GetStructureSprite("onion");
+        }
+    }
+
     public void OnButtonClick(string s)
     {
         if (s == "btnWar")
@@ -169,6 +201,7 @@ public class StructurePanel : UIElement
         else if (s == "btnTeam") // swap teams
         {
             Game.Instance.fruit = !Game.Instance.fruit;
+            SetTeamImages();
             return;
         }
 

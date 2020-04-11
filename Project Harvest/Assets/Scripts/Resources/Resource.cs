@@ -22,6 +22,7 @@ public class Resource : Structure
         CreateSelector();
         SetBounds();
         isBuilt = isPlaced = true;
+        name = GetType().Name;
     }
 
     /// <summary>

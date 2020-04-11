@@ -34,6 +34,7 @@ public class Structure : Entity
         health = maxHealth;
         SetBounds();
         CreateSelector();
+        name = GetType().Name;
     }
 
     public void SetBounds()

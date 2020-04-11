@@ -11,7 +11,6 @@ public class Gold : Resource
         // pick one of four props
         int var = Random.Range(0, 3);
         prop = transform.GetChild(var).gameObject;
-
         DeleteOtherProps();
         base.Start();
     }

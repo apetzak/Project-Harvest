@@ -34,6 +34,7 @@ public class Unit : Entity
     {
         coll = GetComponent<Collider>();
         rotSpeed = speed + 4;
+        name = GetType().Name;
     }
 
     /// <summary>

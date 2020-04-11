@@ -15,31 +15,34 @@ public class Assets : MonoBehaviour
     public List<Troop> troops;
     public List<Structure> structures;
     public List<Farm> farms;
-    public List<Resource> resources;
+    public List<Resource> resources; // unused
     public List<Material> materials;
-    public List<RawImage> sprites;
-    public List<Texture2D> cursors;
+    public List<Texture2D> unitSprites; // unused
+    public List<Sprite> structureSprites;
+    public List<Texture2D> cursors; // unused
 
     private void Awake()
     {
-        InstantiateGlobalLists();
+        InstantiateGlobalProperties();
         LoadUnits();
         LoadStructures();
         LoadFarms();
         LoadResources();
         LoadMaterials();
-        LoadSprites();
+        LoadUnitSprites();
+        LoadStructureSprites();
         LoadCursors();
     }
 
-    private void InstantiateGlobalLists()
+    private void InstantiateGlobalProperties()
     {
         Instance.troops = new List<Troop>();
         Instance.structures = new List<Structure>();
         Instance.farms = new List<Farm>();
         Instance.resources = new List<Resource>();
         Instance.materials = new List<Material>();
-        Instance.sprites = new List<RawImage>();
+        Instance.unitSprites = new List<Texture2D>();
+        Instance.structureSprites = new List<Sprite>();
         Instance.cursors = new List<Texture2D>();
     }
 
@@ -93,14 +96,22 @@ public class Assets : MonoBehaviour
             Instance.materials.Add(m);
     }
 
-    private void LoadSprites()
+    private void LoadUnitSprites()
     {
-        foreach (Texture2D t in Resources.LoadAll("Sprites"))
+        foreach (Texture2D t in Resources.LoadAll("Sprites/Units"))
+            Instance.unitSprites.Add(t);
+    }
+
+    private void LoadStructureSprites()
+    {
+        foreach (Object o in Resources.LoadAll("Sprites/Structures"))
         {
-            GameObject o = new GameObject();
-            o.AddComponent<RawImage>();
-            o.GetComponent<RawImage>().texture = t;
-            Instance.sprites.Add(o.GetComponent<RawImage>());
+            if (!(o is Texture2D))
+                continue;
+            Texture2D t = o as Texture2D;
+            Sprite s = Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2());
+            s.name = t.name;
+            Instance.structureSprites.Add(s);
         }
     }
 
@@ -159,14 +170,25 @@ public class Assets : MonoBehaviour
         return Instance.materials[0];
     }
 
-    public static RawImage GetSprite(string name)
+    public static Texture2D GetUnitSprite(string name)
     {
-        foreach (RawImage i in Instance.sprites)
+        foreach (Texture2D i in Instance.unitSprites)
         {
             if (i.name == name)
                 return i;
         }
-        return Instance.sprites[0];
+        return Instance.unitSprites[0];
+    }
+
+    public static Sprite GetStructureSprite(string name)
+    {
+        foreach (Sprite s in Instance.structureSprites)
+        {
+            //Debug.Log(name + " " + s.name);
+            if (name == s.name)
+                return s;
+        }
+        return Instance.structureSprites[0];
     }
 
     #endregion

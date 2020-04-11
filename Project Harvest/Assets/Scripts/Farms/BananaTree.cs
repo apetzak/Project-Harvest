@@ -23,5 +23,6 @@ public class BananaTree : FruitTree
         sproutEnd = 480;
         GetGrassMeshes();
         troop = GetTroopName();
+        name = GetType().Name;
     }
 }
