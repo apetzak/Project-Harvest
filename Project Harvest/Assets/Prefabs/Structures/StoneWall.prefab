@@ -61,6 +61,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 0
+  stoneCost: 50
+  goldCost: 0
   link1: {fileID: 0}
   link2: {fileID: 0}
   fence: {fileID: 8535578116132976849}

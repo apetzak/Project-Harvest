@@ -76,6 +76,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 100
+  stoneCost: 100
+  goldCost: 0
   turnedOn: 0
   waterConsumed: 0
   sprinklers: []

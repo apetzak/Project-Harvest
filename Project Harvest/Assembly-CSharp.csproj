@@ -63,6 +63,7 @@
     <Compile Include="Assets\Assets\ProBuilder\API Examples\Procedural Mesh\ExtrudeRandomEdges.cs" />
     <Compile Include="Assets\Assets\ProBuilder\API Examples\Runtime Editing\RuntimeEdit.cs" />
     <Compile Include="Assets\Assets\ProBuilder\API Examples\Vertex Colors\HighlightNearestFace.cs" />
+    <Compile Include="Assets\Scripts\AI.cs" />
     <Compile Include="Assets\Scripts\Audio\Audio.cs" />
     <Compile Include="Assets\Scripts\Bot.cs" />
     <Compile Include="Assets\Scripts\Entity.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Assets\Scripts\UI\ActionPanel.cs" />
     <Compile Include="Assets\Scripts\UI\BottomPanel.cs" />
     <Compile Include="Assets\Scripts\UI\CursorSwitcher.cs" />
+    <Compile Include="Assets\Scripts\UI\GameSetupMenu.cs" />
     <Compile Include="Assets\Scripts\UI\Map.cs" />
     <Compile Include="Assets\Scripts\UI\SelectionPanel.cs" />
     <Compile Include="Assets\Scripts\UI\StructurePanel.cs" />

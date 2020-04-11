@@ -22,6 +22,9 @@ public class Structure : Entity
     public bool isVisible;
     private float div = .1f;
     public List<Slot> slots = new List<Slot>();
+    public int woodCost;
+    public int stoneCost;
+    public int goldCost;
 
     /// <summary>
     /// Set health to maxHealth, SetBounds(), CreateSelector()
@@ -134,7 +137,7 @@ public class Structure : Entity
     }
 
     /// <summary>
-    /// TargetStructure() for all selected troops
+    /// SendTroopsToAttack(), SendWorkersToBuild()
     /// </summary>
     protected override void RightClick()
     {
@@ -177,6 +180,57 @@ public class Structure : Entity
         //        }
         //    }
         //}
+    }
+
+    public void ConsumeBuildingCost()
+    {
+        if (fruit)
+        {
+            Game.Instance.fruitResourceWood -= woodCost;
+            Game.Instance.fruitResourceStone -= stoneCost;
+            Game.Instance.fruitResourceGold -= goldCost;
+        }
+        else
+        {
+            Game.Instance.veggieResourceWood -= woodCost;
+            Game.Instance.veggieResourceStone -= stoneCost;
+            Game.Instance.veggieResourceGold -= goldCost;
+        }
+    }
+
+    public bool BoundsOverlap(Structure s)
+    {
+        if (s.maxX < minX ||
+            s.minX > maxX ||
+            s.maxZ < minZ ||
+            s.minZ > maxZ)
+            return false;
+        return true;
+    }
+
+    public void Place()
+    {
+        ConsumeBuildingCost();
+
+        if (fruit)
+            Game.Instance.fruitStructures.Add(this);
+        else
+            Game.Instance.veggieStructures.Add(this);
+
+        isPlaced = true;
+        health = 1;
+
+        if (!(this is Farm))
+        {
+            CreateSlots();
+            transform.GetChild(0).transform.Translate(0, -height, 0, Space.World);
+            SendWorkersToBuild();
+        }
+        else
+        {
+            (this as Farm).FindRallyPoint();
+            (this as Farm).ShowGrass();
+        }
     }
 
     public void SendWorkersToBuild()

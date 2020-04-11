@@ -57,9 +57,15 @@ MonoBehaviour:
   ring: {fileID: 3878542356729460651}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
   isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
+  woodCost: 100
+  stoneCost: 0
+  goldCost: 0
   red: {fileID: 2100000, guid: 70a85722e46889c428229fed3745eb9e, type: 2}
   green: {fileID: 2100000, guid: 390e3ab4ff3cc9149b065c0faece7b9b, type: 2}
 --- !u!65 &6232924148479470754
@@ -178,6 +184,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 127
       objectReference: {fileID: 0}
+    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2065628108222944559, guid: a31dbec23f670d846b62618d7a17c1cd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -252,11 +263,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2065628108222944557, guid: a31dbec23f670d846b62618d7a17c1cd,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a31dbec23f670d846b62618d7a17c1cd, type: 3}

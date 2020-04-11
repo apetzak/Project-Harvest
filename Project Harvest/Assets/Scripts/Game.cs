@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class Game : MonoBehaviour
     public List<Unit> selectedUnits { get; set; }
     public List<Structure> selectedStructures { get; set; }
     public List<Resource> resources { get; set; }
+    public Material grassDecayMat;
     public int fruitResourceWater;
     public int fruitResourceWood;
     public int fruitResourceStone;
@@ -35,6 +37,7 @@ public class Game : MonoBehaviour
     public int veggieResourceFertilizer;
     public Entity selectedEntity;
     public GameObject selectorBox;
+    public GameObject gameOverText;
     public bool holdingDown = false;
     public bool mouseOverUI = false;
     public bool selectionChanged = false;
@@ -48,9 +51,18 @@ public class Game : MonoBehaviour
         GetObjectsInScene();
         //AddSquad(10, 2);
         //AddWorkers();
-        //QualitySettings.vSyncCount = 0; // VSync must be disabled.
-        //Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0; // VSync must be disabled.
+        Application.targetFrameRate = 60;
         selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
+    }
+
+    private void Start()
+    {
+        var hubPosition = Instance.fruit ? Instance.fruitStructures[0].transform.position : Instance.veggieStructures[0].transform.position;
+        float y = Camera.main.transform.position.y;
+        Camera.main.transform.position = new Vector3(hubPosition.x, y, hubPosition.z - 70);
+        Instance.veggieResourceWood = 100;
+        Instance.fruitResourceWood = 100;
     }
 
     private void InstantiateGlobalProperties()
@@ -181,6 +193,16 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
+        if (Instance.fruits.Count == 0 && Instance.blueberries.Count == 0 && Instance.fruitStructures.Count == 0)
+            ShowText("Veggies");
+        else if (Instance.veggies.Count == 0 && Instance.peas.Count == 0 && Instance.veggieStructures.Count == 0)
+            ShowText("Fruits");
+    }
 
+    private void ShowText(string s)
+    {
+        Text t = gameOverText.GetComponent<Text>();
+        t.text = s + " Win";
+        t.enabled = true;
     }
 }

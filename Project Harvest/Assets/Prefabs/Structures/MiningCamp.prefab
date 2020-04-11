@@ -61,6 +61,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 100
+  stoneCost: 0
+  goldCost: 0
 --- !u!65 &5012215948112855704
 BoxCollider:
   m_ObjectHideFlags: 0

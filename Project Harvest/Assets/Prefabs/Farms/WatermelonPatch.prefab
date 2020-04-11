@@ -175,6 +175,9 @@ MonoBehaviour:
   isPlaced: 0
   isBuilt: 0
   isVisible: 0
+  woodCost: 0
+  stoneCost: 0
+  goldCost: 150
   state: 0
   prop: {fileID: 4126049644934012185}
   dirtMound: {fileID: 2990389236820320514}
@@ -189,10 +192,13 @@ MonoBehaviour:
   spawnTime: 0
   spawnEnd: 0
   sproutTime: 30
+  decayTime: 0
+  decayEnd: 3600
   sproutEnd: 0
   index: 0
   rallyPoint: {x: 0, y: 0, z: 0}
   hasSprinkler: 0
+  isOccupied: 0
   spawnPoint: {fileID: 4651345280484830173}
 --- !u!65 &2916016665414944494
 BoxCollider:

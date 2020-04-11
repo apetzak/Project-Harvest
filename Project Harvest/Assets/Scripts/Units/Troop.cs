@@ -144,6 +144,13 @@ public class Troop : Unit
     {
         attacking = true;
 
+        if (s is Farm || s is Hub)
+        {
+            target = s;
+            SetDestination(s.transform.position);
+            return;
+        }
+
         var slot = s.GetOpenSlot(this);
         if (slot == new Vector3())
         {

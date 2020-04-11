@@ -73,6 +73,11 @@ MonoBehaviour:
   minZ: 0
   height: 0
   isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
+  woodCost: 100
+  stoneCost: 100
+  goldCost: 0
 --- !u!1001 &29576347619678481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,6 +186,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5033239461752096722}
     m_Modifications:
+    - target: {fileID: 2914918694877406067, guid: fe6890eccf3ae1743ae80bc10fbf07fa,
+        type: 3}
+      propertyPath: m_Name
+      value: Market
+      objectReference: {fileID: 0}
     - target: {fileID: 2173134992329593184, guid: fe6890eccf3ae1743ae80bc10fbf07fa,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -250,11 +260,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 13.177744
-      objectReference: {fileID: 0}
-    - target: {fileID: 2914918694877406067, guid: fe6890eccf3ae1743ae80bc10fbf07fa,
-        type: 3}
-      propertyPath: m_Name
-      value: Market
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fe6890eccf3ae1743ae80bc10fbf07fa, type: 3}

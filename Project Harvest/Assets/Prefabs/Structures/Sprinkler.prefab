@@ -18429,6 +18429,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 0
+  stoneCost: 100
+  goldCost: 0
   head: {fileID: 4931817500779361705}
   waterDrop: {fileID: 1360334405076889447}
   turnedOn: 1

@@ -187,6 +187,9 @@ MonoBehaviour:
   isPlaced: 0
   isBuilt: 0
   isVisible: 0
+  woodCost: 0
+  stoneCost: 0
+  goldCost: 0
   state: 0
   prop: {fileID: 0}
   dirtMound: {fileID: 0}
@@ -201,16 +204,20 @@ MonoBehaviour:
   spawnTime: 0
   spawnEnd: 0
   sproutTime: 30
+  decayTime: 0
+  decayEnd: 3600
   sproutEnd: 0
   index: 0
   rallyPoint: {x: 0, y: 0, z: 0}
   hasSprinkler: 0
+  isOccupied: 0
   plantGrowthTime: 200
   plantGrowthEnd: 200
   props: []
   harvestCount: 0
   plantGrowthIncrement: 0
   stopHeight: 0
+  treeHealth: 0
 --- !u!1 &2238362797213133558
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +597,9 @@ MonoBehaviour:
   isPlaced: 0
   isBuilt: 0
   isVisible: 0
+  woodCost: 0
+  stoneCost: 0
+  goldCost: 250
   state: 0
   prop: {fileID: 2024059721826750303}
   dirtMound: {fileID: 3203164706283945240}
@@ -604,10 +614,13 @@ MonoBehaviour:
   spawnTime: 0
   spawnEnd: 0
   sproutTime: 30
+  decayTime: 0
+  decayEnd: 3600
   sproutEnd: 0
   index: 0
   rallyPoint: {x: 0, y: 0, z: 0}
   hasSprinkler: 0
+  isOccupied: 0
   plantGrowthTime: 0
   plantGrowthEnd: 200
   props:
@@ -619,6 +632,7 @@ MonoBehaviour:
   harvestCount: 0
   plantGrowthIncrement: 0
   stopHeight: 0
+  treeHealth: 0
 --- !u!65 &4002923773684062652
 BoxCollider:
   m_ObjectHideFlags: 0

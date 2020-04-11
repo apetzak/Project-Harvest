@@ -64,6 +64,9 @@ public class EntityUtils
                 continue;
             }
 
+            if (u.fruit != Game.Instance.fruit)
+                continue;
+
             if (u is Worker)
                 (u as Worker).SwitchState(Worker.State.Idle);
 

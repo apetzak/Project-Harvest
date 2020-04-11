@@ -46,7 +46,7 @@ public class Hub : Structure
 
     protected override void RightClick()
     {
-        if (health == maxHealth)
+        if (health == maxHealth && fruit == Game.Instance.fruit)
         {
             Pick();
             ReleaseUnits();
@@ -58,7 +58,7 @@ public class Hub : Structure
     /// <summary>
     /// Spawn workers, hide props, restart growth cycle
     /// </summary>
-    protected virtual void Pick()
+    public virtual void Pick()
     {
         for (int i = 0; i < unitsGrown; i++)
             SpawnWorker(i);

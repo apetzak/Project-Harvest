@@ -62,6 +62,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 100
+  stoneCost: 100
+  goldCost: 0
   vane: {fileID: 4884283656602982565}
   turnedOn: 1
   waterCollected: 0

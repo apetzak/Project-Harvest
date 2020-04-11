@@ -62,6 +62,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 0
+  stoneCost: 200
+  goldCost: 0
   gun: {fileID: 8941253997344701929}
   burst: {fileID: 1047836377320084313}
   target: {fileID: 0}

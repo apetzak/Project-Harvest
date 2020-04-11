@@ -139,6 +139,10 @@ MonoBehaviour:
   height: 0
   isPlaced: 0
   isBuilt: 0
+  isVisible: 0
+  woodCost: 0
+  stoneCost: 0
+  goldCost: 300
   prop: {fileID: 6379810233099726154}
   props:
   - {fileID: 8987125363133044899}

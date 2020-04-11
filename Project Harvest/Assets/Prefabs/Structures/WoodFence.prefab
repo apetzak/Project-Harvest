@@ -69,9 +69,17 @@ MonoBehaviour:
   ring: {fileID: 0}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
   isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
+  woodCost: 50
+  stoneCost: 0
+  goldCost: 0
+  link1: {fileID: 0}
+  link2: {fileID: 0}
   fence: {fileID: 4849491509341290043}
   stage: 0
   dropTime: 60
@@ -117,6 +125,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1780291019712552188}
     m_Modifications:
+    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
+      propertyPath: m_Name
+      value: PalisadeOne (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 4105918169602158, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -28.758955
@@ -173,10 +185,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
-      propertyPath: m_Name
-      value: PalisadeOne (2)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
 --- !u!4 &720955421524738584 stripped
@@ -192,6 +200,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1780291019712552188}
     m_Modifications:
+    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
+      propertyPath: m_Name
+      value: PalisadeOne
+      objectReference: {fileID: 0}
     - target: {fileID: 4105918169602158, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -28.758951
@@ -248,10 +260,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 8
       objectReference: {fileID: 0}
-    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
-      propertyPath: m_Name
-      value: PalisadeOne
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
 --- !u!4 &1433099316262941176 stripped
@@ -267,6 +275,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1780291019712552188}
     m_Modifications:
+    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
+      propertyPath: m_Name
+      value: PalisadeOne (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 4105918169602158, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -28.758953
@@ -322,10 +334,6 @@ PrefabInstance:
     - target: {fileID: 4105918169602158, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
       propertyPath: m_LocalScale.z
       value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 1377850975990590, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}
-      propertyPath: m_Name
-      value: PalisadeOne (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f71c76107eb375f4b941acd1ce97feb8, type: 3}

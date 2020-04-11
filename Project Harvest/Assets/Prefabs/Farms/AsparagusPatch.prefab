@@ -59,29 +59,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50bce4582f8d8044d8ef47ea48916322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selector: {fileID: 0}
   health: 200
   maxHealth: 200
   isDying: 0
   fruit: 0
   selected: 0
+  description: 
+  ring: {fileID: 0}
   minX: 0
   maxX: 0
-  maxY: 0
-  minY: 0
+  maxZ: 0
+  minZ: 0
+  height: 0
+  isPlaced: 0
+  isBuilt: 0
+  isVisible: 0
+  woodCost: 0
+  stoneCost: 0
+  goldCost: 50
   state: 0
   prop: {fileID: 6461357407408142646}
   dirtMound: {fileID: 1406436183202130426}
   propMesh: {fileID: 0}
   dirtMesh: {fileID: 0}
-  prefab: {fileID: 3926050989987883873, guid: 1dc3edb58b74fa045bfc1147508597c3, type: 3}
+  grassMeshes: []
   troops: []
   size: 0
+  grassCount: 0
   growthTime: 0
   growthEnd: 0
   spawnTime: 0
-  spawnStart: 0
+  spawnEnd: 0
   sproutTime: 30
+  decayTime: 0
+  decayEnd: 3600
+  sproutEnd: 0
   index: 0
+  rallyPoint: {x: 0, y: 0, z: 0}
+  hasSprinkler: 0
+  isOccupied: 0
 --- !u!1001 &2778487142227175611
 PrefabInstance:
   m_ObjectHideFlags: 0

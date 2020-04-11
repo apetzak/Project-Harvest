@@ -117,34 +117,12 @@ public class StructurePanel : UIElement
 
     private void PlaceObject()
     {
-        if (placingObject.fruit)
-            Game.Instance.fruitStructures.Add(placingObject);
-        else
-            Game.Instance.veggieStructures.Add(placingObject);
+        placingObject.Place();
 
-        placingObject.isPlaced = true;
-        placingObject.health = 1;
-
-        if (!(placingObject is Farm))
-        {
-            placingObject.CreateSlots();
-            placingObject.transform.GetChild(0).transform.Translate(0, -placingObject.height, 0, Space.World);
-            placingObject.SendWorkersToBuild();
-        }
-        else
-        {
-            (placingObject as Farm).FindRallyPoint();
-            (placingObject as Farm).ShowGrass();
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
+        if (Input.GetKey(KeyCode.LeftShift) && HasResources(placingObject))
             CreatePlacingObject(GetPrefab(lastClicked));
-        }
         else
-        {
             Reset();
-        }
     }
 
     private void Reset()
@@ -158,25 +136,15 @@ public class StructurePanel : UIElement
     {
         foreach (Structure s in Game.Instance.fruitStructures)
         {
-            if (StructureOverlaps(s))
+            if (placingObject.BoundsOverlap(s))
                 return true;
         }
         foreach (Structure s in Game.Instance.veggieStructures)
         {
-            if (StructureOverlaps(s))
+            if (placingObject.BoundsOverlap(s))
                 return true;
         }
         return false;
-    }
-
-    private bool StructureOverlaps(Structure s)
-    {
-        if (s.maxX < placingObject.minX ||
-            s.minX > placingObject.maxX ||
-            s.maxZ < placingObject.minZ ||
-            s.minZ > placingObject.maxZ)
-            return false;
-        return true;
     }
 
     private void CreatePlacingObject(Structure prefab)
@@ -207,9 +175,28 @@ public class StructurePanel : UIElement
             return;
         }
 
+        Structure structure = GetPrefab(s);
+
+        if (!HasResources(structure))
+            return;
+
         lastClicked = s;
         placing = true;
-        CreatePlacingObject(GetPrefab(s));
+        CreatePlacingObject(structure);
+    }
+
+    public bool HasResources(Structure s)
+    {
+        //return true;
+
+        if (Game.Instance.fruit)
+            return Game.Instance.fruitResourceWood >= s.woodCost
+                && Game.Instance.fruitResourceStone >= s.stoneCost
+                && Game.Instance.fruitResourceGold >= s.goldCost;
+
+        return Game.Instance.veggieResourceWood >= s.woodCost
+            && Game.Instance.veggieResourceStone >= s.stoneCost
+            && Game.Instance.veggieResourceGold >= s.goldCost;
     }
 
     private Structure GetPrefab(string s)

@@ -279,6 +279,12 @@ public class Farm : Structure
     {
         CursorSwitcher.Instance.Switch(this);
 
+        if (Game.Instance.troopIsSelected)
+        {
+            SendTroopsToAttack();
+            return;
+        }
+
         if (state == State.Spawning)
             return;
 
@@ -294,10 +300,6 @@ public class Farm : Structure
         else if (state == State.Dead && this is FruitTree)
         {
             SendWorker(Worker.State.ChoppingFruitTree);
-        }
-        else
-        {
-            base.RightClick();
         }
     }
 

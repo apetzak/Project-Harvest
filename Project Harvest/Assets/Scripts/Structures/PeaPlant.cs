@@ -36,7 +36,7 @@ public class PeaPlant : Hub
         }
     }
 
-    protected override void Pick()
+    public override void Pick()
     {
         HidePods();
         base.Pick();

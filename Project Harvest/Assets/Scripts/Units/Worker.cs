@@ -83,7 +83,7 @@ public class Worker : Unit
                     FindNearestDepository();
 
                 else if (destination == transform.position) // arrived at depository
-                    Game.Instance.fruitResourceWood += DepositLoad();
+                    AddToResources("wood");
             }
             else if (state == State.GoldMining)
             {
@@ -94,7 +94,7 @@ public class Worker : Unit
                     FindNearestDepository();
 
                 else if (destination == transform.position)
-                    Game.Instance.fruitResourceGold += DepositLoad();
+                    AddToResources("gold");
             }
             else if (state == State.StoneMining)
             {
@@ -105,7 +105,7 @@ public class Worker : Unit
                     FindNearestDepository();
 
                 else if (destination == transform.position)
-                    Game.Instance.fruitResourceStone += DepositLoad();
+                    AddToResources("stone");
             }
             else if (state == State.Building)
             {
@@ -130,6 +130,28 @@ public class Worker : Unit
         else
             FindNearestResource();
         return count;
+    }
+
+    private void AddToResources(string resource)
+    {
+        if (fruit)
+        {
+            if (resource == "wood")
+                Game.Instance.fruitResourceWood += DepositLoad();
+            else if (resource == "stone")
+                Game.Instance.fruitResourceStone += DepositLoad();
+            else if (resource == "gold")
+                Game.Instance.fruitResourceGold += DepositLoad();
+        }
+        else
+        {
+            if (resource == "wood")
+                Game.Instance.veggieResourceWood += DepositLoad();
+            else if (resource == "stone")
+                Game.Instance.veggieResourceStone += DepositLoad();
+            else if (resource == "gold")
+                Game.Instance.veggieResourceGold += DepositLoad();
+        }
     }
 
     /// <summary>
@@ -448,7 +470,7 @@ public class Worker : Unit
     {
         ThrustTool(5, .1f, 0, 0);
 
-        if (animTime == animEnd)
+        if (animTime >= animEnd)
             animTime = 0;
 
         (target as Farm).grassCount--;

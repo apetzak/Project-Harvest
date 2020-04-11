@@ -184,6 +184,7 @@ public class SelectionPanel : UIElement
                 text += $"Range          {s.ring.transform.localScale}\n";
 
             text += $"{s.minX} {s.maxX} {s.minZ} {s.maxZ}\n";
+            text += $"{s.woodCost} {s.stoneCost} {s.goldCost}\n";
         }
         if (entity is Resource)
         {
