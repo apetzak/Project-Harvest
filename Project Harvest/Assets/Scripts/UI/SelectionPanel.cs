@@ -133,7 +133,7 @@ public class SelectionPanel : UIElement
         entity = Game.Instance.selectedEntity;
         singleImage.enabled = true;
 
-        string entityName = entity.name.Replace("(Clone)", "").ToLower();
+        string entityName = entity.name.ToLower();
 
         if (entity is Unit)
             singleImage.texture = Assets.GetUnitSprite(entityName);

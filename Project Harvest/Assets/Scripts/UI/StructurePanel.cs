@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class StructurePanel : UIElement
 {
+    public GameObject infoPanel;
     private List<Button> buttons = new List<Button>();
     private bool placing = false;
     private Structure placingObject;
@@ -16,15 +17,13 @@ public class StructurePanel : UIElement
 
     private void Awake()
     {
-        matRed = Assets.GetMaterial("Red");
-
         for (int i = 0; i < transform.childCount; i++)
         {
             var btn = transform.GetChild(i).GetComponent<Button>();
             if (btn == null || btn.name == "btnNull")
                 continue;
 
-            btn.onClick.AddListener(() => { OnButtonClick(btn.name); });
+            btn.onClick.AddListener(() => { OnButtonClick(btn.name); });           
             buttons.Add(btn);
 
             if (btn.name.Contains("War") || btn.name.Contains("Team"))
@@ -35,8 +34,18 @@ public class StructurePanel : UIElement
                 t.text = btn.name.Replace("btn", "");
             }
         }
+    }
 
-        SetTeamImages();
+    private void OnMouseEnter()
+    {
+        Debug.Log("mouse enter");
+        infoPanel.SetActive(!infoPanel.activeSelf);
+    }
+
+    private void Start()
+    {
+        SetFarmImages();
+        matRed = Assets.GetMaterial("Red");
     }
 
     private void Update()
@@ -167,7 +176,7 @@ public class StructurePanel : UIElement
         placingObject = s;
     }
 
-    private void SetTeamImages()
+    private void SetFarmImages()
     {
         bool f = Game.Instance.fruit;
         foreach (Button b in buttons)
@@ -201,7 +210,7 @@ public class StructurePanel : UIElement
         else if (s == "btnTeam") // swap teams
         {
             Game.Instance.fruit = !Game.Instance.fruit;
-            SetTeamImages();
+            SetFarmImages();
             return;
         }
 

@@ -5,29 +5,31 @@ using UnityEngine.UI;
 
 public class BottomPanel : UIElement
 {
-    public Text resourceText;
+    public Text txtWater;
+    public Text txtWood;
+    public Text txtGold;
+    public Text txtStone;
+    public Text txtFertilizer;
+
     public List<Button> buttons = new List<Button>();
 
     private void Update()
     {
-        resourceText.text = GetResourceText();
-    }
-
-    private string GetResourceText()
-    {
         if (Game.Instance.fruit)
         {
-            return string.Format("Water {0} || Wood {1} || Gold {2} || Stone {3} || Fertilizer {4} || Team Fruit",
-                Game.Instance.fruitResourceWater, Game.Instance.fruitResourceWood,
-                Game.Instance.fruitResourceGold, Game.Instance.fruitResourceStone,
-                Game.Instance.fruitResourceFertilizer);
+            txtWater.text = Game.Instance.fruitResourceWater.ToString();
+            txtWood.text = Game.Instance.fruitResourceWood.ToString();
+            txtGold.text = Game.Instance.fruitResourceGold.ToString();
+            txtStone.text = Game.Instance.fruitResourceStone.ToString();
+            txtFertilizer.text = Game.Instance.fruitResourceFertilizer.ToString();
         }
         else
         {
-            return string.Format("Water {0} || Wood {1} || Gold {2} || Stone {3} || Fertilizer {4} || Team Veggie",
-                Game.Instance.veggieResourceWater, Game.Instance.veggieResourceWood,
-                Game.Instance.veggieResourceGold, Game.Instance.veggieResourceStone,
-                Game.Instance.veggieResourceFertilizer);
+            txtWater.text = Game.Instance.veggieResourceWater.ToString();
+            txtWood.text = Game.Instance.veggieResourceWood.ToString();
+            txtGold.text = Game.Instance.veggieResourceGold.ToString();
+            txtStone.text = Game.Instance.veggieResourceStone.ToString();
+            txtFertilizer.text = Game.Instance.veggieResourceFertilizer.ToString();
         }
     }
 }
