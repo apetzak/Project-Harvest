@@ -20,7 +20,7 @@ public class Structure : Entity
     public bool isPlaced = false;
     public bool isBuilt;
     public bool isVisible;
-    private float div = .1f;
+    private float growthMeter = .1f;
     public List<Slot> slots = new List<Slot>();
     public int woodCost;
     public int stoneCost;
@@ -31,12 +31,18 @@ public class Structure : Entity
     /// </summary>
     protected virtual void Start()
     {
-        health = maxHealth;
+        health = 1;
         SetBounds();
         CreateSelector();
         name = GetType().Name;
+
+        if (fruit != Game.Instance.fruit && !isBuilt)
+            Place(); // created by AI
     }
 
+    /// <summary>
+    /// Calculate/set borders and height based on collider size
+    /// </summary>
     public void SetBounds()
     {
         var c = GetComponent<Collider>();
@@ -47,6 +53,9 @@ public class Structure : Entity
         height = c.bounds.extents.y * 2;
     }
 
+    /// <summary>
+    /// Dynamically scale size of selector to match collider size
+    /// </summary>
     public void CreateSelector()
     {
         if (selector == null || selector.transform.childCount == 0)
@@ -54,7 +63,7 @@ public class Structure : Entity
 
         var sides = new List<Transform>();
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) // set color on each side
         {
             sides.Add(selector.transform.GetChild(i));
             sides[i].localPosition = new Vector3();
@@ -81,6 +90,9 @@ public class Structure : Entity
         sides[3].Translate(-xDist, 0, 0, Space.Self);
     }
 
+    /// <summary>
+    /// Dynamically create unit slots based on size of the structure
+    /// </summary>
     public void CreateSlots()
     {
         float horizLength = selector.transform.GetChild(0).transform.localScale.x;
@@ -121,7 +133,7 @@ public class Structure : Entity
     }
 
     /// <summary>
-    /// Empty
+    /// EMPTY
     /// </summary>
     protected virtual void Update()
     {
@@ -129,7 +141,7 @@ public class Structure : Entity
     }
 
     /// <summary>
-    /// base
+    /// base if isPlaced
     /// </summary>
     protected override void LeftClick()
     {
@@ -143,12 +155,11 @@ public class Structure : Entity
     protected override void RightClick()
     {
         SendTroopsToAttack();
-
         //SendWorkersToDeposit();
         SendWorkersToBuild();
     }
 
-    protected virtual void SendTroopsToAttack()
+    protected virtual bool SendTroopsToAttack()
     {
         if (Game.Instance.troopIsSelected && !IsAlly())
         {
@@ -157,7 +168,9 @@ public class Structure : Entity
                 if (t is Troop)
                     (t as Troop).TargetStructure(this);
             }
+            return true;
         }
+        return false;
     }
 
     private void SendWorkersToDeposit()
@@ -209,6 +222,21 @@ public class Structure : Entity
         return true;
     }
 
+    public bool OverlapsExistingStructure()
+    {
+        foreach (Structure s in Game.Instance.fruitStructures)
+        {
+            if (BoundsOverlap(s))
+                return true;
+        }
+        foreach (Structure s in Game.Instance.veggieStructures)
+        {
+            if (BoundsOverlap(s))
+                return true;
+        }
+        return false;
+    }
+
     public void Place()
     {
         ConsumeBuildingCost();
@@ -236,19 +264,17 @@ public class Structure : Entity
 
     public void SendWorkersToBuild()
     {
-        //Debug.Log(Game.Instance.workerIsSelected && health < maxHealth);
-
         if (Game.Instance.workerIsSelected && health < maxHealth && !(this is Farm))
         {
             foreach (Unit u in Game.Instance.selectedUnits)
             {
                 if (u.fruit == fruit && u is Worker)
                 {
-                    var slot = GetOpenSlot(u);
+                    var slot = GetOpenSlotLocation(u);
                     if (slot == new Vector3())
                         return;
                     u.target = this;
-                    u.SetDestination(GetOpenSlot(u));
+                    u.SetDestination(GetOpenSlotLocation(u));
                     (u as Worker).SwitchState(Worker.State.Building);
                 }
             }
@@ -352,6 +378,9 @@ public class Structure : Entity
         selected = b;
     }
 
+    /// <summary>
+    /// Select all ally structures of the same type on double click.
+    /// </summary>
     public override void SelectType()
     {
         int selectedCount = 0;
@@ -362,7 +391,7 @@ public class Structure : Entity
             if (selectedCount > 84)
                 break;
 
-            if (s.fruit != fruit || s.GetType() != GetType())
+            if (s.GetType() != GetType())
                 continue;
 
             selectedCount++;
@@ -373,6 +402,9 @@ public class Structure : Entity
         Game.Instance.ChangeSelection();
     }
 
+    /// <summary>
+    /// Increment health and rise building, clear slots if finished
+    /// </summary>
     public void Build()
     {
         if (health == maxHealth)
@@ -392,24 +424,26 @@ public class Structure : Entity
             transform.GetChild(0).transform.Translate(0, height / 10, 0, Space.World);
             isBuilt = true;
             ToggleSelector(false);
-
-            if (this is RallyPoint)
-                (this as RallyPoint).SetPointOnFarms();
-            else if (this is WaterTower)
-                (this as WaterTower).ActivateSprinklers();
-            else if (this is Sprinkler)
-                (this as Sprinkler).SetSource();
+            OnBuilt();
         }
 
         // rise out of ground
-        if (health >= maxHealth * div)
+        if (health >= maxHealth * growthMeter)
         {
             transform.GetChild(0).transform.Translate(0, height / 10, 0, Space.World);
-            div += .1f;
+            growthMeter += .1f;
         }
     }
 
-    public Vector3 GetOpenSlot(Unit u)
+    protected virtual void OnBuilt()
+    {
+
+    }
+
+    /// <summary>
+    /// Gets location of open slot nearest to the unit. Returns new Vector3() if no slot is open.
+    /// </summary>
+    public Vector3 GetOpenSlotLocation(Unit u)
     {
         Slot s = new Slot(new Vector3());
         float closest = 100000;
@@ -440,11 +474,21 @@ public class Structure : Entity
         return false;
     }
 
+    public bool CanAfford()
+    {
+        return true;
+        //if (fruit)
+        //    return Game.Instance.fruitResourceWood >= woodCost
+        //        && Game.Instance.fruitResourceStone >= stoneCost
+        //        && Game.Instance.fruitResourceGold >= goldCost;
+        //return Game.Instance.veggieResourceWood >= woodCost
+        //    && Game.Instance.veggieResourceStone >= stoneCost
+        //    && Game.Instance.veggieResourceGold >= goldCost;
+    }
+
     /// <summary>
-    /// Gets the location of closest edge relative to the unit position
+    /// Gets the location of closest edge nearest to the unit position
     /// </summary>
-    /// <param name="u"></param>
-    /// <returns></returns>
     public Vector3 GetUnitDestination(Unit u)
     {
         Vector3 v = transform.position;

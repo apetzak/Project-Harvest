@@ -47,8 +47,8 @@ public class Game : MonoBehaviour
         GetObjectsInScene();
         //AddSquad(10, 2);
         //AddWorkers();
-        QualitySettings.vSyncCount = 0; // VSync must be disabled.
-        Application.targetFrameRate = 60;
+        //QualitySettings.vSyncCount = 0; // VSync must be disabled.
+        //Application.targetFrameRate = 60;
         selectorBox.GetComponent<RectTransform>().localScale = new Vector3(0, 0, 0);
     }
 
@@ -74,6 +74,9 @@ public class Game : MonoBehaviour
         Instance.selectedStructures = new List<Structure>();
     }
 
+    /// <summary>
+    /// Adds all entities in scene to Instance collections
+    /// </summary>
     private void GetObjectsInScene()
     {
         foreach (Resource r in GameObject.FindObjectsOfType(typeof(Resource)))
@@ -99,52 +102,6 @@ public class Game : MonoBehaviour
             if (s is Farm)
                 (s as Farm).FindRallyPoint();
         #endregion
-    }
-
-    private void AddWorkers()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            int j = i * 10;
-
-            AddWorker(0, j + 200, 0);
-            AddWorker(0, j + 200, 10);
-            AddWorker(1, j + 200, 20);
-            AddWorker(1, j + 200, 30);
-        }
-    }
-
-    private void AddSquad(int rows, int columns)
-    {
-        for (int z = 0; z < 10; z++)
-        {
-            for (int i = 0; i < rows; i++)
-            {
-                for (int q = 0; q < columns; q++)
-                    AddUnit(z, i * 10, q * 10 + (12 * z * columns));
-            }
-        }
-    }
-
-    public void AddUnit(int index, int x, int z)
-    {
-        Vector3 pos = new Vector3(x + 20, 10f, z + 10);
-        Troop u = Instantiate(Assets.Instance.troops[index], pos, Quaternion.identity);
-        u.ToggleSelected(false);
-        //u.attacking = true;
-    }
-
-    public void AddWorker(int index, int x, int z)
-    {
-        Vector3 pos = new Vector3(x + 20, 10f, z + 10);
-        Worker w = Instantiate(Assets.Instance.bb, pos, Quaternion.identity);
-        w.ToggleSelected(false);
-        Instance.blueberries.Add(w);
-
-        pos = new Vector3(x + 30, 10f, z + 10);
-        w = Instantiate(Assets.Instance.pea, pos, Quaternion.identity);
-        w.ToggleSelected(false);
-        Instance.peas.Add(w);
     }
 
     /// <summary>
@@ -198,4 +155,53 @@ public class Game : MonoBehaviour
         t.text = s + " Win";
         t.enabled = true;
     }
+
+    #region Spawn squads of units (unused) 
+
+    private void AddWorkers()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            int j = i * 10;
+
+            AddWorker(0, j + 200, 0);
+            AddWorker(0, j + 200, 10);
+            AddWorker(1, j + 200, 20);
+            AddWorker(1, j + 200, 30);
+        }
+    }
+
+    private void AddSquad(int rows, int columns)
+    {
+        for (int z = 0; z < 10; z++)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                for (int q = 0; q < columns; q++)
+                    AddUnit(z, i * 10, q * 10 + (12 * z * columns));
+            }
+        }
+    }
+
+    public void AddUnit(int index, int x, int z)
+    {
+        Vector3 pos = new Vector3(x + 20, 10f, z + 10);
+        Troop u = Instantiate(Assets.Instance.troops[index], pos, Quaternion.identity);
+        u.ToggleSelected(false);
+    }
+
+    public void AddWorker(int index, int x, int z)
+    {
+        Vector3 pos = new Vector3(x + 20, 10f, z + 10);
+        Worker w = Instantiate(Assets.Instance.bb, pos, Quaternion.identity);
+        w.ToggleSelected(false);
+        Instance.blueberries.Add(w);
+
+        pos = new Vector3(x + 30, 10f, z + 10);
+        w = Instantiate(Assets.Instance.pea, pos, Quaternion.identity);
+        w.ToggleSelected(false);
+        Instance.peas.Add(w);
+    }
+
+    #endregion
 }

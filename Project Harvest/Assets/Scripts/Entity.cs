@@ -9,6 +9,9 @@ using UnityEngine;
 /// </summary>
 public class Entity : MonoBehaviour
 {
+    /// <summary>
+    /// The object that indicates whether an entity is selected or selectable. Appears under the entity (ring or square).
+    /// </summary>
     public GameObject selector;
     public float health;
     public float maxHealth;
@@ -32,13 +35,16 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// Empty
+    /// EMPTY
     /// </summary>
     public virtual void Remove()
     {
         //Destroy(gameObject);
     }
 
+    /// <summary>
+    /// EMPTY
+    /// </summary>
     public virtual void Spawn()
     {
 
@@ -53,14 +59,16 @@ public class Entity : MonoBehaviour
         selector.GetComponentInChildren<MeshRenderer>().enabled = selected = b;
     }
 
-
+    /// <summary>
+    /// Select all ally entities of the same type on double click. Must override.
+    /// </summary>
     public virtual void SelectType()
     {
 
     }
 
     /// <summary>
-    /// Call left or right click on mouse down
+    /// Call left or right click on mouse down, handle double clicks.
     /// </summary>
     protected virtual void OnMouseOver()
     {
@@ -75,7 +83,7 @@ public class Entity : MonoBehaviour
         if (clickedOnce)
             clickTimer++;
 
-        if (clickTimer == 20) // cancel double click after 20
+        if (clickTimer == 20) // cancel double click after 20 frames
         {
             clickTimer = 0;
             clickedOnce = false;
@@ -105,7 +113,7 @@ public class Entity : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// EMPTY
     /// </summary>
     protected virtual void RightClick()
     {
@@ -117,6 +125,9 @@ public class Entity : MonoBehaviour
         return fruit == Game.Instance.fruit;
     }
 
+    /// <summary>
+    /// If not dying and !mouseOverUI, switch cursor
+    /// </summary>
     protected virtual void OnMouseEnter()
     {
         if (isDying || Game.Instance.mouseOverUI)
@@ -124,6 +135,9 @@ public class Entity : MonoBehaviour
         CursorSwitcher.Instance.Switch(this);
     }
 
+    /// <summary>
+    /// EMPTY
+    /// </summary>
     protected virtual void OnMouseExit()
     {
         //CursorSwitcher.Instance.Switch(null);

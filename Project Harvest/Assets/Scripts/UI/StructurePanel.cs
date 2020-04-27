@@ -38,7 +38,7 @@ public class StructurePanel : UIElement
 
     private void OnMouseEnter()
     {
-        Debug.Log("mouse enter");
+        //Debug.Log("mouse enter");
         infoPanel.SetActive(!infoPanel.activeSelf);
     }
 
@@ -101,7 +101,7 @@ public class StructurePanel : UIElement
             return;
         }
 
-        if (OverlapsExistingStructure())
+        if (placingObject.OverlapsExistingStructure())
         {
             placingObject.ToggleSelectorColor(matRed);
         }
@@ -133,7 +133,7 @@ public class StructurePanel : UIElement
     {
         placingObject.Place();
 
-        if (Input.GetKey(KeyCode.LeftShift) && HasResources(placingObject))
+        if (Input.GetKey(KeyCode.LeftShift) && placingObject.CanAfford())
             CreatePlacingObject(Assets.GetStructure(lastClicked));
         else
             Reset();
@@ -144,21 +144,6 @@ public class StructurePanel : UIElement
         placing = false;
         placingObject = null;
         startPoint = endPoint = new Vector3();
-    }
-
-    private bool OverlapsExistingStructure()
-    {
-        foreach (Structure s in Game.Instance.fruitStructures)
-        {
-            if (placingObject.BoundsOverlap(s))
-                return true;
-        }
-        foreach (Structure s in Game.Instance.veggieStructures)
-        {
-            if (placingObject.BoundsOverlap(s))
-                return true;
-        }
-        return false;
     }
 
     private void CreatePlacingObject(Structure prefab)
@@ -176,6 +161,9 @@ public class StructurePanel : UIElement
         placingObject = s;
     }
 
+    /// <summary>
+    /// Set images on farm buttons based on current team
+    /// </summary>
     private void SetFarmImages()
     {
         bool f = Game.Instance.fruit;
@@ -216,27 +204,13 @@ public class StructurePanel : UIElement
 
         string structureName = GetStructureName(s);
         Structure structure = Assets.GetStructure(structureName);
-
-        if (!HasResources(structure))
+        structure.fruit = Game.Instance.fruit;
+        if (!structure.CanAfford())
             return;
 
         lastClicked = structureName;
         placing = true;
         CreatePlacingObject(structure);
-    }
-
-    public bool HasResources(Structure s)
-    {
-        return true;
-
-        //if (Game.Instance.fruit)
-        //    return Game.Instance.fruitResourceWood >= s.woodCost
-        //        && Game.Instance.fruitResourceStone >= s.stoneCost
-        //        && Game.Instance.fruitResourceGold >= s.goldCost;
-
-        //return Game.Instance.veggieResourceWood >= s.woodCost
-        //    && Game.Instance.veggieResourceStone >= s.stoneCost
-        //    && Game.Instance.veggieResourceGold >= s.goldCost;
     }
 
     private string GetStructureName(string btnText)

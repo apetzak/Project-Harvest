@@ -13,7 +13,7 @@ public class Sprinkler : Structure
 
     protected override void Start()
     {
-        SetSource();
+        OnBuilt();
         head.transform.Rotate(0, Random.Range(0, 360), 0);
         base.Start();
     }
@@ -35,7 +35,10 @@ public class Sprinkler : Structure
         head.transform.Rotate(0, 1, 0);
     }
 
-    public void SetSource()
+    /// <summary>
+    /// Turn on sprinkler if ally WaterTower is in range
+    /// </summary>
+    protected override void OnBuilt()
     {
         var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in list)

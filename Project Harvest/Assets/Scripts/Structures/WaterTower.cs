@@ -57,7 +57,10 @@ public class WaterTower : Structure
         return sprinklers.Count;
     }
 
-    public void ActivateSprinklers()
+    /// <summary>
+    /// Activate all ally sprinklers within range
+    /// </summary>
+    protected override void OnBuilt()
     {
         turnedOn = fruit && Game.Instance.fruitResourceWater > 0 || !fruit && Game.Instance.veggieResourceWater > 0;
 

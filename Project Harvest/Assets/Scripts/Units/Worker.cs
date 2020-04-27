@@ -109,7 +109,7 @@ public class Worker : Unit
             }
             else if (state == State.Building)
             {
-                SwingHammer();
+                BuildStructure();
             }
         }
 
@@ -216,8 +216,6 @@ public class Worker : Unit
         {
             Debug.Log("tool " + toolIndex + " is broke");
         }
-
-        //tools[toolIndex].SetActive(true);
     }
 
     /// <summary>
@@ -330,7 +328,7 @@ public class Worker : Unit
         {
             if (s.health < s.maxHealth && !(s is Farm))
             {
-                var slot = s.GetOpenSlot(this);
+                var slot = s.GetOpenSlotLocation(this);
                 if (slot == new Vector3())
                     continue;
                 target = s;
@@ -374,7 +372,7 @@ public class Worker : Unit
         }
     }
 
-    private void SwingHammer()
+    private void BuildStructure()
     {
         if (target != null && target.health == target.maxHealth)
             target = null;
@@ -425,6 +423,9 @@ public class Worker : Unit
         animTime++;
     }
 
+    /// <summary>
+    /// Finish animation so tool returns to default position
+    /// </summary>
     private void ResetTool()
     {
         if (animTime > 0)
@@ -481,7 +482,6 @@ public class Worker : Unit
             SetDestination(target.transform.position);
             SwitchState(State.Planting);
         }
-
         animTime++;
     }
 
@@ -501,7 +501,6 @@ public class Worker : Unit
                 SwitchState(State.Watering);
             }
         }
-
         animTime++;
     }
 
@@ -522,7 +521,6 @@ public class Worker : Unit
                 InteractWithNearestFarm();
             }
         }
-
         animTime++;
     }
 
@@ -545,10 +543,12 @@ public class Worker : Unit
         {
             tools[4].transform.Rotate(0, 0, -1f, Space.Self);
         }
-
         animTime++;
     }
 
+    /// <summary>
+    /// Find nearest unoccupied farm, rake or pick if possible
+    /// </summary>
     private void InteractWithNearestFarm()
     {
         var farms = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
@@ -557,24 +557,25 @@ public class Worker : Unit
             if (!(f is Farm) || (f as Farm).isOccupied)
                 continue;
             if ((f as Farm).state == Farm.State.Grassy)
-
             {
-                target = f;
-                (f as Farm).isOccupied = true;
-                SetDestination(f.GetUnitDestination(this));
-                SwitchState(State.Raking);
+                TargetFarm(f as Farm, State.Raking);
                 return;
             }
             if ((f as Farm).state == Farm.State.Pickable)
             {
-                target = f;
-                (f as Farm).isOccupied = true;
-                SetDestination(f.GetUnitDestination(this));
-                SwitchState(State.Picking);
+                TargetFarm(f as Farm, State.Picking);
                 return;
             }
         }
         SwitchState(State.Idle);
+    }
+
+    public void TargetFarm(Farm f, State s)
+    {
+        target = f;
+        f.isOccupied = true;
+        SetDestination(f.GetUnitDestination(this));
+        SwitchState(s);
     }
 
     private void ClearPatch()

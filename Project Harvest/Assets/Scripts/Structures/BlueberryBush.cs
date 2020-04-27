@@ -6,7 +6,7 @@ public class BlueberryBush : Hub
 {
     protected override void Start()
     {
-        growthTimer = growthEnd = 120;
+        growthTimer = growthEnd = 300;
         maxUnits = 8;
         ShowProps(false);
         workerPrefab = Assets.Instance.bb;

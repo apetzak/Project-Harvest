@@ -151,7 +151,7 @@ public class Troop : Unit
             return;
         }
 
-        var slot = s.GetOpenSlot(this);
+        var slot = s.GetOpenSlotLocation(this);
         if (slot == new Vector3())
         {
             FindClosestTarget();

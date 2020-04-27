@@ -17,6 +17,7 @@ public class Hub : Structure
     {
         workerPrefab.fruit = fruit;
         base.Start();
+        health = maxHealth;
     }
 
     protected virtual void GrowUnits()

@@ -23,7 +23,7 @@ public class CursorSwitcher : MonoBehaviour
     public List<Texture2D> textures;
     private CursorMode cursorMode = CursorMode.Auto;
     private Vector2 hotSpot = Vector2.zero;
-    public cursor current;
+    private cursor current;
 
     void Start()
     {
@@ -32,7 +32,7 @@ public class CursorSwitcher : MonoBehaviour
     }
 
     /// <summary>
-    /// Change cursor image
+    /// Change cursor image. Pass null for default.
     /// </summary>
     /// <param name="e"></param>
     public void Switch(Entity e)
@@ -49,7 +49,7 @@ public class CursorSwitcher : MonoBehaviour
                     current = cursor.Axe;
                 else if (e is Water)
                     current = cursor.WaterDrop;
-                else
+                else // gold or stone
                     current = cursor.Pickaxe;
             }
         }

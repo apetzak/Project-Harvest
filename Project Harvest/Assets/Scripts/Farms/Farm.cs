@@ -292,19 +292,15 @@ public class Farm : Structure
     {
         CursorSwitcher.Instance.Switch(this);
 
-        if (Game.Instance.troopIsSelected)
-        {
-            SendTroopsToAttack();
+        if (SendTroopsToAttack())
             return;
-        }
 
-        if (state == State.Spawning)
+        if (state == State.Spawning || isOccupied || !Game.Instance.workerIsSelected)
             return;
 
         if (state == State.Grassy)
         {
             SendWorker(Worker.State.Raking);
-            return;
         }
         else if (state == State.Pickable)
         {
@@ -318,17 +314,11 @@ public class Farm : Structure
 
     public void SendWorker(Worker.State state)
     {
-        if (!Game.Instance.workerIsSelected)
-            return;
-
         foreach (Unit u in Game.Instance.selectedUnits)
         {
             if (u.fruit == fruit && u is Worker)
             {
-                isOccupied = true;
-                u.target = this;
-                u.SetDestination(transform.position);
-                (u as Worker).SwitchState(state);
+                (u as Worker).TargetFarm(this, state);
                 return;
             }
         }

@@ -90,7 +90,6 @@
     <Compile Include="Assets\Scripts\Input\CameraMovement.cs" />
     <Compile Include="Assets\Scripts\Input\HotkeyController.cs" />
     <Compile Include="Assets\Scripts\Input\SelectorBox.cs" />
-    <Compile Include="Assets\Scripts\NewBehaviourScript.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Resources\Gold.cs" />
     <Compile Include="Assets\Scripts\Resources\Resource.cs" />

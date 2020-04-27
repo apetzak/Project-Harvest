@@ -112,8 +112,6 @@ public class Map : UIElement, IPointerClickHandler
             DrawEntity(e);
         foreach (Entity e in Game.Instance.veggieStructures)
             DrawEntity(e);
-
-        // todo: figure out how to not re-draw still objects
         //foreach (Entity e in Game.Instance.resources)
         //    DrawResource(e);
         foreach (Entity e in Game.Instance.selectedUnits)
@@ -145,15 +143,19 @@ public class Map : UIElement, IPointerClickHandler
 
     private void DrawResource(Entity e)
     {
+        // todo: figure out how to not re-draw still objects
+        if (e is Tree)
+            return;
+
         float x = e.transform.position.x / 7.5f;
         float z = e.transform.position.z / 7.5f;
         Rect r = new Rect(minX + x, minY - z, 2, 2);
 
-        if (e is Tree)
-            Graphics.DrawTexture(r, textureWood);
-        else if (e is Gold)
+        if (e is Gold)
             Graphics.DrawTexture(r, textureGold);
         else if (e is Stone)
             Graphics.DrawTexture(r, textureStone);
+        else if (e is Tree)
+            Graphics.DrawTexture(r, textureWood);
     }
 }
