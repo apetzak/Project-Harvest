@@ -24,8 +24,8 @@ public class Troop : Unit
         Structures
     }
 
-    public AttackState attackState;
-    public FocusState focusState;
+    public AttackState attackState; // todo
+    public FocusState focusState; // todo
     public bool attacking;
     public float attackSpeed;
     public float attackRange;

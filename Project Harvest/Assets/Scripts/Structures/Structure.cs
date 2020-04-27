@@ -234,6 +234,11 @@ public class Structure : Entity
             if (BoundsOverlap(s))
                 return true;
         }
+        foreach (Resource r in Game.Instance.resources)
+        {
+            if (BoundsOverlap(r))
+                return true;
+        }
         return false;
     }
 
@@ -269,14 +274,7 @@ public class Structure : Entity
             foreach (Unit u in Game.Instance.selectedUnits)
             {
                 if (u.fruit == fruit && u is Worker)
-                {
-                    var slot = GetOpenSlotLocation(u);
-                    if (slot == new Vector3())
-                        return;
-                    u.target = this;
-                    u.SetDestination(GetOpenSlotLocation(u));
-                    (u as Worker).SwitchState(Worker.State.Building);
-                }
+                    (u as Worker).TargetStructure(this);
             }
         }
     }

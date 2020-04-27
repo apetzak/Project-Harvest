@@ -19,7 +19,9 @@ public class EntityUtils
         {
             u.target = null;
             if (u is Troop)
+            {
                 (u as Troop).attacking = false;
+            }
         }
     }
 

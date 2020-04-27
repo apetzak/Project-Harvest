@@ -14,13 +14,13 @@ public class Farm : Structure
         Grassy,
         Empty,
         Planting,
-        Sprouting, // todo
+        Sprouting,
         PlantGrowing,
         Growing,
         Pickable,
         Spawning,
         Dead,
-        Decayed
+        Decayed // todo
     }
 
     public State state = State.Empty;
@@ -165,9 +165,15 @@ public class Farm : Structure
             decayTime++;
             if (decayTime >= decayEnd)
             {
-                ShowGrass();
-                SetDecayed();
-                state = State.Decayed;
+                if (fruit)
+                    Game.Instance.fruitStructures.Remove(this);
+                else
+                    Game.Instance.veggieStructures.Remove(this);
+
+                //Destroy(gameObject);
+                //ShowGrass();
+                //SetDecayed();
+                //state = State.Decayed;
             }
         }
         base.Update();

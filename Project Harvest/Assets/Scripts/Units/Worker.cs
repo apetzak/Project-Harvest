@@ -240,7 +240,7 @@ public class Worker : Unit
         var structs = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in structs)
         {
-            if (s.GetType() == t)
+            if (s.GetType() == t && s.isBuilt)
             {
                 float mag = (s.transform.position - transform.position).sqrMagnitude;
 
@@ -328,11 +328,7 @@ public class Worker : Unit
         {
             if (s.health < s.maxHealth && !(s is Farm))
             {
-                var slot = s.GetOpenSlotLocation(this);
-                if (slot == new Vector3())
-                    continue;
-                target = s;
-                SetDestination(slot);
+                TargetStructure(s);
                 return;
             }
         }
@@ -552,18 +548,19 @@ public class Worker : Unit
     private void InteractWithNearestFarm()
     {
         var farms = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
-        foreach (Structure f in farms)
+        foreach (Structure s in farms)
         {
-            if (!(f is Farm) || (f as Farm).isOccupied)
+            if (!(s is Farm) || (s as Farm).isOccupied)
                 continue;
-            if ((f as Farm).state == Farm.State.Grassy)
+            Farm f = target as Farm;
+            if (f.state == Farm.State.Grassy)
             {
-                TargetFarm(f as Farm, State.Raking);
+                TargetFarm(f, State.Raking);
                 return;
             }
-            if ((f as Farm).state == Farm.State.Pickable)
+            if (f.state == Farm.State.Pickable)
             {
-                TargetFarm(f as Farm, State.Picking);
+                TargetFarm(f, State.Picking);
                 return;
             }
         }
@@ -576,6 +573,16 @@ public class Worker : Unit
         f.isOccupied = true;
         SetDestination(f.GetUnitDestination(this));
         SwitchState(s);
+    }
+
+    public void TargetStructure(Structure s)
+    {
+        var slot = s.GetOpenSlotLocation(this);
+        if (slot == new Vector3())
+            return;
+        target = s;
+        SetDestination(slot);
+        SwitchState(Worker.State.Building);
     }
 
     private void ClearPatch()

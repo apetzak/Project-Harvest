@@ -9,7 +9,7 @@ public class StructurePanel : UIElement
     private List<Button> buttons = new List<Button>();
     private bool placing = false;
     private Structure placingObject;
-    public Material matRed;
+    private Material matRed;
     private Vector3 startPoint = new Vector3();
     private Vector3 endPoint = new Vector3();
     private bool facingDirectionChanged = true;
