@@ -10,22 +10,20 @@ public class Tree : Resource
     {
         workerState = Worker.State.WoodCutting;
         base.Start();
+        enabled = false;
     }
 
     private void Update()
     {
-        if (isDying)
-        {
-            fallCounter++;
-            transform.Rotate(.5f, 0, 0);
+        fallCounter++;
+        transform.Rotate(.5f, 0, 0);
 
-            if (fallCounter >= 90)
-                Remove();
-        }
+        if (fallCounter >= 90)
+            Remove();
     }
 
     public void FallOver()
     {
-        isDying = true;
+        enabled = true;
     }
 }

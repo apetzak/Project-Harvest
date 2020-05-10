@@ -12,12 +12,12 @@ public class Projectile : MonoBehaviour
     public Vector3 hitLocation;
     public Entity target;
 
-    void Start()
+    private void Start()
     {
         mesh = GetComponent<MeshRenderer>();
     }
 
-    void Update()
+    private void Update()
     {
         if (launchDistance > 0 && o != null)
             Propel();

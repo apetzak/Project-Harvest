@@ -29,20 +29,27 @@ public class WaterTower : Structure
 
         if (counter <= 0)
         {
+            int drainCount = 0;
+            foreach (Sprinkler s in sprinklers)
+            {
+                if (s.turnedOn)
+                    drainCount++;
+            }
+
             if (fruit)
             {
-                if (Game.Instance.fruitResourceWater > sprinklers.Count)
-                    Game.Instance.fruitResourceWater -= ConsumeWater();
+                if (Game.Instance.fruitResourceWater > drainCount)
+                    Game.Instance.fruitResourceWater -= ConsumeWater(drainCount);
 
-                if (Game.Instance.fruitResourceWater <= 0)
+                if (Game.Instance.fruitResourceWater < drainCount)
                     DeactivateSprinklers();
             }
             else
             {
-                if (Game.Instance.veggieResourceWater >= sprinklers.Count)
-                    Game.Instance.veggieResourceWater -= ConsumeWater();
+                if (Game.Instance.veggieResourceWater >= drainCount)
+                    Game.Instance.veggieResourceWater -= ConsumeWater(drainCount);
 
-                if (Game.Instance.veggieResourceWater < sprinklers.Count)
+                if (Game.Instance.veggieResourceWater < drainCount)
                     DeactivateSprinklers();
             }
         }
@@ -50,9 +57,9 @@ public class WaterTower : Structure
         base.Update();
     }
 
-    public int ConsumeWater()
+    public int ConsumeWater(int drainCount)
     {
-        waterConsumed += sprinklers.Count;
+        waterConsumed += drainCount;
         counter = 60;
         return sprinklers.Count;
     }

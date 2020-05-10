@@ -140,27 +140,20 @@ public class Troop : Unit
         (e as Unit).isUnderAttack = true;
     }
 
-    public virtual void TargetStructure(Structure s)
+    public virtual void TargetStructure(Structure structure)
     {
         attacking = true;
 
-        if (s is Farm || s is Hub)
+        if (structure is Farm || structure is Hub)
         {
-            target = s;
-            SetDestination(s.transform.position);
+            target = structure;
+            SetDestination(structure.transform.position);
             return;
         }
 
-        var slot = s.GetOpenSlotLocation(this);
-        if (slot == new Vector3())
-        {
+        structure.SetOpenSlot(this);
+        if (slot == null) // no open slots
             FindClosestTarget();
-        }
-        else
-        {
-            target = s;
-            SetDestination(slot);
-        }
     }
 
     /// <summary>
@@ -197,8 +190,17 @@ public class Troop : Unit
     private void TriggerAttack()
     {
         timeUntilNextAttack = attackSpeed * 60;
-        Audio.Instance.PlayAttack(index);
+        AudioPlayer.Instance.PlayAttack(index);
         InflictDamage();
+    }
+
+    /// <summary>
+    /// Reduce targets health by attackDamage
+    /// </summary>
+    public virtual void InflictDamage()
+    {
+        if (target != null)
+            target.health -= attackDamage;
     }
 
     #region Target Finding
@@ -224,14 +226,21 @@ public class Troop : Unit
             return;
         }
 
-        int i3 = FindClosestEnemyStructure(ref closest);
+        int i3 = FindClosestEnemyFarm(ref closest);
         if (closest != 100000)
         {
-            TargetStructure(GetEnemyStructures()[i3]);
+            TargetStructure(GetEnemyFarms()[i3]);
             return;
         }
 
-        if (closest == 100000)
+        int i4 = FindClosestEnemyStructure(ref closest);
+        if (closest != 100000)
+        {
+            TargetStructure(GetEnemyStructures()[i4]);
+            return;
+        }
+
+        if (closest == 100000) // all targets out of range
         {
             attacking = false;
             StopMoving();
@@ -274,6 +283,23 @@ public class Troop : Unit
         return index;
     }
 
+    private int FindClosestEnemyFarm(ref float closest)
+    {
+        int index = -1;
+        foreach (Farm f in GetEnemyFarms())
+        {
+            if (f.isDying || !f.HasOpenSpot())
+                continue;
+            float dist = (transform.position - f.transform.position).sqrMagnitude;
+            if (dist < closest)
+            {
+                closest = dist;
+                index = GetEnemyFarms().IndexOf(f);
+            }
+        }
+        return index;
+    }
+
     private int FindClosestEnemyStructure(ref float closest)
     {
         int index = -1;
@@ -293,14 +319,7 @@ public class Troop : Unit
 
     #endregion
 
-    /// <summary>
-    /// Reduce targets health by attackDamage
-    /// </summary>
-    public virtual void InflictDamage()
-    {
-        if (target != null)
-            target.health -= attackDamage;
-    }
+    #region Override in child classes
 
     public virtual List<Troop> GetAllyTroops()
     {
@@ -316,4 +335,11 @@ public class Troop : Unit
     {
         return null;
     }
+
+    public virtual List<Farm> GetEnemyFarms()
+    {
+        return null;
+    }
+
+    #endregion
 }

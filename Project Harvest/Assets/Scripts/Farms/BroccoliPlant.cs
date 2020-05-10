@@ -6,13 +6,15 @@ public class BroccoliPlant : Farm
 {
     public int plantGrowthTime;
     public GameObject prop2;
+    private MeshRenderer prop2Mesh;
     private int pickCount;
 
     protected override void Start()
     {
         growthEnd = 1400;
         plantGrowthTime = 1600;
-        prop2.GetComponent<MeshRenderer>().enabled = false;
+        prop2Mesh = prop.GetComponent<MeshRenderer>();
+        prop2Mesh.enabled = false;
         prop2.transform.localScale = new Vector3(0, 0, 0);
         prop.transform.localScale = new Vector3(0, 0, 0);
         System.Random rand = new System.Random();
@@ -68,7 +70,7 @@ public class BroccoliPlant : Farm
 
     public override void StartPlantGrowing()
     {
-        prop2.GetComponent<MeshRenderer>().enabled = true;
+        prop2Mesh.enabled = true;
         state = State.PlantGrowing;
     }
 

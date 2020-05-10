@@ -14,12 +14,23 @@ public class Game : MonoBehaviour
     public static int screenWidth;
     public List<Troop> fruits { get; set; }
     public List<Troop> veggies { get; set; }
+    public List<Farm> fruitFarms { get; set; }
+    public List<Farm> veggieFarms { get; set; }
     public List<Worker> blueberries { get; set; }
     public List<Worker> peas { get; set; }
     public List<Structure> fruitStructures { get; set; }
     public List<Structure> veggieStructures { get; set; }
+    /// <summary>
+    /// Units currently selected by player. Contains troops and workers
+    /// </summary>
     public List<Unit> selectedUnits { get; set; }
+    /// <summary>
+    /// Structures currently selected by player. Always null when units are selected
+    /// </summary>
     public List<Structure> selectedStructures { get; set; }
+    /// <summary>
+    /// List of neutral Resource entities scattered throughout zone
+    /// </summary>
     public List<Resource> resources { get; set; }
     public int fruitResourceWater;
     public int fruitResourceWood;
@@ -37,8 +48,17 @@ public class Game : MonoBehaviour
     public bool holdingDown = false;
     public bool mouseOverUI = false;
     public bool selectionChanged = false;
+    /// <summary>
+    /// At least one worker is selected by player
+    /// </summary>
     public bool workerIsSelected = false;
+    /// <summary>
+    /// At least one troop is selected by player
+    /// </summary>
     public bool troopIsSelected = false;
+    /// <summary>
+    /// The player is controlling the fruit team
+    /// </summary>
     public bool fruit = true;
 
     private void Awake()
@@ -57,14 +77,20 @@ public class Game : MonoBehaviour
         var hubPosition = Instance.fruit ? Instance.fruitStructures[0].transform.position : Instance.veggieStructures[0].transform.position;
         float y = Camera.main.transform.position.y;
         Camera.main.transform.position = new Vector3(hubPosition.x, y, hubPosition.z - 70);
-        Instance.veggieResourceWood = 100;
-        Instance.fruitResourceWood = 100;
+        Instance.veggieResourceWood = 2000;
+        Instance.fruitResourceWood = 2000;
+        Instance.veggieResourceGold = 3000;
+        Instance.fruitResourceGold = 3000;
+        Instance.veggieResourceStone = 3200;
+        Instance.fruitResourceStone = 3200;
     }
 
     private void InstantiateGlobalProperties()
     {
         Instance.fruits = new List<Troop>();
         Instance.veggies = new List<Troop>();
+        Instance.fruitFarms = new List<Farm>();
+        Instance.veggieFarms = new List<Farm>();
         Instance.blueberries = new List<Worker>();
         Instance.peas = new List<Worker>();
         Instance.fruitStructures = new List<Structure>();
@@ -88,20 +114,27 @@ public class Game : MonoBehaviour
                 continue; // skip resources
 
             s.isPlaced = s.isBuilt = true;
-            if (s.fruit)
-                Instance.fruitStructures.Add(s);
+
+            if (s is Farm)
+            {
+                if (s.fruit)
+                    Instance.fruitFarms.Add(s as Farm);
+                else
+                    Instance.veggieFarms.Add(s as Farm);
+            }
             else
-                Instance.veggieStructures.Add(s);
+            {
+                if (s.fruit)
+                    Instance.fruitStructures.Add(s);
+                else
+                    Instance.veggieStructures.Add(s);
+            }
         }
 
-        #region Set Rally Points
-        foreach (Structure s in Instance.fruitStructures)
-            if (s is Farm)
-                (s as Farm).FindRallyPoint();
-        foreach (Structure s in Instance.veggieStructures)
-            if (s is Farm)
-                (s as Farm).FindRallyPoint();
-        #endregion
+        foreach (Farm f in Instance.fruitFarms)
+            f.FindRallyPoint();
+        foreach (Farm f in Instance.veggieFarms)
+            f.FindRallyPoint();
     }
 
     /// <summary>
@@ -143,9 +176,9 @@ public class Game : MonoBehaviour
 
     private void Update()
     {
-        if (Instance.fruits.Count == 0 && Instance.blueberries.Count == 0 && Instance.fruitStructures.Count == 0)
+        if (Instance.fruits.Count == 0 && Instance.blueberries.Count == 0 && Instance.fruitStructures.Count == 0 && Instance.fruitFarms.Count == 0)
             ShowText("Veggies");
-        else if (Instance.veggies.Count == 0 && Instance.peas.Count == 0 && Instance.veggieStructures.Count == 0)
+        else if (Instance.veggies.Count == 0 && Instance.peas.Count == 0 && Instance.veggieStructures.Count == 0 && Instance.veggieFarms.Count == 0)
             ShowText("Fruits");
     }
 

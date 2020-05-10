@@ -15,6 +15,7 @@ public class Sprinkler : Structure
     {
         OnBuilt();
         head.transform.Rotate(0, Random.Range(0, 360), 0);
+        turnedOn = false;
         base.Start();
     }
 
@@ -49,6 +50,7 @@ public class Sprinkler : Structure
                 if (dist < 160) // water tower in range
                 {
                     (s as WaterTower).sprinklers.Add(this);
+                    turnedOn = (s as WaterTower).turnedOn;
                     hasSource = true;
                     return;
                 }

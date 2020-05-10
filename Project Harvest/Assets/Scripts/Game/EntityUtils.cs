@@ -49,16 +49,16 @@ public class EntityUtils
     /// Create basic formation.
     /// </summary>
     /// <param name="hit"></param>
-    public static void SetGroupLocation(Vector3 point)
+    public static void SetGroupLocation(List<Unit> units, Vector3 point)
     {
-        int count = Game.Instance.selectedUnits.Count;
+        int count = units.Count;
         double rows = Math.Round(Math.Sqrt(count), 0);
         float xSpace = 0;
         float zSpace = 0;
         float lowestSpeed = 20;
 
         // create formation
-        foreach (Unit u in Game.Instance.selectedUnits)
+        foreach (Unit u in units)
         {
             if (u.isDying) // todo: figure out why dead units are in here
             {              // might be fixed already
@@ -72,8 +72,11 @@ public class EntityUtils
             if (u is Worker)
                 (u as Worker).SwitchState(Worker.State.Idle);
 
-            if (u.target is Structure)
-                (u.target as Structure).ClearSlots(); // todo: only clear unoccupied slots
+            if (u.target is Structure && u.slot != null)
+            {
+                u.slot.occupied = false;
+                u.slot = null;
+            }
 
             if (u.speed < lowestSpeed)
                 lowestSpeed = u.speed;

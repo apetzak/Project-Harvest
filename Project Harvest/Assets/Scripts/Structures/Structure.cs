@@ -17,7 +17,13 @@ public class Structure : Entity
     public float maxZ;
     public float minZ;
     public float height;
+    /// <summary>
+    /// If the structure has been placed (created) by the player
+    /// </summary>
     public bool isPlaced = false;
+    /// <summary>
+    /// If the workers have finished building the structure
+    /// </summary>
     public bool isBuilt;
     public bool isVisible;
     private float growthMeter = .1f;
@@ -154,9 +160,11 @@ public class Structure : Entity
     /// </summary>
     protected override void RightClick()
     {
-        SendTroopsToAttack();
-        //SendWorkersToDeposit();
-        SendWorkersToBuild();
+        if (!SendTroopsToAttack())
+        {
+            SendWorkersToDeposit();
+            SendWorkersToBuild();
+        }
     }
 
     protected virtual bool SendTroopsToAttack()
@@ -173,27 +181,50 @@ public class Structure : Entity
         return false;
     }
 
+    /// <summary>
+    /// todo: finish
+    /// </summary>
     private void SendWorkersToDeposit()
     {
-        //if (isBuilt && Game.Instance.workerIsSelected)
-        //{
-        //    foreach (Unit u in Game.Instance.selectedUnits)
-        //    {
-        //        if (u is Troop)
-        //            continue;
+        if (!isBuilt || !Game.Instance.workerIsSelected)
+            return;
 
+        foreach (Unit u in Game.Instance.selectedUnits)
+        {
+            if (u is Troop)
+                continue;
 
-        //        if (u is Worker && (u as Worker).resourceCount > 0)
-        //        {
-        //            Worker w = u as Worker;
+            if ((u as Worker).resourceCount > 0)
+            {
+                Worker w = u as Worker;
 
-        //            Type t = state == State.WoodCutting ? typeof(LumberMill) :
-        //            state == State.CollectingWater ? typeof(WaterWell) : typeof(MiningCamp);
-
-        //            u.SetDestination(GetWorkerDestination(u as Worker));
-        //        }
-        //    }
-        //}
+                if (this is LumberMill && w.state == Worker.State.WoodCutting)
+                {
+                    w.tools[9].SetActive(true); // sacking
+                    u.SetDestination(GetUnitDestination(u));
+                }
+                else if (this is MiningCamp && (w.state == Worker.State.GoldMining || w.state == Worker.State.StoneMining))
+                {
+                    w.tools[9].SetActive(true); // sacking
+                    u.SetDestination(GetUnitDestination(u));
+                }
+                else if (this is WaterWell && w.state == Worker.State.GatheringWater)
+                {
+                    w.tools[9].SetActive(true); // sacking
+                    u.SetDestination(GetUnitDestination(u));
+                }
+                else if (this is CompostBin && w.state == Worker.State.GatheringWater)
+                {
+                    // todo
+                    w.tools[9].SetActive(true); // sacking
+                    u.SetDestination(GetUnitDestination(u));
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
     }
 
     public void ConsumeBuildingCost()
@@ -234,6 +265,16 @@ public class Structure : Entity
             if (BoundsOverlap(s))
                 return true;
         }
+        foreach (Farm f in Game.Instance.fruitFarms)
+        {
+            if (BoundsOverlap(f))
+                return true;
+        }
+        foreach (Farm f in Game.Instance.veggieFarms)
+        {
+            if (BoundsOverlap(f))
+                return true;
+        }
         foreach (Resource r in Game.Instance.resources)
         {
             if (BoundsOverlap(r))
@@ -242,7 +283,7 @@ public class Structure : Entity
         return false;
     }
 
-    public void Place()
+    public virtual void Place()
     {
         ConsumeBuildingCost();
 
@@ -254,22 +295,17 @@ public class Structure : Entity
         isPlaced = true;
         health = 1;
 
-        if (!(this is Farm))
-        {
-            CreateSlots();
-            transform.GetChild(0).transform.Translate(0, -height, 0, Space.World);
-            SendWorkersToBuild();
-        }
-        else
-        {
-            (this as Farm).FindRallyPoint();
-            (this as Farm).ShowGrass();
-        }
+        CreateSlots();
+        transform.GetChild(0).transform.Translate(0, -height, 0, Space.World); // sink into ground
+        SendWorkersToBuild();
     }
 
+    /// <summary>
+    /// Command all selected workers to target this structure
+    /// </summary>
     public void SendWorkersToBuild()
     {
-        if (Game.Instance.workerIsSelected && health < maxHealth && !(this is Farm))
+        if (Game.Instance.workerIsSelected && health < maxHealth)
         {
             foreach (Unit u in Game.Instance.selectedUnits)
             {
@@ -312,7 +348,6 @@ public class Structure : Entity
     /// <summary>
     /// Show area ring
     /// </summary>
-    /// <param name="b"></param>
     public void ToggleRing(bool b = true)
     {
         if (ring != null)
@@ -322,7 +357,6 @@ public class Structure : Entity
     /// <summary>
     /// Show selector
     /// </summary>
-    /// <param name="b"></param>
     public void ToggleSelector(bool b = true)
     {
         if (selector == null || selector.transform.childCount == 0)
@@ -337,7 +371,6 @@ public class Structure : Entity
     /// <summary>
     /// Change selector material
     /// </summary>
-    /// <param name="m"></param>
     public void ToggleSelectorColor(Material m)
     {
         if (selector != null && selector.transform.childCount > 0)
@@ -352,7 +385,7 @@ public class Structure : Entity
     /// </summary>
     public override void Remove()
     {
-        Audio.Instance.PlayExplosion();
+        AudioPlayer.Instance.PlayExplosion();
 
         if (fruit)
             Game.Instance.fruitStructures.Remove(this);
@@ -441,25 +474,33 @@ public class Structure : Entity
     /// <summary>
     /// Gets location of open slot nearest to the unit. Returns new Vector3() if no slot is open.
     /// </summary>
-    public Vector3 GetOpenSlotLocation(Unit u)
+    public void SetOpenSlot(Unit u)
     {
-        Slot s = new Slot(new Vector3());
         float closest = 100000;
+        int slotIndex = -1;
 
         foreach (Slot slot in slots)
         {
-            if (slot.occupied == true)
+            if (slot.occupied)
                 continue;
             float dist = (slot.location - u.transform.position).sqrMagnitude;
             if (dist < closest)
             {
                 closest = dist;
-                s = slot;
+                slotIndex = slots.IndexOf(slot);
             }
         }
 
-        s.occupied = true;
-        return s.location;
+        if (slotIndex == -1)
+        {
+            u.slot = null;
+            return;
+        }
+
+        slots[slotIndex].occupied = true;
+        u.slot = slots[slotIndex];
+        u.target = this;
+        u.SetDestination(u.slot.location);
     }
 
     public bool HasOpenSpot()
@@ -474,18 +515,18 @@ public class Structure : Entity
 
     public bool CanAfford()
     {
-        return true;
-        //if (fruit)
-        //    return Game.Instance.fruitResourceWood >= woodCost
-        //        && Game.Instance.fruitResourceStone >= stoneCost
-        //        && Game.Instance.fruitResourceGold >= goldCost;
-        //return Game.Instance.veggieResourceWood >= woodCost
-        //    && Game.Instance.veggieResourceStone >= stoneCost
-        //    && Game.Instance.veggieResourceGold >= goldCost;
+        //return true;
+        if (fruit)
+            return Game.Instance.fruitResourceWood >= woodCost
+                && Game.Instance.fruitResourceStone >= stoneCost
+                && Game.Instance.fruitResourceGold >= goldCost;
+        return Game.Instance.veggieResourceWood >= woodCost
+            && Game.Instance.veggieResourceStone >= stoneCost
+            && Game.Instance.veggieResourceGold >= goldCost;
     }
 
     /// <summary>
-    /// Gets the location of closest edge nearest to the unit position
+    /// Gets the location of edge nearest to the unit position
     /// </summary>
     public Vector3 GetUnitDestination(Unit u)
     {

@@ -24,63 +24,49 @@ public class AI : MonoBehaviour
     private List<StructLoc> fruitLocations;
     private List<StructLoc> veggieLocations;
 
-    void Start()
+    private void Start()
     {
         fruitHub = Game.Instance.fruitStructures[0] as BlueberryBush;
         veggieHub = Game.Instance.veggieStructures[0] as PeaPlant;
         fruitLocations = new List<StructLoc>();
-        fruitLocations.Add(new StructLoc(0, 50, "AppleTree"));
-        fruitLocations.Add(new StructLoc(50, 50, "PearTree"));
-        fruitLocations.Add(new StructLoc(0, 80, "StrawberryBush"));
-        fruitLocations.Add(new StructLoc(20, 80, "StrawberryBush"));
-        fruitLocations.Add(new StructLoc(40, 80, "StrawberryBush"));
-        fruitLocations.Add(new StructLoc(-50, 50, "WatermelonPatch"));
-        fruitLocations.Add(new StructLoc(-50, 90, "BananaTree"));
+
+        fruitLocations.Add(new StructLoc(-50, -50, "LumberMill"));
+        fruitLocations.Add(new StructLoc(-150, -50, "MiningCamp"));
+        fruitLocations.Add(new StructLoc(-50, -125, "Windmill"));
+        fruitLocations.Add(new StructLoc(50, -125, "Windmill"));
+        fruitLocations.Add(new StructLoc(50, 70, "Sprinkler"));
+        fruitLocations.Add(new StructLoc(-50, 70, "Sprinkler"));
+        fruitLocations.Add(new StructLoc(50, 170, "Sprinkler"));
+        fruitLocations.Add(new StructLoc(-50, 170, "Sprinkler"));
+        fruitLocations.Add(new StructLoc(-20, 120, "WaterTower"));
+        fruitLocations.Add(new StructLoc(15, 120, "RallyPoint"));
+        fruitLocations.Add(new StructLoc(-60, 0, "CompostBin"));
+        fruitLocations.Add(new StructLoc(-80, 0, "CompostBin"));
+        fruitLocations.Add(new StructLoc(-100, 0, "CompostBin"));
+        fruitLocations.Add(new StructLoc(75, 0, "Turret"));
+        fruitLocations.Add(new StructLoc(75, 225, "Turret"));
+        AddFruitFarms();
     }
 
-    private bool HasStructure(Type t)
+    private void AddFruitFarms()
     {
-        foreach (Structure s in Game.Instance.fruitStructures)
-        {
-            if (s.GetType() == t)
-                return true;
-        }
-        return false;
-    }
-
-    private void PlaceStructure(string type, int xLoc, int zLoc)
-    {
-        Vector3 pos = fruitHub.transform.position + new Vector3(xLoc, 0, zLoc);
-        Structure s = Instantiate(Assets.GetStructure(type), pos, Quaternion.identity);
-        if (s.OverlapsExistingStructure())
-        {
-            Destroy(s);
-            return;
-        }
-        s.fruit = !Game.Instance.fruit;
-        s.Place();
-        Material m = s.fruit ? Assets.GetMaterial("Fruit") : Assets.GetMaterial("Veggie");
-        s.ToggleSelectorColor(m);
-        s.ToggleSelector();
-    }
-
-    private void PlaceFarm(StructLoc sl)
-    {
-        Vector3 pos = fruitHub.transform.position + sl.Pos;
-        Structure s = Instantiate(Assets.GetStructure(sl.Structure), pos, Quaternion.identity);
-        s.fruit = !Game.Instance.fruit;
-    }
-
-    private void PickResource(Worker w, int i)
-    {
-        if (i == 0)
-            w.SwitchState(Worker.State.WoodCutting);
-        else if (i == 1)
-            w.SwitchState(Worker.State.GoldMining);
-        else if (i == 2)
-            w.SwitchState(Worker.State.StoneMining);
-
-        w.FindNearestResource();
+        fruitLocations.Add(new StructLoc(-85, 150, "AppleTree"));
+        fruitLocations.Add(new StructLoc(-85, 90, "AppleTree"));
+        fruitLocations.Add(new StructLoc(85, 150, "PearTree"));
+        fruitLocations.Add(new StructLoc(85, 90, "PearTree"));
+        fruitLocations.Add(new StructLoc(-35, 80, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-20, 80, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-5, 80, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-35, 60, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-20, 60, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-5, 60, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-35, 40, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-20, 40, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-5, 40, "StrawberryBush"));
+        fruitLocations.Add(new StructLoc(-25, 200, "WatermelonPatch"));
+        fruitLocations.Add(new StructLoc(25, 200, "WatermelonPatch"));
+        fruitLocations.Add(new StructLoc(30, 80, "BananaTree"));
+        fruitLocations.Add(new StructLoc(30, 50, "BananaTree"));
     }
 
     private void Update()
@@ -94,79 +80,131 @@ public class AI : MonoBehaviour
 
         if (!Game.Instance.fruit)
         {
-            if (fruitHub.unitsGrown > unitSpawnCount)
+            if (Game.Instance.blueberries.Count < 50 && fruitHub.unitsGrown > unitSpawnCount)
             {
                 fruitHub.Pick();
                 unitSpawnCount = r.Next(1, 8);
-                return;
             }
 
-            if (!HasStructure(typeof(LumberMill)) && Game.Instance.fruitResourceWood >= 100)
+            if (HasFarm())
             {
-                PlaceStructure("LumberMill", -50, -50);
-                return;
-            }
-
-            if (!HasStructure(typeof(MiningCamp)) && Game.Instance.fruitResourceWood >= 100)
-            {
-                PlaceStructure("MiningCamp", -150, -50);
-                return;
-            }
-
-            int index = -1;
-            foreach (StructLoc sl in fruitLocations)
-            {
-                if (Assets.GetStructure(sl.Structure).CanAfford())
+                foreach (Worker w in Game.Instance.blueberries)
                 {
-                    PlaceFarm(sl);
-                    index = fruitLocations.IndexOf(sl);
-                    break;
+                    if (!w.moving && w.state == Worker.State.Idle && UnityEngine.Random.value > .8f)
+                        w.InteractWithNearestFarm();
                 }
             }
 
-            if (index != -1)
+            foreach (Worker w in Game.Instance.blueberries)
             {
-                fruitLocations.RemoveAt(index);
-                return;
+                if (!w.moving && w.state == Worker.State.Idle && UnityEngine.Random.value > .5f)
+                {
+                    w.FindNearestBuilding();
+
+                    if (w.state == Worker.State.Idle)
+                        w.FindNearestBuilding();
+                }
             }
 
-            //if (fruitLocations[0].structure.CanAfford())
-            //{
-            //    PlaceFarm(fruitLocations[0]);
-            //    return;
-            //}
-
-            //if (Game.Instance.fruitResourceGold > 250)
-            //{
-            //    PlaceFarm(r.Next(0, 5));
-            //    return;
-            //}
-
-            foreach (Structure s in Game.Instance.fruitStructures)
+            if (fruitLocations.Count > 0)
             {
-                if (!s.isBuilt)
+                StructLoc sl = fruitLocations[0];
+                Structure structure = Assets.GetStructure(sl.Structure);
+                structure.fruit = !Game.Instance.fruit;
+                if (structure.CanAfford())
                 {
-                    foreach (Worker w in Game.Instance.blueberries)
-                    {
-                        if (!w.moving && w.state == Worker.State.Idle)
-                            w.TargetStructure(s);
-                    }
+                    PlaceStructure(structure, sl);
+                    fruitLocations.RemoveAt(0);
                     return;
                 }
             }
 
-            // pick tree if mining camp doesn't exist
-            int i = HasStructure(typeof(MiningCamp)) ? r.Next(0, 3) : 0;
+            //if (Game.Instance.fruits.Count > 90 && !Game.Instance.fruits[0].attacking)
+            //{
+            //    foreach (Troop t in Game.Instance.fruits)
+            //        t.FindClosestTarget();
+            //    return;
+            //}
 
+            // pick tree if mining camp doesn't exists
+            int i = GetResourceToPick();
             foreach (Worker w in Game.Instance.blueberries)
             {
-                if (!w.moving && w.state == Worker.State.Idle)
+                if (!w.moving && w.state == Worker.State.Idle && UnityEngine.Random.value > .5f)
+                {
                     PickResource(w, i);
+                    if (w.diff.sqrMagnitude > 10000 && UnityEngine.Random.value > .5f)
+                        w.SwitchState(Worker.State.Idle);
+                }
             }
         }
         else
         {
 
         }
+    }
+
+    private bool HasStructure(Type t)
+    {
+        foreach (Structure s in Game.Instance.fruitStructures)
+        {
+            if (s.GetType() == t && s.isBuilt)
+                return true;
+        }
+        return false;
+    }
+
+    private bool HasFarm()
+    {
+        foreach (Structure s in Game.Instance.fruitFarms)
+        {
+            if (s is Farm)
+                return true;
+        }
+        return false;
+    }
+
+    private int GetResourceToPick()
+    {
+        int i = 0;
+        if (HasStructure(typeof(MiningCamp)))
+        {
+            if (Game.Instance.fruitResourceGold < Game.Instance.fruitResourceWood)
+                i = 1;
+            if (Game.Instance.fruitResourceStone < Game.Instance.fruitResourceGold)
+                i = 2;
+        }
+        return i;
+    }
+
+    private void PlaceStructure(Structure prefab, StructLoc sl)
+    {
+        Vector3 pos = (Game.Instance.fruit ? veggieHub.transform.position : fruitHub.transform.position) + sl.Pos;
+        Structure s = Instantiate(prefab, pos, Quaternion.identity);
+        //s.SetBounds();
+        if (s.OverlapsExistingStructure())
+        {
+            Debug.Log("overlap");
+            //s.Remove();
+            Destroy(s);
+            return;
+        }
+        s.Place();
+        Material m = s.fruit ? Assets.GetMaterial("Fruit") : Assets.GetMaterial("Veggie");
+        s.ToggleSelectorColor(m);
+        s.ToggleSelector();
+        //Debug.Log("placed");
+    }
+
+    private void PickResource(Worker w, int i)
+    {
+        if (i == 0)
+            w.SwitchState(Worker.State.WoodCutting);
+        else if (i == 1)
+            w.SwitchState(Worker.State.GoldMining);
+        else if (i == 2)
+            w.SwitchState(Worker.State.StoneMining);
+
+        w.FindNearestResource();
     }
 }

@@ -24,5 +24,7 @@ public class BananaTree : FruitTree
         GetGrassMeshes();
         troop = GetTroopName();
         name = GetType().Name;
+        ShowGrass();
+        SetBounds();
     }
 }

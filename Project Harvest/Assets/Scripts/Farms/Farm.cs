@@ -6,6 +6,7 @@ using UnityEngine;
 /// Spawns troops (each has associated subclass of farm).
 /// Has various growth stages.
 /// Built and maintained by workers.
+/// todo: implement global tick system
 /// </summary>
 public class Farm : Structure
 {
@@ -31,7 +32,7 @@ public class Farm : Structure
     public GameObject dirtMound;
     public MeshRenderer propMesh;
     public MeshRenderer dirtMesh;
-    public List<MeshRenderer> grassMeshes = new List<MeshRenderer>();
+    public List<MeshRenderer> grassMeshes = new List<MeshRenderer>(); // todo: remove or implement
     public List<Troop> troops;
     public int size;
     public int grassCount;
@@ -90,11 +91,12 @@ public class Farm : Structure
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (transform.GetChild(i).name == "Patch1")
+            string childName = transform.GetChild(i).name;
+            if (childName == "Patch1")
                 return 1;
-            else if (transform.GetChild(i).name == "Patch2")
+            else if (childName == "Patch2")
                 return 2;
-            else if (transform.GetChild(i).name == "Patch3")
+            else if (childName == "Patch3")
                 return 3;
         }
         return 0;
@@ -166,9 +168,9 @@ public class Farm : Structure
             if (decayTime >= decayEnd)
             {
                 if (fruit)
-                    Game.Instance.fruitStructures.Remove(this);
+                    Game.Instance.fruitFarms.Remove(this);
                 else
-                    Game.Instance.veggieStructures.Remove(this);
+                    Game.Instance.veggieFarms.Remove(this);
 
                 //Destroy(gameObject);
                 //ShowGrass();
@@ -183,10 +185,8 @@ public class Farm : Structure
     /// Retrieve troops from pickable farm
     /// </summary>
     /// <param name="count">Quantity to pick</param>
-    /// <returns>Harvested troops</returns>
     public void Pick(int count)
     {
-        //count += 5;
         troops.Clear();
 
         if (propMesh != null)
@@ -292,7 +292,7 @@ public class Farm : Structure
     }
 
     /// <summary>
-    /// Switch cursor
+    /// Switch cursor, SendTroopsToAttack(), send worker if grassy/pickable
     /// </summary>
     protected override void RightClick()
     {
@@ -328,5 +328,31 @@ public class Farm : Structure
                 return;
             }
         }
+    }
+
+    public override void Remove()
+    {
+        if (fruit)
+            Game.Instance.fruitFarms.Remove(this);
+        else
+            Game.Instance.veggieFarms.Remove(this);
+
+        Destroy(gameObject);
+    }
+
+    public override void Place()
+    {
+        ConsumeBuildingCost();
+
+        if (fruit)
+            Game.Instance.fruitFarms.Add(this);
+        else
+            Game.Instance.veggieFarms.Add(this);
+
+        isPlaced = true;
+        health = maxHealth;
+
+        FindRallyPoint();
+        ShowGrass();
     }
 }

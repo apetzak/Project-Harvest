@@ -9,7 +9,7 @@ public class Worker : Unit
     {
         Idle,
         Walking,
-        CollectingWater,
+        GatheringWater,
         CarryingWater,
         Raking,
         Watering,
@@ -33,6 +33,7 @@ public class Worker : Unit
     public int collectingEnd;
     public int resourceCount;
     public int resourceCapacity;
+    public string sackResource;
     public List<GameObject> tools;
 
     protected override void Start()
@@ -52,64 +53,67 @@ public class Worker : Unit
             MoveToSpawnPoint();
             return;
         }
-        else if (!moving)
+        else if (!moving && state != State.Idle)
         {
-            if (state == State.Raking)
+            switch (state)
             {
-                Rake();
-            }
-            else if (state == State.Planting)
-            {
-                PlantSeed();
-            }
-            else if (state == State.Watering)
-            {
-                WaterPlant();
-            }
-            else if (state == State.Picking)
-            {
-                PickPlant();
-            }
-            else if (state == State.ChoppingFruitTree)
-            {
-                PickPlant();
-            }
-            else if (state == State.WoodCutting)
-            {
-                if (resourceCount < resourceCapacity && target != null)
-                    ChopTree();
+                case State.Raking:
+                    Rake();
+                    break;
+                case State.Planting:
+                    PlantSeed();
+                    break;
+                case State.Watering:
+                    WaterPlant();
+                    break;
+                case State.Picking:
+                    PickPlant();
+                    break;
+                case State.ChoppingFruitTree:
+                    PickPlant();
+                    break;
+                case State.Building:
+                    BuildStructure();
+                    break;
+                case State.WoodCutting:
+                    {
+                        if (resourceCount < resourceCapacity && target != null)
+                            ChopTree();
 
-                else if (!tools[9].activeSelf)
-                    FindNearestDepository();
+                        else if (!tools[9].activeSelf)
+                            FindNearestDepository();
 
-                else if (destination == transform.position) // arrived at depository
-                    AddToResources("wood");
-            }
-            else if (state == State.GoldMining)
-            {
-                if (resourceCount < resourceCapacity && target != null)
-                    MineOre();
+                        else if (destination == transform.position) // arrived at depository
+                            AddToResources("wood");
+                    }
+                    break;
+                case State.GoldMining:
+                    {
+                        if (resourceCount < resourceCapacity && target != null)
+                            MineOre();
 
-                else if (!tools[9].activeSelf)
-                    FindNearestDepository();
+                        else if (!tools[9].activeSelf)
+                            FindNearestDepository();
 
-                else if (destination == transform.position)
-                    AddToResources("gold");
-            }
-            else if (state == State.StoneMining)
-            {
-                if (resourceCount < resourceCapacity && target != null)
-                    MineOre();
+                        else if (destination == transform.position)
+                            AddToResources("gold");
+                    }
+                    break;
+                case State.StoneMining:
+                    {
+                        if (resourceCount < resourceCapacity && target != null)
+                            MineOre();
 
-                else if (!tools[9].activeSelf)
-                    FindNearestDepository();
+                        else if (!tools[9].activeSelf)
+                            FindNearestDepository();
 
-                else if (destination == transform.position)
-                    AddToResources("stone");
-            }
-            else if (state == State.Building)
-            {
-                BuildStructure();
+                        else if (destination == transform.position)
+                            AddToResources("stone");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Default case");
+                    break;
             }
         }
 
@@ -158,7 +162,6 @@ public class Worker : Unit
     /// Hide all tools, show current tool, change state.
     /// If target is resource, set to occupied.
     /// </summary>
-    /// <param name="s"></param>
     public void SwitchState(State s)
     {
         ResetTool();
@@ -170,7 +173,16 @@ public class Worker : Unit
             ShowTool();
 
         if (target != null && (target is Resource))
+        {
             (target as Resource).occupied = false;
+            target = null;
+        }
+
+        if (slot != null && s != State.Building)
+        {
+            slot.occupied = false;
+            slot = null;
+        }
 
         if (resourceCount > 0)
             tools[9].SetActive(true);
@@ -191,7 +203,7 @@ public class Worker : Unit
             toolIndex = 1;
         else if (state == State.Building)
             toolIndex = 2;
-        else if (state == State.CarryingWater || state == State.CollectingWater)
+        else if (state == State.CarryingWater || state == State.GatheringWater)
             toolIndex = 3;
         else if (state == State.Watering)
         {
@@ -208,14 +220,16 @@ public class Worker : Unit
         else if (state == State.Sacking)
             toolIndex = 9;
 
-        try
-        {
-            tools[toolIndex].SetActive(true);
-        }
-        catch
-        {
-            Debug.Log("tool " + toolIndex + " is broke");
-        }
+        tools[toolIndex].SetActive(true);
+
+        //try
+        //{
+        //    tools[toolIndex].SetActive(true);
+        //}
+        //catch
+        //{
+        //    Debug.Log("tool " + toolIndex + " is broke");
+        //}
     }
 
     /// <summary>
@@ -233,10 +247,10 @@ public class Worker : Unit
     private void FindNearestDepository()
     {
         Type t = state == State.WoodCutting ? typeof(LumberMill) :
-                 state == State.CollectingWater ? typeof(WaterWell) : typeof(MiningCamp);
+                 state == State.GatheringWater ? typeof(WaterWell) : typeof(MiningCamp);
 
         float closest = 100000;
-        int index = 0;
+        int index = -1;
         var structs = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in structs)
         {
@@ -252,7 +266,7 @@ public class Worker : Unit
             }
         }
 
-        if (closest != 100000)
+        if (index != -1)
         {
             tools[9].SetActive(true); // sacking
             if (fruit)
@@ -269,13 +283,12 @@ public class Worker : Unit
     /// <summary>
     /// SwitchState, set target = r, set r.occupied, SetDestination
     /// </summary>
-    /// <param name="r"></param>
     public void GatherFrom(Resource r)
     {
         SwitchState(r.workerState);
         target = r;
         r.occupied = true;
-        SetDestination(r.GetUnitDestination(this)); // todo: set in front of resource
+        SetDestination(r.GetUnitDestination(this));
     }
 
     /// <summary>
@@ -287,7 +300,7 @@ public class Worker : Unit
          state == State.GoldMining ? typeof(Gold) :
          state == State.StoneMining ? typeof(Stone) : typeof(Water);
 
-        int index = 0;
+        int index = -1;
         float lowestDistance = 100000;
 
         foreach (Resource r in Game.Instance.resources)
@@ -303,7 +316,11 @@ public class Worker : Unit
             }
         }
 
-        if (lowestDistance == 100000)
+        if (index != -1)
+        {
+            GatherFrom(Game.Instance.resources[index]);
+        }
+        else
         {
             if (resourceCount > 0)
             {
@@ -315,10 +332,6 @@ public class Worker : Unit
                 SwitchState(State.Idle);
             }
         }
-        else
-        {
-            GatherFrom(Game.Instance.resources[index]);
-        }
     }
 
     public void FindNearestBuilding()
@@ -326,7 +339,7 @@ public class Worker : Unit
         var list = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
         foreach (Structure s in list)
         {
-            if (s.health < s.maxHealth && !(s is Farm))
+            if (s.health < s.maxHealth && s.HasOpenSpot())
             {
                 TargetStructure(s);
                 return;
@@ -460,7 +473,7 @@ public class Worker : Unit
 
     private void CollectWater()
     {
-
+        // todo
     }
 
     private void Rake()
@@ -545,14 +558,13 @@ public class Worker : Unit
     /// <summary>
     /// Find nearest unoccupied farm, rake or pick if possible
     /// </summary>
-    private void InteractWithNearestFarm()
+    public void InteractWithNearestFarm()
     {
-        var farms = fruit ? Game.Instance.fruitStructures : Game.Instance.veggieStructures;
-        foreach (Structure s in farms)
+        var farms = fruit ? Game.Instance.fruitFarms : Game.Instance.veggieFarms;
+        foreach (Farm f in farms)
         {
-            if (!(s is Farm) || (s as Farm).isOccupied)
+            if (f.isOccupied)
                 continue;
-            Farm f = target as Farm;
             if (f.state == Farm.State.Grassy)
             {
                 TargetFarm(f, State.Raking);
@@ -577,11 +589,9 @@ public class Worker : Unit
 
     public void TargetStructure(Structure s)
     {
-        var slot = s.GetOpenSlotLocation(this);
-        if (slot == new Vector3())
+        s.SetOpenSlot(this);
+        if (slot == null) // no open slots
             return;
-        target = s;
-        SetDestination(slot);
         SwitchState(Worker.State.Building);
     }
 

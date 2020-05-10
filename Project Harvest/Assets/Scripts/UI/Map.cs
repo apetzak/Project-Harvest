@@ -21,6 +21,7 @@ public class Map : UIElement, IPointerClickHandler
     public Texture2D textureWood;
     public Texture2D textureGold;
     public Texture2D textureStone;
+    private int tickCount = 0;
 
     private void Start()
     {
@@ -53,6 +54,11 @@ public class Map : UIElement, IPointerClickHandler
 
     private void OnGUI()
     {
+        tickCount++;
+        if (tickCount < 2)
+            return;
+        tickCount = 0;
+
         if (leftButtonDown)
         {
             if (!Input.GetMouseButtonDown(0))
@@ -95,7 +101,7 @@ public class Map : UIElement, IPointerClickHandler
         float x = (pos.x - minX) * 7.5f;
         float z = (pos.y * 7.5f) + maxY - minY;
         Vector3 point = new Vector3(x, 10, z);
-        EntityUtils.SetGroupLocation(point);
+        EntityUtils.SetGroupLocation(Game.Instance.selectedUnits, point);
     }
 
     private void DrawObjects()
@@ -111,6 +117,10 @@ public class Map : UIElement, IPointerClickHandler
         foreach (Entity e in Game.Instance.fruitStructures)
             DrawEntity(e);
         foreach (Entity e in Game.Instance.veggieStructures)
+            DrawEntity(e);
+        foreach (Entity e in Game.Instance.fruitFarms)
+            DrawEntity(e);
+        foreach (Entity e in Game.Instance.veggieFarms)
             DrawEntity(e);
         //foreach (Entity e in Game.Instance.resources)
         //    DrawResource(e);

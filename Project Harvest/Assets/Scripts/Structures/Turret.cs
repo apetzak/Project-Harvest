@@ -60,7 +60,7 @@ public class Turret : Structure
     private void ShootTarget()
     {
         // sniper shot
-        Audio.Instance.PlaySound(TroopClass.Instance.list[5].sounds[0]);
+        AudioPlayer.Instance.PlaySound(TroopClass.Instance.list[5].sounds[0]);
 
         burst.Pop();
         attackTime = 60;
@@ -89,6 +89,11 @@ public class Turret : Structure
                 if (TargetFound(s as Entity))
                     return;
             }
+            foreach (Farm f in Game.Instance.veggieFarms)
+            {
+                if (TargetFound(f as Entity))
+                    return;
+            }
             foreach (Worker w in Game.Instance.peas)
             {
                 if (TargetFound(w as Entity))
@@ -105,6 +110,11 @@ public class Turret : Structure
             foreach (Structure s in Game.Instance.fruitStructures)
             {
                 if (TargetFound(s as Entity))
+                    return;
+            }
+            foreach (Farm f in Game.Instance.fruitFarms)
+            {
+                if (TargetFound(f as Entity))
                     return;
             }
             foreach (Worker w in Game.Instance.blueberries)

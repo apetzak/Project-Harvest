@@ -35,14 +35,17 @@ public class Resource : Structure
 
         foreach (Unit u in Game.Instance.selectedUnits)
         {
-            if (u is Worker)
+            if (u is Troop || u.target == this)
+                continue;
+
+            if (!occupied)
+            {
+                (u as Worker).GatherFrom(this);
+            }
+            else
             {
                 (u as Worker).state = workerState;
-
-                if (occupied)
-                    (u as Worker).FindNearestResource();
-                else
-                    (u as Worker).GatherFrom(this);
+                (u as Worker).FindNearestResource();
             }
         }
     }
@@ -82,11 +85,13 @@ public class Resource : Structure
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// todo: use base if Selector is added
+    /// </summary>
     protected override void OnMouseEnter()
     {
         if (isDying || Game.Instance.mouseOverUI)
             return;
         CursorSwitcher.Instance.Switch(this);
-        //base.OnMouseEnter();
     }
 }

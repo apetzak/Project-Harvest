@@ -25,7 +25,8 @@ public class Unit : Entity
     public Entity target;
     private static float rad = 180.0f / Mathf.PI;
     protected Collider coll;
-    protected Vector3 diff;
+    public Vector3 diff;
+    public Slot slot = null;
 
     /// <summary>
     /// Set collider
@@ -161,7 +162,7 @@ public class Unit : Entity
                 Game.Instance.ChangeSelection();
             }
 
-            Audio.Instance.PlayDeath(index);
+            AudioPlayer.Instance.PlayDeath(index);
             StopMoving();
             target = null;
         }
